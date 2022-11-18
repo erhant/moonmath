@@ -1,32 +1,15 @@
 package set1
 
-import (
-	"cryptopals/internal/constants"
-	"encoding/hex"
-)
+import "cryptopals/internal/constants"
 
 func XOR(a, b []byte) ([]byte, error) {
-	// check lengths
-	aD := make([]byte, hex.DecodedLen(len(a)))
-	bD := make([]byte, hex.DecodedLen(len(b)))
-	if len(aD) != len(bD) {
+	if len(a) != len(b) {
 		return nil, constants.ErrLenMismatch
 	}
 
-	// decode
-	_, err1 := hex.Decode(aD, a)
-	if err1 != nil {
-		return nil, err1
-	}
-	_, err2 := hex.Decode(bD, b)
-	if err2 != nil {
-		return nil, err2
-	}
-
-	// xor
-	ans := make([]byte, len(aD))
-	for i := 0; i < len(aD); i++ {
-		ans[i] = aD[i] ^ bD[i]
+	ans := make([]byte, len(a))
+	for i := 0; i < len(a); i++ {
+		ans[i] = a[i] ^ b[i]
 	}
 	return ans, nil
 }

@@ -2,6 +2,7 @@ package set1
 
 import (
 	"cryptopals/internal/common"
+	"log"
 	"math"
 )
 
@@ -9,9 +10,8 @@ import (
 // This is also known as Repeating-Key XOR.
 func VigenereCipher(pt []byte, key []byte) []byte {
 	ct := make([]byte, len(pt))
-	keylen := len(key)
 	for i := 0; i < len(pt); i++ {
-		ct[i] = pt[i] ^ key[i%keylen]
+		ct[i] = pt[i] ^ key[i%len(key)]
 	}
 	return ct
 }
@@ -28,13 +28,16 @@ func VigenereDecipher(ct []byte) ([]byte, []byte, error) {
 		for ks := KEYSIZE_MIN; ks < KEYSIZE_MAX; ks++ {
 			// find average normalized edit distance for N consecutive blocks
 			dist := float64(0)
-			numBlocks := 1
+			numBlocks := 8
 			for b := 0; b < numBlocks; b++ {
-				// TODO
-				dist += float64(common.LevensteinEditDistance(ct[b*ks:(b+1)*ks], ct[(b+1)*ks:(b+2)*ks]))
+				d, err := common.HammingDistance(ct[b*ks:(b+1)*ks], ct[(b+1)*ks:(b+2)*ks])
+				if err != nil {
+					return nil, nil, err
+				}
+				dist += float64(d)
 			}
 			dist /= float64(numBlocks) // average
-			dist /= float64(keySize)   // normalize
+			dist /= float64(ks)        // normalize
 			// update results
 			if dist < minDist {
 				minDist = dist
@@ -43,13 +46,14 @@ func VigenereDecipher(ct []byte) ([]byte, []byte, error) {
 		}
 	}
 
+	log.Println("Keysize:", keySize)
 	// then, break the ciphertext into blocks of keysize length and take every KEYSIZE block separately.
 	// bytes b, b+ks, b+2ks, ... are all encrypted with ks[0], a single byte!
 	// we can concatenate them and run a single-byte XOR decipher.
 	key := make([]byte, keySize)
 	for i := 0; i < keySize; i++ {
 		// find how many bytes you will have for that position of the key
-		numBytes := 2 // TODO
+		numBytes := int(math.Ceil(float64(len(ct)-i) / float64(keySize)))
 		block := make([]byte, numBytes)
 		for b := 0; b < numBytes; b++ {
 			block[b] = ct[i+b*keySize]

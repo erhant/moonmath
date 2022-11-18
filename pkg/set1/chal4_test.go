@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"cryptopals/internal/constants"
 	"cryptopals/pkg/set1"
+	"encoding/hex"
 	"math"
 	"os"
 	"testing"
 )
 
 func TestChal4(t *testing.T) {
-	t.Skip("skipping test 4 it is too long")
+	t.Skip("skipping test 4: too long")
 	// open file
 	file, err := os.Open("../../res/set1/4.txt")
 	if err != nil {
@@ -24,13 +25,25 @@ func TestChal4(t *testing.T) {
 	var key byte
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		chal := scanner.Bytes()
-		candidate, k, s, err := set1.SingleByteXORDecipher(chal)
+		ct := scanner.Bytes()
+
+		// decode hex
+		len := hex.DecodedLen(len(ct))
+		ctDec := make([]byte, len)
+		_, err := hex.Decode(ctDec, ct)
 		if err != nil {
 			t.Error(err)
 		}
+
+		// crack line
+		pt, k, s, err := set1.SingleByteXORDecipher(ctDec)
+		if err != nil {
+			t.Error(err)
+		}
+
+		// update score
 		if s <= score {
-			ans = candidate
+			ans = pt
 			key = k
 			score = s
 			// fmt.Println("Better:", string(ans), "\nKey:", key, "\nScore:", score)

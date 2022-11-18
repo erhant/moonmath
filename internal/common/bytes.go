@@ -2,7 +2,6 @@ package common
 
 import (
 	"cryptopals/internal/constants"
-	"fmt"
 )
 
 // Calculate byte frequencies in a given byte array. Returns a mapping of
@@ -72,11 +71,33 @@ func LevensteinEditDistance(s, t []byte) int {
 		}
 
 		// copy v1 to v0 for next iteration (pointer swap would work too)
-		fmt.Println("V0:", v0, "\nV1:", v1)
 		copy(v0, v1)
 
 	}
 
-	// some bug?
 	return v0[n]
+}
+
+// Finds the hamming distance, which is the total number of differing bits.
+// We simply XOR bit by bit, and count the set bits in the result.
+func HammingDistance(a, b []byte) (int, error) {
+	if len(a) != len(b) {
+		return 0, constants.ErrLenMismatch
+	}
+	dist := 0
+	for i := 0; i < len(a); i++ {
+		dist += NumOfSetBits(a[i] ^ b[i])
+	}
+	return dist, nil
+}
+
+func NumOfSetBits(b byte) int {
+	count := 0
+	for b != 0 {
+		if b&1 == 1 {
+			count++
+		}
+		b >>= 1
+	}
+	return count
 }
