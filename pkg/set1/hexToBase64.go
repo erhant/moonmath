@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 )
 
+// Converts a hex byte array to base64. The input array is decoded within this function.
 func HexToBase64(src []byte) ([]byte, error) {
 	// decode hex
 	srcD := make([]byte, hex.DecodedLen(len(src)))

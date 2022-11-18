@@ -6,6 +6,8 @@ import (
 	"math"
 )
 
+// Deciphers a ciphertext that has been encrypted with a single byte XOR.
+// Returns in order: plaintext, key, score, error
 func SingleByteXORDecipher(ct []byte) ([]byte, byte, float32, error) {
 	len := hex.DecodedLen(len(ct))
 
@@ -21,14 +23,16 @@ func SingleByteXORDecipher(ct []byte) ([]byte, byte, float32, error) {
 	var key byte
 	var score float32 = math.MaxFloat32
 	for b := 0; b < 256; b++ {
-		// xor everything & calculate score
+		// xor everything
 		pt := make([]byte, len)
 		for i := 0; i < len; i++ {
 			pt[i] = ctDec[i] ^ byte(b)
 		}
 
-		// update results
+		// find the score w.r.t letter frequencies
 		s := common.FittingQuotinent(common.LetterFreqs(pt))
+
+		// update scores
 		if s <= score {
 			ans = pt
 			key = byte(b)

@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-func FixedXOR(a, b []byte) ([]byte, error) {
+func XOR(a, b []byte) ([]byte, error) {
 	// check lengths
 	aD := make([]byte, hex.DecodedLen(len(a)))
 	bD := make([]byte, hex.DecodedLen(len(b)))

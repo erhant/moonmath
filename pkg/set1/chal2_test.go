@@ -10,7 +10,7 @@ func TestChal2(t *testing.T) {
 	a := []byte("1c0111001f010100061a024b53535009181c")
 	b := []byte("686974207468652062756c6c277320657965")
 	expectedStr := "746865206b696420646f6e277420706c6179"
-	output, err := set1.FixedXOR(a, b)
+	output, err := set1.XOR(a, b)
 	if err != nil {
 		t.Error(err)
 	}
