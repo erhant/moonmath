@@ -1,41 +1,12 @@
 package set1
 
 import (
+	"cryptopals/internal/common"
 	"encoding/hex"
-	"fmt"
+	"math"
 )
 
-// as per the ETAOIN SHRDLU joke on the question.
-// see also: https://en.wikipedia.org/wiki/Etaoin_shrdlu
-var weights = map[byte]int{
-	byte('U'): 2,
-	byte('u'): 2,
-	byte('L'): 3,
-	byte('l'): 3,
-	byte('D'): 4,
-	byte('d'): 4,
-	byte('R'): 5,
-	byte('r'): 5,
-	byte('H'): 6,
-	byte('h'): 6,
-	byte('S'): 7,
-	byte('s'): 7,
-	byte(' '): 8,
-	byte('N'): 9,
-	byte('n'): 9,
-	byte('I'): 10,
-	byte('i'): 10,
-	byte('O'): 11,
-	byte('o'): 11,
-	byte('A'): 12,
-	byte('a'): 12,
-	byte('T'): 13,
-	byte('t'): 13,
-	byte('E'): 14,
-	byte('e'): 14,
-}
-
-func SingleByteXORCipher(chal []byte) ([]byte, byte, int, error) {
+func SingleByteXORCipher(chal []byte) ([]byte, byte, float32, error) {
 	len := hex.DecodedLen(len(chal))
 
 	// decode hex
@@ -48,29 +19,24 @@ func SingleByteXORCipher(chal []byte) ([]byte, byte, int, error) {
 	// brute force bytes
 	var ans []byte
 	var key byte
-	var score int
+	var score float32 = math.MaxFloat32
 	for b := 0; b < 256; b++ {
 		// xor everything & calculate score
-		s := 0
 		xor := make([]byte, len)
 		for i := 0; i < len; i++ {
-			c := chal[i] ^ byte(b)
-			xor[i] = c
-			s += weights[c]
-
+			xor[i] = chalDec[i] ^ byte(b)
 		}
 
 		// update results
-		if s > score {
+		s := common.FittingQuotinent(common.LetterFreqs(xor))
+		if s <= score {
 			ans = xor
 			key = byte(b)
 			score = s
+			// fmt.Println("Better:", string(xor), "\nKey:", key, "\nScore:", score)
 		}
 
-		fmt.Println("Score:", s)
 	}
-
-	fmt.Println(weights[byte('E')])
 
 	return ans, key, score, nil
 }

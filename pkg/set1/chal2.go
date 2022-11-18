@@ -1,7 +1,7 @@
 package set1
 
 import (
-	"cryptopals/internal/common"
+	"cryptopals/internal/constants"
 	"encoding/hex"
 )
 
@@ -10,7 +10,7 @@ func FixedXOR(a, b []byte) ([]byte, error) {
 	aD := make([]byte, hex.DecodedLen(len(a)))
 	bD := make([]byte, hex.DecodedLen(len(b)))
 	if len(aD) != len(bD) {
-		return nil, common.ErrLenMismatch
+		return nil, constants.ErrLenMismatch
 	}
 
 	// decode
