@@ -6,12 +6,12 @@ import (
 	"math"
 )
 
-func SingleByteXORCipher(chal []byte) ([]byte, byte, float32, error) {
-	len := hex.DecodedLen(len(chal))
+func SingleByteXORDecipher(ct []byte) ([]byte, byte, float32, error) {
+	len := hex.DecodedLen(len(ct))
 
 	// decode hex
-	chalDec := make([]byte, len)
-	_, err := hex.Decode(chalDec, chal)
+	ctDec := make([]byte, len)
+	_, err := hex.Decode(ctDec, ct)
 	if err != nil {
 		return nil, 0, 0, err
 	}
@@ -22,15 +22,15 @@ func SingleByteXORCipher(chal []byte) ([]byte, byte, float32, error) {
 	var score float32 = math.MaxFloat32
 	for b := 0; b < 256; b++ {
 		// xor everything & calculate score
-		xor := make([]byte, len)
+		pt := make([]byte, len)
 		for i := 0; i < len; i++ {
-			xor[i] = chalDec[i] ^ byte(b)
+			pt[i] = ctDec[i] ^ byte(b)
 		}
 
 		// update results
-		s := common.FittingQuotinent(common.LetterFreqs(xor))
+		s := common.FittingQuotinent(common.LetterFreqs(pt))
 		if s <= score {
-			ans = xor
+			ans = pt
 			key = byte(b)
 			score = s
 			// fmt.Println("Better:", string(xor), "\nKey:", key, "\nScore:", score)
