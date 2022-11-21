@@ -2,13 +2,12 @@ package set1
 
 import (
 	"cryptopals/internal/common"
-	"log"
 	"math"
 )
 
 // Given a byte array, XOR the bytes with a repeating key.
 // This is also known as Repeating-Key XOR.
-func RepeatingKeyXOREncrypt(pt []byte, k []byte) []byte {
+func RepeatingKeyXOREncrypt(pt, k []byte) []byte {
 	ct := make([]byte, len(pt))
 	for i := 0; i < len(pt); i++ {
 		ct[i] = pt[i] ^ k[i%len(k)]
@@ -17,7 +16,7 @@ func RepeatingKeyXOREncrypt(pt []byte, k []byte) []byte {
 }
 
 // Decrypting is the same as encrypting.
-func RepeatingKeyXORDecrypt(ct []byte, k []byte) []byte {
+func RepeatingKeyXORDecrypt(ct, k []byte) []byte {
 	return RepeatingKeyXOREncrypt(ct, k)
 }
 
@@ -33,9 +32,9 @@ func RepeatingKeyXORDecipher(ct []byte) ([]byte, []byte, error) {
 		keySizeCandidates := make([]int, 0)
 		minDist := math.MaxFloat64
 		for ks := KEYSIZE_MIN; ks < KEYSIZE_MAX; ks++ {
-			// find average normalized edit distance for N consecutive blocks
+			// find average normalized Hamming distance for N consecutive blocks
 			dist := float64(0)
-			numBlocks := 16
+			numBlocks := 8
 			for b := 1; b <= numBlocks; b++ {
 				d, err := common.HammingDistance(ct[:ks], ct[b*ks:(b+1)*ks])
 				if err != nil {
@@ -45,7 +44,7 @@ func RepeatingKeyXORDecipher(ct []byte) ([]byte, []byte, error) {
 			}
 			dist /= float64(numBlocks) // average
 			dist /= float64(ks)        // normalize
-			// fmt.Println("Dist:", dist, "\tSize:", ks)
+
 			// update results
 			if dist <= minDist {
 				minDist = dist
@@ -56,7 +55,6 @@ func RepeatingKeyXORDecipher(ct []byte) ([]byte, []byte, error) {
 		keySizes = keySizeCandidates[common.Max(0, len(keySizeCandidates)-KEYSIZE_COUNT):]
 	}
 
-	log.Println("Key size candidates:", keySizes)
 	// then, break the ciphertext into blocks of keysize length and take every KEYSIZE block separately.
 	// bytes b, b+ks, b+2ks, ... are all encrypted with ks[0], a single byte!
 	// we can concatenate them and run a single-byte XOR decipher.

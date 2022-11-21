@@ -1,7 +1,6 @@
 package set1_test
 
 import (
-	"cryptopals/internal/constants"
 	"cryptopals/pkg/set1"
 	"encoding/hex"
 	"testing"
@@ -19,15 +18,16 @@ func TestChal3(t *testing.T) {
 	}
 
 	// crack
-	res, key, _, err := set1.SingleByteXORDecipher(ctDec)
+	res, _, _, err := set1.SingleByteXORDecipher(ctDec)
 	if err != nil {
 		t.Error(err)
 	}
 
-	// there are two answers!
+	// there are two answers if you include capital letters too!
 	// key 88  --> "Cooking MC's like a pound of bacon" (score: 0.72218305)
 	// key 120 --> "cOOKINGmcSLIKEAPOUNDOFBACON"			  (score: 0.72218287)
-	if string(res) != "cOOKINGmcSLIKEAPOUNDOFBACON" && key != 120 {
-		t.Error(constants.ErrWrongResult)
+	expectedRes := "Cooking MC's like a pound of bacon"
+	if string(res) != expectedRes {
+		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", string(res), expectedRes)
 	}
 }

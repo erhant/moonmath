@@ -32,11 +32,17 @@ func TestChal6(t *testing.T) {
 	// decode
 	ct := make([]byte, base64.StdEncoding.DecodedLen(len(fileb64)))
 	base64.StdEncoding.Decode(ct, fileb64)
-	pt, key, err := set1.RepeatingKeyXORDecipher(ct)
+	_, key, err := set1.RepeatingKeyXORDecipher(ct)
 	if err != nil {
 		t.Error(err)
 	}
-	t.Log("KEY:", string(key))
-	t.Log("PT:", string(pt))
+
+	expectedKey := "Terminator X: Bring the noise"
+	// there are two answers if you include capital letters too!
+	// key: teRmINaTORx:brINGthENOISE
+	// key: Terminator X: Bring the noise
+	if string(key) != expectedKey {
+		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", key, expectedKey)
+	}
 
 }

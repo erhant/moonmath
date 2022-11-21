@@ -2,7 +2,6 @@ package set1_test
 
 import (
 	"bufio"
-	"cryptopals/internal/constants"
 	"cryptopals/pkg/set1"
 	"encoding/hex"
 	"math"
@@ -11,7 +10,7 @@ import (
 )
 
 func TestChal4(t *testing.T) {
-	t.Skip("skipping test 4: too long")
+	t.Skip("skip: test is a bit long")
 	// open file
 	file, err := os.Open("../../res/set1/4.txt")
 	if err != nil {
@@ -22,7 +21,6 @@ func TestChal4(t *testing.T) {
 	// read line by line
 	var score float32 = math.MaxFloat32
 	var ans []byte
-	var key byte
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		ct := scanner.Bytes()
@@ -36,7 +34,7 @@ func TestChal4(t *testing.T) {
 		}
 
 		// crack line
-		pt, k, s, err := set1.SingleByteXORDecipher(ctDec)
+		pt, _, s, err := set1.SingleByteXORDecipher(ctDec)
 		if err != nil {
 			t.Error(err)
 		}
@@ -44,7 +42,6 @@ func TestChal4(t *testing.T) {
 		// update score
 		if s <= score {
 			ans = pt
-			key = k
 			score = s
 			// fmt.Println("Better:", string(ans), "\nKey:", key, "\nScore:", score)
 		}
@@ -54,8 +51,8 @@ func TestChal4(t *testing.T) {
 		t.Error(err)
 	}
 
-	// key 21 --> "nOWTHATTHEPARTYISJUMPING*" (score: 0.7060677)
-	if string(ans) != "nOWTHATTHEPARTYISJUMPING" && key != 21 {
-		t.Error(constants.ErrWrongResult)
+	expected := "Now that the party is jumping\n"
+	if string(ans) != expected {
+		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", string(ans), expected)
 	}
 }
