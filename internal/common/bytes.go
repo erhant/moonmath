@@ -91,6 +91,7 @@ func HammingDistance(a, b []byte) (int, error) {
 	return dist, nil
 }
 
+// Returns the number of set bits (1) within a byte.
 func NumOfSetBits(b byte) int {
 	count := 0
 	for b != 0 {
@@ -100,4 +101,16 @@ func NumOfSetBits(b byte) int {
 		b >>= 1
 	}
 	return count
+}
+
+func RepeatingBlocks(bytes []byte, size int) int {
+	repeats := make(map[string]int)
+	s := 0
+	for bs, be := 0, size; be <= len(bytes); bs, be = bs+size, be+size {
+		repeats[string(bytes[bs:be])]++
+	}
+	for _, r := range repeats {
+		s += r - 1 // minus 1 to ignore single-occurences
+	}
+	return s
 }

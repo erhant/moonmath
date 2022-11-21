@@ -15,20 +15,24 @@ func TestChal2(t *testing.T) {
 	_, err1 := hex.Decode(aD, a)
 	if err1 != nil {
 		t.Error(err1)
+		return
 	}
 	bD := make([]byte, hex.DecodedLen(len(b)))
 	_, err2 := hex.Decode(bD, b)
 	if err2 != nil {
 		t.Error(err2)
+		return
 	}
 
 	output, err := set1.XOR(aD, bD)
 	if err2 != nil {
 		t.Error(err)
+		return
 	}
 	outputStr := hex.EncodeToString(output)
 	expectedStr := "746865206b696420646f6e277420706c6179"
 	if outputStr != expectedStr {
 		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", outputStr, expectedStr)
+		return
 	}
 }

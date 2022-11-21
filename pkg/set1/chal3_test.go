@@ -15,12 +15,14 @@ func TestChal3(t *testing.T) {
 	_, err := hex.Decode(ctDec, ct)
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	// crack
 	res, _, _, err := set1.SingleByteXORDecipher(ctDec)
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	// there are two answers if you include capital letters too!
@@ -29,5 +31,6 @@ func TestChal3(t *testing.T) {
 	expectedRes := "Cooking MC's like a pound of bacon"
 	if string(res) != expectedRes {
 		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", string(res), expectedRes)
+		return
 	}
 }

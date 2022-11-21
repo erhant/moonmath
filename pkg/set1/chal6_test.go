@@ -4,11 +4,13 @@ import (
 	"cryptopals/internal/common"
 	"cryptopals/pkg/set1"
 	"encoding/base64"
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestChal6(t *testing.T) {
+	t.Skip("skip: test is a bit long")
+
 	// test hamming distance
 	{
 		s1 := []byte("this is a test")
@@ -16,17 +18,20 @@ func TestChal6(t *testing.T) {
 		dist, err := common.HammingDistance(s1, s2)
 		if err != nil {
 			t.Error(err)
+			return
 		}
 		expectedDist := 37
 		if dist != expectedDist {
 			t.Errorf("Wrong output.\nHave: %d\nNeed: %d\n", dist, expectedDist)
+			return
 		}
 	}
 
 	// read file (base64 encoded)
-	fileb64, err := ioutil.ReadFile("../../res/set1/6.txt")
+	fileb64, err := os.ReadFile("../../res/set1/6.txt")
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	// decode
@@ -35,6 +40,7 @@ func TestChal6(t *testing.T) {
 	_, key, err := set1.RepeatingKeyXORDecipher(ct)
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	expectedKey := "Terminator X: Bring the noise"
@@ -43,6 +49,7 @@ func TestChal6(t *testing.T) {
 	// key: Terminator X: Bring the noise
 	if string(key) != expectedKey {
 		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", key, expectedKey)
+		return
 	}
 
 }

@@ -15,6 +15,7 @@ func TestChal4(t *testing.T) {
 	file, err := os.Open("../../res/set1/4.txt")
 	if err != nil {
 		t.Error(err)
+		return
 	}
 	defer file.Close()
 
@@ -31,12 +32,14 @@ func TestChal4(t *testing.T) {
 		_, err := hex.Decode(ctDec, ct)
 		if err != nil {
 			t.Error(err)
+			return
 		}
 
 		// crack line
 		pt, _, s, err := set1.SingleByteXORDecipher(ctDec)
 		if err != nil {
 			t.Error(err)
+			return
 		}
 
 		// update score
@@ -49,10 +52,12 @@ func TestChal4(t *testing.T) {
 
 	if err := scanner.Err(); err != nil {
 		t.Error(err)
+		return
 	}
 
 	expected := "Now that the party is jumping\n"
 	if string(ans) != expected {
 		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", string(ans), expected)
+		return
 	}
 }

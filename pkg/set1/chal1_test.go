@@ -12,8 +12,10 @@ func TestChal1(t *testing.T) {
 	output, err := set1.HexToBase64(input)
 	if err != nil {
 		t.Error(err)
+		return
 	}
 	if !bytes.Equal(output, expectedOutput) {
 		t.Errorf("Wrong output.\nHave: %s\nNeed: %s\n", output, expectedOutput)
+		return
 	}
 }
