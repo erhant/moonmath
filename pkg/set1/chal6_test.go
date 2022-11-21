@@ -28,10 +28,11 @@ func TestChal6(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
 	// decode
 	ct := make([]byte, base64.StdEncoding.DecodedLen(len(fileb64)))
 	base64.StdEncoding.Decode(ct, fileb64)
-	pt, key, err := set1.VigenereDecipher(ct)
+	pt, key, err := set1.RepeatingKeyXORDecipher(ct)
 	if err != nil {
 		t.Error(err)
 	}

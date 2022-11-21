@@ -26,10 +26,23 @@ func SingleByteXORDecipher(ct []byte) ([]byte, byte, float32, error) {
 			ans = pt
 			key = byte(b)
 			score = s
-			// fmt.Println("Better:", string(xor), "\nKey:", key, "\nScore:", score)
+			// fmt.Println("Better:", string(pt), "\nKey:", key, "\nScore:", score)
 		}
 
 	}
 
 	return ans, key, score, nil
+}
+
+func SingleByteXOREncrypt(pt []byte, k byte) []byte {
+	ct := make([]byte, len(pt))
+	for i := 0; i < len(ct); i++ {
+		ct[i] = pt[i] ^ k
+	}
+	return ct
+}
+
+// Decrypting is same as encrypting.
+func SingleByteXORDecrypt(ct []byte, k byte) []byte {
+	return SingleByteXOREncrypt(ct, k)
 }
