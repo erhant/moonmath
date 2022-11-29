@@ -1,6 +1,8 @@
 package set2
 
-import "cryptopals/internal/constants"
+import (
+	"cryptopals/internal/constants"
+)
 
 func PadPKCS7(buf []byte, size int) []byte {
 	// calculate amount of padding required
@@ -27,9 +29,10 @@ func UnpadPKCS7(buf []byte) ([]byte, int, error) {
 	b := buf[len_padded-1]
 	len_unpadded := len_padded - int(b)
 	for i := len_padded - 1; i > len_unpadded; i-- {
-		if i < 0 || buf[i] != b {
+		if buf[i] != b || i < 0 {
 			return buf, int(b), constants.ErrInvalidPKCS
 		}
 	}
+	// log.Println(buf[:len_unpadded])
 	return buf[:len_unpadded], int(b), nil
 }

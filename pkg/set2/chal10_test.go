@@ -23,6 +23,7 @@ func TestChal10(t *testing.T) {
 	base64.StdEncoding.Decode(ct, fileb64)
 	iv := make([]byte, 16) // 128-bit all zeros
 
+	// decrypt
 	pt, _, err := set2.AES128CBCDecrypt(ct, iv, key)
 	if err != nil {
 		t.Error(err)
@@ -34,6 +35,7 @@ func TestChal10(t *testing.T) {
 		t.Error(constants.ErrWrongResult)
 		return
 	}
+	t.Log("PT:", string(pt))
 
 	// custom test
 	{
@@ -48,6 +50,7 @@ func TestChal10(t *testing.T) {
 			t.Error(err)
 			return
 		}
+		t.Log("PT1:", string(myPt), "\tPT2:", string(myPt2), "\n")
 		if !bytes.Equal(myPt, myPt2) {
 			t.Error(constants.ErrWrongResult)
 		}

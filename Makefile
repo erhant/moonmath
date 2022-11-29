@@ -3,9 +3,9 @@
 test:
 	go test ./... -v --count=1
 
-test-set1:
+testset1:
 	go test ./pkg/set1/* -v --count=1
-test-set2:
+testset2:
 	go test ./pkg/set2/* -v --count=1
 
 # Shorthand for go mod tidy

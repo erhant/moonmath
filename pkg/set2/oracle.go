@@ -10,7 +10,6 @@ import (
 // appends & preprends some stuff to the plaintext
 // and then encrypts the entire thing. Half of the time,
 // it will use ECB mode, otherwise CBC.
-
 func EncryptionOracle(pt []byte) ([]byte, bool, error) {
 	const size = 16
 	// create random 16-byte key
@@ -20,16 +19,14 @@ func EncryptionOracle(pt []byte) ([]byte, bool, error) {
 	}
 
 	// prepend
-	prependAmount := common.RandInteger(5, 10)
-	if prependBytes, err := common.RandBytes(prependAmount); err != nil {
+	if prependBytes, err := common.RandBytes(common.RandInteger(5, 10)); err != nil {
 		return nil, false, err
 	} else {
 		pt = append(prependBytes, pt...)
 	}
 
 	// append
-	appendAmount := common.RandInteger(5, 10)
-	if appendBytes, err := common.RandBytes(appendAmount); err != nil {
+	if appendBytes, err := common.RandBytes(common.RandInteger(5, 10)); err != nil {
 		return nil, false, err
 	} else {
 		pt = append(pt, appendBytes...)

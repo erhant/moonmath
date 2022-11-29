@@ -20,18 +20,27 @@ func AES128CBCEncrypt(pt, iv, key []byte) ([]byte, int, error) {
 		return nil, 0, err
 	}
 
-	// make sure input length is multiple of block length
-	// not really caring about PKCS for this challenge
-	padding := uint8(size - (len(pt) % size))
-	for i := padding; i > 0; i-- {
-		pt = append(pt, padding)
+	if len(pt)%size != 0 {
+		return nil, 0, constants.ErrLenMismatch
 	}
+
+	// make sure input length is multiple of block length
+
+	// padding := uint8(size - (len(pt) % size))
+	// if padding == 0 {
+	// 	padding = size
+	// }
+	// for i := padding; i > 0; i-- {
+	// 	pt = append(pt, padding)
+	// }
+	pt = PadPKCS7(pt, size)
 
 	// encrypt
 	ct := make([]byte, len(pt))
 	prev := make([]byte, size)
 	copy(prev, iv)
-	for bs, be := 0, size; be <= len(pt); bs, be = bs+size, be+size {
+	for be := size; be <= len(ct); be += size {
+		bs := be - size
 		// xor with prev
 		xor, err := set1.XOR(pt[bs:be], prev)
 		if err != nil {
@@ -44,7 +53,8 @@ func AES128CBCEncrypt(pt, iv, key []byte) ([]byte, int, error) {
 
 	}
 
-	return ct[:len(pt)-int(padding)], int(padding), nil
+	return ct, 0, nil
+	// return ct[:len(pt)-int(padding)], int(padding), nil
 }
 
 func AES128CBCDecrypt(ct, iv, key []byte) ([]byte, int, error) {
@@ -56,24 +66,28 @@ func AES128CBCDecrypt(ct, iv, key []byte) ([]byte, int, error) {
 	if len(iv) != size {
 		return nil, 0, constants.ErrWrongIVSize
 	}
+	if len(ct)%size != 0 {
+		return nil, 0, constants.ErrLenMismatch
+	}
 	cipher, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, 0, err
 	}
 
 	// make sure input length is multiple of block length
-	// not really caring about PKCS for this challenge
-	padding := size - (len(ct) % size)
-	if padding > 0 {
-		pad := make([]byte, padding)
-		ct = append(ct, pad...)
-	}
+	// padding := size - (len(ct) % size)
+	// if padding > 0 {
+	// 	pad := make([]byte, padding)
+	// 	ct = append(ct, pad...)
+	// }
+	ct = PadPKCS7(ct, size)
 
 	// decrypt
 	pt := make([]byte, len(ct))
 	prev := make([]byte, size)
 	copy(prev, iv)
-	for bs, be := 0, size; be <= len(ct); bs, be = bs+size, be+size {
+	for be := size; be <= len(ct); be += size {
+		bs := be - size
 		// decrypt
 		cipher.Decrypt(pt[bs:be], ct[bs:be])
 		// xor with prev
@@ -86,5 +100,6 @@ func AES128CBCDecrypt(ct, iv, key []byte) ([]byte, int, error) {
 		copy(prev, ct[bs:be])
 	}
 
-	return pt[:len(ct)-padding], padding, nil
+	// return pt[:len(ct)-padding], padding, nil
+	return pt, 0, nil
 }

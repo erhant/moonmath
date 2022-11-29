@@ -16,11 +16,13 @@ func TestChal11(t *testing.T) {
 
 	const numTries = 20
 	for i := 0; i < numTries; i++ {
+		// encrypts the plaintext with ECB or CBC. 1/2 prob each
 		ct, useECB, err := set2.EncryptionOracle(pt)
 		if err != nil {
 			t.Error(err)
 			return
 		}
+		// returns true if ciphertext is detected to be encrypted with ECB
 		detectedECB := set2.DetectionOracle(ct)
 		// if useECB != detectedECB {
 		t.Log("USED:", useECB, "\tDETECTED:", detectedECB)
