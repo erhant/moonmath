@@ -9,7 +9,7 @@ import (
 )
 
 func TestChal6(t *testing.T) {
-	t.Skip("skip: test is a bit long")
+	// t.Skip("skip: test is a bit long")
 
 	// test hamming distance
 	{
@@ -37,11 +37,12 @@ func TestChal6(t *testing.T) {
 	// decode
 	ct := make([]byte, base64.StdEncoding.DecodedLen(len(fileb64)))
 	base64.StdEncoding.Decode(ct, fileb64)
-	_, key, err := set1.RepeatingKeyXORDecipher(ct)
+	pt, key, err := set1.RepeatingKeyXORDecipher(ct)
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	t.Log("PLAINTEXT:", string(pt), "\n")
 
 	expectedKey := "Terminator X: Bring the noise"
 	// there are two answers if you include capital letters too!

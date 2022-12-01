@@ -22,28 +22,28 @@ func RepeatingKeyXORDecrypt(ct, k []byte) []byte {
 
 // Given a byte array, finds the possible key used and the corresponding plaintext.
 func RepeatingKeyXORDecipher(ct []byte) ([]byte, []byte, error) {
-	const KEYSIZE_MIN = 2  // inclusive
-	const KEYSIZE_MAX = 41 // exclusive
+	const KEYSIZE_MIN = 2
+	const KEYSIZE_MAX = 40
 	const KEYSIZE_COUNT = 2
+	const NUM_BLOCKS = 8
 
 	// first, find the keysize via edit distance of consecutive blocks
 	var keySizes []int
 	{
 		keySizeCandidates := make([]int, 0)
 		minDist := math.MaxFloat64
-		for ks := KEYSIZE_MIN; ks < KEYSIZE_MAX; ks++ {
+		for ks := KEYSIZE_MIN; ks <= KEYSIZE_MAX; ks++ {
 			// find average normalized Hamming distance for N consecutive blocks
 			dist := float64(0)
-			numBlocks := 8
-			for b := 1; b <= numBlocks; b++ {
+			for b := 1; b <= NUM_BLOCKS; b++ {
 				d, err := common.HammingDistance(ct[:ks], ct[b*ks:(b+1)*ks])
 				if err != nil {
 					return nil, nil, err
 				}
 				dist += float64(d)
 			}
-			dist /= float64(numBlocks) // average
-			dist /= float64(ks)        // normalize
+			dist /= float64(NUM_BLOCKS) // average
+			dist /= float64(ks)         // normalize
 
 			// update results
 			if dist <= minDist {
