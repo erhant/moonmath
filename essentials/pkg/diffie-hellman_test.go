@@ -5,6 +5,8 @@ import (
 	"crypto/rand"
 	"math/big"
 	"testing"
+
+	common "cryptogoraphy/pkg/common"
 )
 
 // this example uses P256 curve
@@ -35,25 +37,25 @@ func TestDiffieHellman(t *testing.T) {
 
 	// compare shared keys
 	if sharedKey1.Cmp(sharedKey2) != 0 {
-		t.Error(ErrCorrectness)
+		t.Error(common.ErrCorrectness)
 	}
 }
 
-func generateKeys() (*big.Int, CurvePoint, error) {
+func generateKeys() (*big.Int, common.CurvePoint, error) {
 	// generate private key
 	privateKey, err := rand.Int(rand.Reader, curve.Params().N)
 	if err != nil {
-		return nil, CurvePoint{}, err
+		return nil, common.CurvePoint{}, err
 	}
 
 	// generate public key
 	publicKeyX, publicKeyY := curve.ScalarBaseMult(privateKey.Bytes())
-	publicKey := CurvePoint{X: publicKeyX, Y: publicKeyY}
+	publicKey := common.CurvePoint{X: publicKeyX, Y: publicKeyY}
 
 	return privateKey, publicKey, nil
 }
 
-func generateSharedKey(privateKey *big.Int, publicKey CurvePoint) (*big.Int, error) {
+func generateSharedKey(privateKey *big.Int, publicKey common.CurvePoint) (*big.Int, error) {
 	// generate shared key, only care about X coordinate
 	sharedKeyX, _ := curve.ScalarMult(publicKey.X, publicKey.Y, privateKey.Bytes())
 	sharedKey := new(big.Int).SetBytes(sharedKeyX.Bytes())

@@ -1,4 +1,4 @@
-package essentials_test
+package common
 
 import (
 	"errors"

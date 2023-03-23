@@ -5,6 +5,8 @@ import (
 	"crypto/sha256"
 	"math/big"
 	"testing"
+
+	common "cryptogoraphy/pkg/common"
 )
 
 const bits = 1024     // security parameter
@@ -39,6 +41,6 @@ func TestRSA(t *testing.T) {
 
 	// verify that the decrypted hash matches the original hash
 	if string(decryptedHash.Bytes()) != string(hash[:]) {
-		t.Error(ErrCorrectness)
+		t.Error(common.ErrCorrectness)
 	}
 }
