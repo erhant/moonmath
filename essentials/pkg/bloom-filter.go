@@ -1,13 +1,10 @@
-package essentials_test
+package essentials
 
 import (
 	"errors"
 	"hash/adler32"
 	"hash/crc32"
 	"hash/fnv"
-	"testing"
-
-	common "cryptogoraphy/pkg/common"
 )
 
 type BloomFilter struct {
@@ -17,13 +14,14 @@ type BloomFilter struct {
 
 // Create a new Bloom Filter of size m bits, with k hash functions
 func NewBloomFilter(m, k uint) (*BloomFilter, error) {
-	i := 0
 	bitmap := make([]bool, m)
 	hashes := make([]func([]byte) uint32, k)
 
+	// assign hash functions
+	i := 0
 	switch k - 1 {
 	default:
-		return nil, errors.New("Too many hash functions")
+		return nil, errors.New("too many hash functions")
 	case 5:
 		hashes[i] = func(data []byte) uint32 {
 			h := fnv.New32()
@@ -91,25 +89,4 @@ func (bf *BloomFilter) PossiblyContains(data []byte) bool {
 		res = res && bf.bitmap[hash(data)]
 	}
 	return res
-}
-
-func TestBloomFilter(t *testing.T) {
-	// create a new Bloom Filter with 10 bits and 2 hash functions
-	bf, err := NewBloomFilter(10, 2)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// add some data to the Bloom Filter
-	bf.Add([]byte("hello"))
-	bf.Add([]byte("world"))
-
-	// check if some items are possibly in the Bloom Filter
-	if !(bf.PossiblyContains([]byte("hello")) && bf.PossiblyContains([]byte("world"))) {
-		t.Error(common.ErrCorrectness)
-	}
-
-	if bf.PossiblyContains([]byte("foo")) || bf.PossiblyContains([]byte("bar")) {
-		t.Error(common.ErrCorrectness)
-	}
 }
