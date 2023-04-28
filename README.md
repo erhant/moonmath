@@ -7,6 +7,7 @@
 Apparently you have to bite into Rust if you want to delve into cryptography libraries.
 
 - [Essentials](./rust/essentials/)
+- [ZKHACK Puzzles](./rust/zkhack/)
 
 ## in Go
 

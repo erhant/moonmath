@@ -1,0 +1,17 @@
+[package]
+name = "semaphore"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]]
+name = "semaphore"
+path = "src/main.rs"
+
+[dependencies]
+hex = { version = "0.4" }
+log = { version = "0.4" }
+env_logger = { version = "0.9" }
+rand-utils = { version = "0.3", package = "winter-rand-utils" }
+prompt = { git = "https://github.com/kobigurk/zkhack-prompt" }
+winterfell = { version = "0.3", features = ["concurrent"] }
+winter-utils = { version = "0.3" }

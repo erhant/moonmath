@@ -1,0 +1,13 @@
+[package]
+name = "fib"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]]
+name = "fib"
+path = "src/main.rs"
+
+[dependencies]
+hex = { version = "0.4" }
+prompt = { git = "https://github.com/kobigurk/zkhack-prompt" }
+winterfell = { version = "0.3", features = ["concurrent"] }

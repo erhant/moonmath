@@ -1,0 +1,18 @@
+[package]
+name = "ipa-puzzle"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ark-ec = { version = "^0.3.0", default-features = false }
+ark-ff = { version = "^0.3.0", default-features = false }
+ark-poly = { version = "^0.3.0", default-features = false }
+ark-serialize = { version = "^0.3.0", default-features = false, features = [ "derive" ] }
+ark-std = { version = "^0.3.0", default-features = false, features = [ "std" ] }
+ark-bls12-381 = { version = "^0.3.0", default-features = false, features = [ "curve" ] }
+
+digest = { version = "0.9" }
+blake2 = { version = "0.9", default-features = false }
+rand_chacha = { version = "0.3.0", default-features = false }
+
+prompt = { git = "https://github.com/kobigurk/zkhack-prompt" }
