@@ -1,8 +1,7 @@
-
 ## Extended Euclidean Algorithm
 ## xgcd(a,b) = s * a + t * b
 ## return `gcd(a,b)` along with `s` and `t`
-def xgcd(a: int, b: int):
+def xgcd(a: int, b: int, verbose: bool = False):
   assert(a >= b)
 
   # initials
@@ -20,11 +19,12 @@ def xgcd(a: int, b: int):
     t.append(t[k-2] - quot * t[k-1])
     k += 1
 
-  print("{0}|\t{1}\t{2}\t{3}".format("k", "r", "s", "t"))
-  for i in range(k):
-     print("{0}|\t{1}\t{2}\t{3}".format(i, r[i], s[i], t[i]))
+  if verbose:
+    print("{0}|\t{1}\t{2}\t{3}".format("k", "r", "s", "t"))
+    for i in range(k):
+      print("{0}|\t{1}\t{2}\t{3}".format(i, r[i], s[i], t[i]))
      
   return r[k-2], s[k-2], t[k-2]
 
 if __name__ == '__main__':
-    print(xgcd(12, 5))
+  print(xgcd(12, 5, True))

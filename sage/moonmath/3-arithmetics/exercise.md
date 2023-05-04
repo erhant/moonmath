@@ -62,4 +62,26 @@ implying one by one the equivalences $a^i \equiv b^i \pmod{n}$ for $i = 2, 3, \l
 
 > Let $a, n$ be integers, such that $a$ and $n$ are **not** co-prime. For which $b \in \mathbb{Z}$ does $ax \equiv b \pmod{n}$ have a solution $x$, and how does the solution set look like?
 
-...
+... todo ...
+
+## Exercise 21
+
+> Define $\mathbb{Z}_{13}$ as the arithmetic modulo 13. Consider the following equation:
+>
+> $$5x + 4 \equiv 28x +2x \pmod{13}$$
+>
+> Rewrite this in $\mathbb{Z}\_{13}
+
+We have:
+
+$$5x + 4 \equiv 2 + 2x \pmod{13}$$
+$$3x + 2 \equiv 0 \pmod{13}$$
+$$3x \equiv 11 \pmod{13}$$
+
+Now, which integers $x \in \mathbb{Z}_{13}$ give $11 \pmod{13}$ when multiplied by 3? Instead of asking that, here I can ask what is the inverse of 3 in modulo 13, that is, which number when multiplied by 3 gives 1?
+
+We know that $3 \times 9 = 27 \equiv 1 \pmod{13}$, so I can multiply both sides with 9.
+
+$$x \equiv 99 \equiv 8 \pmod{13}$$
+
+Meaning that all integers of the form $13k+8, k \in \mathbb{N}$ solve this equation.
