@@ -45,6 +45,10 @@ class Polynomial:
   def __mul__(self, Q: "Polynomial"):
     raise NotImplemented()
   
+  def __div__(self, Q: "Polynomial"):
+    # will use poly-long-division
+    raise NotImplemented()
+  
 if __name__ == "__main__":
   P = Polynomial([1, 2])
   Q = Polynomial([4])

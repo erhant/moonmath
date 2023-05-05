@@ -26,5 +26,29 @@ def xgcd(a: int, b: int, verbose: bool = False):
      
   return r[k-2], s[k-2], t[k-2]
 
+def xgcd_arrayless(a: int, b: int):
+  assert(a >= b)
+ 
+  r_prev, r_cur = a, b
+  s_prev, s_cur = 1, 0
+  t_prev, t_cur = 0, 1
+  
+  while r_cur != 0:
+    quot = r_prev // r_cur
+    rem = r_prev % r_cur 
+    s_next = s_prev - quot * s_cur
+    t_next = t_prev - quot * t_cur
+ 
+    r_prev = r_cur
+    r_cur = rem
+    s_prev = s_cur
+    s_cur = s_next
+    t_prev = t_cur
+    t_cur = t_next
+     
+  return r_prev, s_prev, t_prev
+
 if __name__ == '__main__':
-  print(xgcd(12, 5, True))
+  a, b = 12, 5
+  print(xgcd_arrayless(12, 5))
+  print(xgcd(12, 5))
