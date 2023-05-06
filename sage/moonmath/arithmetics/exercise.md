@@ -58,7 +58,7 @@ $$
 
 implying one by one the equivalences $a^i \equiv b^i \pmod{n}$ for $i = 2, 3, \ldots, k$.
 
-## ⚠️ Exercise 20 ⚠️
+## Exercise 20 ✨
 
 > Let $a, n$ be integers, such that $a$ and $n$ are **not** co-prime. For which $b \in \mathbb{Z}$ does $ax \equiv b \pmod{n}$ have a solution $x$, and how does the solution set look like?
 
@@ -66,7 +66,25 @@ The equivalence implies $ax - ny = b$. Denote $d=\gcd(a, n)$ which also implies 
 
 $$b = ax' - ny' = da'x' - dn'y' = d(a'x' - n'y')$$
 
-Since $a', x', n', y'$ are all integers, $b / d$ must be an integer too; implying that $d \mid b$.
+Since $a', x', n', y'$ are all integers, $b / d$ must be an integer too; implying that $d \mid b$. In other words, solutions exists for $b \in \mathbb{Z}$ where $\gcd(a, n) \mid b$.
+
+Now that we also know $b = db'$, let's rewrite the congruence:
+
+$$da'x \equiv db' \pmod{dn'}$$
+
+We can remove $d$ from all sides:
+
+$$a'x \equiv b' \pmod{n'}$$
+
+Since $\gcd(a', n') = 1$, this has only one solution. Denote this solution as $t$ where $x \equiv t \pmod{n'}$. The other solutions are the numbers from $t$ to $t + n$, with increments of $n'$. Notice that:
+
+- $t \implies da'(t) \equiv db' \pmod{dn'}$
+- $t + n' \implies da'(t + n') = da't + a'dn' = da' \equiv db' \pmod{dn'}$
+- $t + 2n' \implies da'(t + 2n') = da't + 2a'dn' = da' \equiv db' \pmod{dn'}$
+- $\ldots$
+- $t + dn' \implies da'(t + dn') = da't + da'dn' = da' \equiv db' \pmod{dn'}$
+
+Since $t + (d+1)n' = t + n' + dn'$ would be equivalent to $t + n'$ in modulo $n'$, we start to wrap around the solution set of $x$. That is our complete set of solutions with $d$ elements.
 
 - [Theory of Numbers - Theorem 57 (p. 68)](https://blngcc.files.wordpress.com/2008/11/hardy-wright-theory_of_numbers.pdf)
 
@@ -115,19 +133,11 @@ Q = Z5x(3*x^3 + 2*x^2 + 2*x + 2)
 Q == A / B # true
 ```
 
-## ⚠️ Exercise 29 ⚠️
+## Exercise 29 ✨
 
 > Show that if a polynomial $P \in \mathbb{R}[X]$ of degree $\deg(P) = m$ has less than $m$ roots, it must have a prime factor $F$ such that $\deg(F) > 1$.
 
-Let $z_1, z_2, \ldots, z_k$ be the distinct roots of $P$, where $1 \leq k < m$. Then, $P(x) = c(x - z_1)(x - z_2) \cdots (x - z_k) Q(x)$, where $c$ is the leading coefficient of $P$ and $Q(x)$ is a polynomial of degree $m-k$.
-
-Since $P$ is not constant, we have $k < m$. Thus, $Q(x)$ is a non-constant polynomial of degree at least $1$
-
-Suppose for the sake of contradiction that all the prime factors of $P$ have degree at most $1$. Then, we can write some prime factor $F(x) = ax + b$ for some $a,b \in \mathbb{R}$.
-
-By construction, $Q(x)$ is not identically zero and has degree $m-k \geq 1$, so $a \neq 0$. Moreover, $Q(x)$ has no roots in common with the polynomial $(x - z_1)(x - z_2) \cdots (x - z_k)$, since $Q(x)$ has no roots and $z_1, z_2, \ldots, z_k$ are all distinct roots of $P$. Therefore, the product $(x - z_1)(x - z_2) \cdots (x - z_k) Q(x)$ has $m$ distinct roots, which contradicts the fact that $P$ has less than $m$ roots.
-
-Thus, our assumption that all prime factors of $P$ have degree at most $1$ leads to a contradiction. Therefore, $P$ must have a prime factor $F$ such that $\deg(F) > 1$, as required.
+This comes from the fact that for any given root $r$ of $P$, the polynomial $F(x) = (x - r)$ is a prime factor.
 
 ## Exercise 31
 
@@ -146,4 +156,4 @@ Apparently, $4x^3 + 3x^2 + 4x$ does the job!
 
 > Consider the same set $S = \{(0, 0), (1, 1), (2, 2), (3, 2)\}$. Why is it not possible to do Lagrange interpolation for these points in $\mathbb{Z}_6[x]$?
 
-We can't, because we need the elements to have multiplicative inverses of the evaluated elements. In $\mathbb{Z}_6$, only 1 and 5 have multiplicative inverse; the other elements do not have a multiplicative inverse.
+We can't, because we need the elements to have multiplicative inverses of the evaluated elements. In $\mathbb{Z}_6$, only 1 and 5 have multiplicative inverse; the other elements do not have a multiplicative inverse..

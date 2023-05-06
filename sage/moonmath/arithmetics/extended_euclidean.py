@@ -1,7 +1,18 @@
-## Extended Euclidean Algorithm
-## xgcd(a,b) = s * a + t * b
-## return `gcd(a,b)` along with `s` and `t`
 def xgcd(a: int, b: int, verbose: bool = False):
+  """
+  Extended Euclidean Algorithm
+  
+  Given `a` and `b`, finds `gcd(a,b)`, `s` 
+  and `t` such that `gcd(a, b) = s * a + t * b`.
+
+  Parameters:
+  - `a` number
+  - `b` number
+  - `verbose` print the execution trace
+
+  Returns:
+  - `[gcd(a,b), s, t]` as a triple
+  """
   assert(a >= b)
 
   # initials
