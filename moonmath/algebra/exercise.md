@@ -46,4 +46,14 @@ See the code [here](./hashing.sage).
 
 ## Exercise 47
 
->
+> Consider the ring $\mathbb{Z}_5$. Show that it is also a field and write its characteristic. Then, prove that $ax = b$ has only a single solution $x \in \mathbb{Z}_5$ for any given $a, b \in \mathbb{Z}_5^*$.
+
+We have the ring $\mathbb{Z}_5$ which is $(\{0, 1, 2, 3, 4\}, +, \times) $. This is a field, because all field rules hold and every member expect 0 has a multiplicative inverse. The characteristic of this field is $5$, because $\sum_{i=1}^5 1 = 0$ in $\mathbb{Z}_5$.
+
+As for $ax = b$, there is only one solution because each $a$ has a single multiplicative inverse $a^{-1}$ in the multiplicative field, and we get $x = ba^{-1}$ which is a single element in the field.
+
+## Exercise 56
+
+> Consider the prime field $\mathbb{F}_5. Show that the polynomial $P = x^2 + 2$ from $\mathbb{F}_5[X]$ is irreducible. Implement the finite field $\mathbb{F}_2$ in Sage.
+
+See the code [here](./extension-field.sage).

@@ -10,6 +10,12 @@
 
 Exercises & codes from the MoonMath manual to zkSNARKs.
 
+## [Polynomials](./polynomials/)
+
+<img src="https://img.shields.io/badge/rust-F74B01?style=flat-square&logo=rust&logoColor=white" alt="rust" />
+
+Some polynomial arithmetic in finite fields.
+
 ## [ZKHACK](./zkhack/)
 
 <img src="https://img.shields.io/badge/rust-F74B01?style=flat-square&logo=rust&logoColor=white" alt="rust" />
