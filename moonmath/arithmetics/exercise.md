@@ -137,7 +137,13 @@ Q == A / B # true
 
 > Show that if a polynomial $P \in \mathbb{R}[X]$ of degree $\deg(P) = m$ has less than $m$ roots, it must have a prime factor $F$ such that $\deg(F) > 1$.
 
-This comes from the fact that for any given root $r$ of $P$, the polynomial $F(x) = (x - r)$ is a prime factor.
+Suppose that $P$ has $k$ roots $\{z_1, z_2, \ldots, z_k\}$ such that $k < m$. Then, we know that:
+
+$$
+P(x) = (x - z_1)(x - z_2)\ldots(x - z_k)Q(x)
+$$
+
+From this, we can see that $P(x) = (x^k + \ldots)Q(x)$, meaning that $Q(x)$ must have degree $m - k$. $Q(x)$ itself may be reducible; however, none of it's factors may be linear because that would imply the existence of another root. So, $Q(x)$ must have at least one prime factor that is not linear (i.e. degree greater than 1), which implies $P(x)$ such a factor.
 
 ## Exercise 31
 

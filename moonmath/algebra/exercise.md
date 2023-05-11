@@ -32,8 +32,18 @@ Let $x = g^a \in \mathbb{Z}_p^*$ and $y = g^{a+k} \in \mathbb{Z}_p^*$ where $x =
 
 Cyclic group exponentiation made use of "square-and-multiply". In efficient scalar multiplication, we will essentially use it's equivalent operations in additive groups, that is, "double-and-add". See the code [here](./cyclic-group-exponentiation.py)
 
-## Exercise 41
+## Exercise 41 ✨
 
 > Let $(\mathbb{Z}_p^*, .)$ be a cyclic group. Show that for $p \geq 5$ not every element of $\mathbb{F}_p^*$ is a generator of $\mathbb{F}_p^*$
 
-...
+Well, the identity element can not be a generator. There is more to this question though. (TODO)
+
+## Exercise 45
+
+> Consider the Pedersen Hash and the SHA256 hash function. Implement the related hash-to-group function in Sage.
+
+See the code [here](./hashing.sage).
+
+## Exercise 47
+
+>
