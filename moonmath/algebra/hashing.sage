@@ -1,3 +1,4 @@
+from sage.all import ZZ, Integers
 import hashlib
 
 # "try-and-increment" method on top of SHA256

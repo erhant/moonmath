@@ -1,3 +1,5 @@
+from sage.all import random_prime, ZZ
+
 # Fermat's Little Theorem
 if __name__ == "__main__":
   p = random_prime(2 ^ 16)
