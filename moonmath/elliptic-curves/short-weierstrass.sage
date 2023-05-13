@@ -1,4 +1,60 @@
-from sage.all import GF, EllipticCurve
+'''
+Affine Short Weierstrass form:
+
+  y^2 = x^3 + a(x) + b
+
+Projective Short Weierstrass form:
+
+  Y^2 * Z = X^3 + a * X * Z^2 + b * Z^3
+
+'''
+
+from sage.all import GF, EllipticCurve, factor
+
+def exercise_67():
+  # TinyJubJub_13
+  E = EllipticCurve(GF(13), [8, 8])
+
+  # Get it's largest prime factor
+  lpf = max(factor(E.order()))
+
+  # Find co-factor
+  cf = E.order() // lpf
+
+  # Do co-factor clearing
+  pass
+
+def example_78():
+  '''
+  Adding random affine points in secp256k1.
+  '''
+  p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+  E = EllipticCurve(GF(p), [0, 7])
+  
+  P = E.random_point()
+  Q = E.random_point()
+  R = P + Q
+
+  print("P: {0}\nQ: {1}\nR: {2}".format(P.xy(), Q.xy(), R.xy()))
+
+
+def exercise_63():
+  # TinyJubJub_13
+  E = EllipticCurve(GF(13), [8, 8])
+
+  # part 1
+  print("Inverting points:")
+  points = [E(10, 10), E(0), E(4, 0), E(1, 2)]
+  inverses = list(map(lambda p : -p, points))
+  for p, ip in zip(points, inverses):
+    print("{0} --> {1}".format(p, ip))
+
+  # part 2
+  print("Solving x + (9, 4) = (5, 2)")
+  A, B = E(9, 4), E(5, 2)
+  X = B - A
+  assert(X + A == B)
+  print("X:", X.xy())
 
 def print_points(E, compressed=False):
   '''

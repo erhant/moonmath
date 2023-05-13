@@ -15,10 +15,22 @@ See the code [here](./short-weierstrass.sage).
 > 1. Compute the inverse of $(10, 10), \mathcal{O}, (4, 0), (1, 2)$
 > 2. Solve the equation $x \oplus (9, 4) = (5, 2)$ for some point $x$ on the curve.
 
-See the code [here](./affine-group-law.sage).
+See the code [here](./short-weierstrass.sage).
 
 ## Exercise 67
 
 > Compute the projective representation of the TinyJubJub curve with base field $\mathbb{F}_{13}$.
 
-See the code [here](./short-weierstrass.sage).
+todo
+
+## Exercise 72
+
+> Show that `secp256k1` is not a Montgomery curve.
+
+todo
+
+## Exercise 74
+
+> Show that `alt_bn128` is not a Montgomery curve.
+
+todo
