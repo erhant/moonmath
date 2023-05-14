@@ -22,3 +22,5 @@ Some errors in version 1.1.1 (I might be wrong though).
 - Page 84, at the top why does it map to $\mathbb{G}_2$? Shouldn't it say $E_{1, 1}(\mathbb{F}_3)[3]$?
 - Page 84, instead of saying "tangent rule repeatedly" it should say "tangent & chord rules repeatedly"?
 - Page 95, in eq 5.35 the paragraphs can use `\left(` and `\right)`
+- Page 96, above 5.37 it should probably say "Short Weierstrass or Montgomery representation"
+- Page 97, end of 3rd paragraph should be $(-x_1, y_1)$.
