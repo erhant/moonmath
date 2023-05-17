@@ -24,3 +24,4 @@ Some errors in version 1.1.1 (I might be wrong though).
 - Page 95, in eq 5.35 the paragraphs can use `\left(` and `\right)`
 - Page 96, above 5.37 it should probably say "Short Weierstrass or Montgomery representation"
 - Page 97, end of 3rd paragraph should be $(-x_1, y_1)$.
+- Page 102, end of exercise 78 should say $alt\_bn128(\mathbb{F}_{p^{12}})$
