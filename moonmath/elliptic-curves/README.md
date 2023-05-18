@@ -40,9 +40,9 @@ See the code [here](./montgomery.sage).
 > - Compute the inverse of $(1, 9), \mathcal{O}, (7, 12), (4, 9)$.
 > - Solve the equation $x \oplus (3, 8) = (10, 3)$ for some point in the Montgomery curve.
 >
-> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's lograithmic order. (TODO)
+> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's lograithmic order.
 
-See the code [here](./montgomery.sage).
+See the code [here](./montgomery.sage). **Generator part is still TO-DO**
 
 ## Exercise 74
 
@@ -57,6 +57,36 @@ See the code [here](./montgomery.sage).
 > - Compute the inverse of $(1, 11), (0, 1), (3, 0), (5, 8)$.
 > - Solve the equation $x \oplus (5, 8) = (1, 11)$ for some point in the Montgomery curve.
 >
-> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's lograithmic order. (TODO)
+> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's lograithmic order.
 
-See the code [here](./twisted-edwards.sage).
+See the code [here](./twisted-edwards.sage). **Generator part is still TO-DO**
+
+## Exercise 76
+
+> Consider the short Weierstrass curve $y^2 = x^3 + x + 1$ over extension field $\mathbb{F}_{5^2}. Compute $(4t + 3, 2t + 1) \oplus (3t + 3, 2)$, and double-check the result in sage. Then, solve the equation $x \oplus (3t + 3, 3) = (3, 4)$ for some $x$ in the curve. Also, compute $[5](2t + 1, 4t + 4)$.
+
+See the code [here](./embedding-and-extension.sage)
+
+## Exercise 77
+
+> Consider TinyJubJub. Show that $t^4 + 2 \in \mathbb{F}_{13}[t]$ is irreducible. Then, write a sage program to implement the finite field extension $\mathbb{F}_{13^4}$. Implement the curve extension in the extension field, and compute the number of curve points (i.e. order).
+
+See the code [here](./embedding-and-extension.sage)
+
+## Exercise 78 ✨
+
+> Consider `alt_bn128` curve. We know from example 89 that this curve has embedding degree 12. Use Sage to find an irreducible polynomial in $\mathbb{F}_p[t]$, and then compute the field extension $\mathbb{F}_{p^{12}}$ to implement the curve extension of `alt_bn128`. Compute the number of curve points.
+
+See the code [here](./embedding-and-extension.sage)
+
+## Exercise 80 ✨
+
+todo
+
+## Exercise 81
+
+todo
+
+## Exercise 84
+
+todo

@@ -30,22 +30,29 @@ class MontgomeryCurve:
   def __str__(self) -> str:
     return "{0} * y^2 = x^3 + {1} * x^2 + x".format(self.B, self.A)
 
-  def chord(self, P, Q):
+  def add(self, P, Q):
     '''
     Add points P and Q in the Montgomery curve.
+
+    If P == Q, tangent law is used.
+    If P != Q, chord law is used.
     '''
-    assert(P[0] != Q[0])
     assert(P in self.points)
     assert(Q in self.points)
 
     x1, x2, y1, y2 = P[0], Q[0], P[1], Q[1]
-    common = (y2 - y1) / (x2 - x1)
+    if (x1 != x2):
+      # chord
+      common = (y2 - y1) / (x2 - x1)
+    else:
+      # tangent
+      common = (3 * x1 * x1 + 2 * self.A * x1 + 1) / (2 * self.B & y1)
 
     x3 = common * common * self.B - (x1 + x2) - self.A
     y3 = common * (x1 - x3) - y1
     assert(self.in_curve((x3, y3)))
     return (x3, y3)
-
+  
   def in_curve(self, P) -> bool:
     '''
     Returns true if the given point is in curve.
@@ -124,13 +131,14 @@ def exercise_73():
   assert(MTJJ.in_curve(A))
   assert(MTJJ.in_curve(B))
 
-  # X = B + (-A), we have to use Chord rule
-  X = MTJJ.chord(B, MTJJ.inverse(A))
+  # X = B + (-A)
+  X = MTJJ.add(B, MTJJ.inverse(A))
   print("X:", X)
   assert(MTJJ.in_curve(X))
 
   # part 3
   # TODO
+
 
 def exercise_74():
   # alt_bn128

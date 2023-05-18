@@ -36,7 +36,7 @@ Cyclic group exponentiation made use of "square-and-multiply". In efficient scal
 
 > Let $(\mathbb{Z}_p^*, .)$ be a cyclic group. Show that for $p \geq 5$ not every element of $\mathbb{F}_p^*$ is a generator of $\mathbb{F}_p^*$
 
-Well, the identity element can not be a generator. There is more to this question though. (TODO)
+**TODO TODO TODO**
 
 ## Exercise 45
 

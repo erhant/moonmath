@@ -3,12 +3,11 @@ from sage.all import GF
 if __name__ == "__main__":
   # prepare polynomials over Z_3
   Z5 = GF(5) # prime field
-  Z5t = Z5["t"] # polynomial
+  Z5t.<t> = Z5[] # polynomial # type: ignore
   print("Z5t:", Z5)
-  t = Z5t.gen() # get indeterminate
 
-  # prepare an irreducible polynomial
-  P = Z5t(t^2 + 2)
+  # prepare an irreducible polynomial 
+  P = Z5t(t^2 + 2) # type: ignore
   assert(P.is_irreducible())
 
   # extension field
