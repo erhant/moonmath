@@ -25,3 +25,12 @@ Some errors in version 1.1.1 (I might be wrong though).
 - Page 96, above 5.37 it should probably say "Short Weierstrass or Montgomery representation"
 - Page 97, end of 3rd paragraph should be $(-x_1, y_1)$.
 - Page 102, end of exercise 78 should say $alt\_bn128(\mathbb{F}_{p^{12}})$
+- Page 108, top of the page says "add this to references"
+- Page 110, Algorithm 9, should be $y^2 \gets x^3 + a\cdot x + b$
+
+## Chapter 6
+
+- Page 135, Example 116 should say $R_{tiny, jj}(<x_1, \ldots, x_n>) = true$.
+- Page 136, Exercise 96, missing double quote at the end
+- Page 138, Example 119 second equation has $m = m$, should say $m = 2$.
+- Page 140, Footnote, says equation XXX

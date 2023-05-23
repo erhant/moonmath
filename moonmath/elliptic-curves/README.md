@@ -81,12 +81,30 @@ See the code [here](./embedding-and-extension.sage)
 
 ## Exercise 80 ✨
 
+> Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element frmo the curve's full torsion group that is not the point at infinity.
+
 todo
 
 ## Exercise 81
 
+> Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
+
+todo
+
+## Exercise 83
+
+> Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
+
 todo
 
 ## Exercise 84
+
+todo
+
+## Exercise 85
+
+todo
+
+## Exercise 86
 
 todo
