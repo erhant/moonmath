@@ -1,6 +1,6 @@
 # Errata (v1.1.1)
 
-Some errors in version 1.1.1 (I might be wrong though).
+Some possible errors in version 1.1.1.
 
 ## Chapter 3
 
@@ -34,3 +34,4 @@ Some errors in version 1.1.1 (I might be wrong though).
 - Page 136, Exercise 96, missing double quote at the end
 - Page 138, Example 119 second equation has $m = m$, should say $m = 2$.
 - Page 140, Footnote, says equation XXX
+- Page 158, Eqn 6.15 probably should say $j = 0$ instead of $h = 0$?

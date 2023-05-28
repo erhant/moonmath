@@ -1,3 +1,25 @@
+
+def crt(a: list[int], n: list[int]):
+  '''
+  Chinese Remainder Theorem demonstration.
+  '''
+  assert(len(a) == len(n))
+
+  # find N as multiplication of all n
+  N = 1
+  for n_i in n:
+    N *= n_i
+
+  # find x'  
+  xp = 0
+  for i in range(len(a)):
+    Ndiv = N // n[i]
+    _, s, t = xgcd(Ndiv, n[i])
+    xp += a[i] * s * Ndiv
+  
+  # return x' mod N
+  return xp % N
+
 def xgcd(a: int, b: int, verbose: bool = False):
   """
   Extended Euclidean Algorithm

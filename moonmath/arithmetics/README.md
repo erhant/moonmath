@@ -162,4 +162,4 @@ Apparently, $4x^3 + 3x^2 + 4x$ does the job!
 
 > Consider the same set $S = \{(0, 0), (1, 1), (2, 2), (3, 2)\}$. Why is it not possible to do Lagrange interpolation for these points in $\mathbb{Z}_6[x]$?
 
-We can't, because we need the elements to have multiplicative inverses of the evaluated elements. In $\mathbb{Z}_6$, only 1 and 5 have multiplicative inverse; the other elements do not have a multiplicative inverse..
+We can't, because we need the elements to have multiplicative inverses of the evaluated elements. In $\mathbb{Z}_6$, only 1 and 5 have multiplicative inverse; the other elements do not have a multiplicative inverse.

@@ -6,6 +6,7 @@
 - [Chapter 4. Algebra](./algebra/)
 - [Chapter 5. Elliptic Curves](./elliptic-curves/)
 - [Chapter 6. Statements](./statements/)
+- [Chapter 7. Circuit Compilers](./circuit-compilers/)
 - [Errata](./ERRATA.md)
 
-You can run both Sage and Python files by calling `load("path-to-file")` within the Sage command-line. Make sure you activate Sage environment, and also select it from the bottom if you are using VSCode.
+You can run both Sage and Python files by calling `load("path-to-file")` within the Sage command-line. Make sure you activate Sage environment if you are using it that way.
