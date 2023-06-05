@@ -7,10 +7,11 @@
 The decision function can be written as follows:
 
 $$
-R_{Exercise_1} : (\mathbb{F}_{13})^* \to \{true, false\} ; <x_1, \ldots, x_n>
+R_{Exercise_1} : (\mathbb{F}_{13})^* \to \{true, false\} ;
 $$
 
 $$
+\langle x_1, \ldots, x_n \rangle
 \mapsto
 \begin{cases}
 true & n = 1 \text{ and } 5x_1+4 = 28 + 2x_1 \\
@@ -24,17 +25,18 @@ We can find the solution $x$ as follows:
 - Taking modulo 13 to get: $3x = 11$
 - Inverse of $3$ is $9$ in this field, so we have $x = 11 * 9$ which is $x = 8$ in mod 13.
 
-So, the string $<8>$ is a constructive proof and the computation $R_{Exercise_1}(<8>) = true$ verifies the proof.
+So, the string $\langle 8 \rangle$ is a constructive proof and the computation $R_{Exercise_1}(\langle 8 \rangle) = true$ verifies the proof.
 
 ## Exercise 97
 
 > Consider modular 6 arithmetic $(\mathbb{Z}_6)$, the alphabet $\Sigma = \mathbb{Z}_6$ and the following decision function:
 >
 > $$
->  R_{example_{11}} : \Sigma^* \to \{true, false\} ; <x_1, \ldots,  x_n>
+>  R_{example_{11}} : \Sigma^* \to \{true, false\} ;
 > $$
 >
 > $$
+> \langle x_1, \ldots,  x_n \rangle
 >   \mapsto
 >   \begin{cases}
 >   true & n = 1 \text{ and } 3x_1 + 3 = 0 \\
@@ -44,7 +46,7 @@ So, the string $<8>$ is a constructive proof and the computation $R_{Exercise_1}
 >
 > Compute all words in the associated language $L_{example_{11}}$, provide a constructive proof for the statement "There exist a word in $L_{example_{11}}$" and verify the proof.
 
-Looking at words with $n=1$, we have $<0>, <1>, <2>, <3>, <4>, <5>$. From these, $<1>$ and $<5>$ fit the whole grammar as $3(1) + 3 = 6 \equiv 0 \pmod{6}$ and $3(5)+3 = 18 \equiv 0 \pmod{6}$.
+Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \langle 2 \rangle, \langle 3 \rangle, \langle 4 \rangle, \langle 5 \rangle$. From these, $\langle 1 \rangle$ and $\langle 5 \rangle$ fit the whole grammar as $3(1) + 3 = 6 \equiv 0 \pmod{6}$ and $3(5)+3 = 18 \equiv 0 \pmod{6}$.
 
 ## Exercise 99 ✨
 
@@ -88,8 +90,8 @@ $$
 (i ; w) \mapsto
 \begin{cases}
 true  & |i| = 4 \text{ and } |w| = 2  \\
-      & \text{ and } (<i_1, i_2>) \in L_{tiny-jj} \\
-      & \text{ and } (<i_3, i_4>) \in L_{tiny-jj} \\
+      & \text{ and } (\langle i_1, i_2 \rangle) \in L_{tiny-jj} \\
+      & \text{ and } (\langle i_3, i_4 \rangle) \in L_{tiny-jj} \\
       & \text{ and } (w_1, w_2) =
 \left(
 \frac
@@ -115,7 +117,7 @@ To provide an instance with knowledge proof, we can just pick two points in the 
 
 ## Exercise 101
 
-> Consider the circuit $C_{tiny-jj}(\mathbb{F}_{13})$ with it's associated language $L_{tiny-jj}$. Construct a proof $\pi$ for the instance $<11, 6>$ and verify the proof.
+> Consider the circuit $C_{tiny-jj}(\mathbb{F}_{13})$ with it's associated language $L_{tiny-jj}$. Construct a proof $\pi$ for the instance $\langle 11, 6 \rangle$ and verify the proof.
 
 The said circuit outputs 0 when the given point coordinates $x, y$ hold for the equation of the TinyJubJub curve in twisted Edwards form:
 
@@ -174,7 +176,7 @@ flowchart TD
   a3 --S6--> f_tiny-jj
 ```
 
-The proof will be to find the correct values for wire labels given the inputs $<11, 6>$. That is:
+The proof will be to find the correct values for wire labels given the inputs $\langle 11, 6 \rangle$. That is:
 
 ```mermaid
 flowchart TD
@@ -219,13 +221,13 @@ flowchart TD
   a3 --"S6 = 0"--> f_tiny-jj
 ```
 
-Indeed, we got the output to be 0 and we have a valid set of assignments to prove it! Our proof $\pi$, that is the assignments for $<S_1, S_2, S_3, S_4, S_5, S_6>$ are:
+Indeed, we got the output to be 0 and we have a valid set of assignments to prove it! Our proof $\pi$, that is the assignments for $\langle S_1, S_2, S_3, S_4, S_5, S_6 \rangle$ are:
 
 $$
-\pi = <11, 6, 4, 10, 1, 0>
+\pi = \langle 11, 6, 4, 10, 1, 0 \rangle
 $$
 
-## Exercise 102
+## Exercise 102 ✨
 
 > Consider the R1CS for points on the TinyJubJub curve. Compute an associated QAP for this R1CS and check your results with Sage.
 

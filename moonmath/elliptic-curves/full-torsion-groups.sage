@@ -8,6 +8,7 @@ def embedding_degree(E, max_k = 50):
   # largest prime factor of n
   r = max(factor(n))[0] 
 
+  # find embedding
   k = 1
   while k < r or k <= max_k:
     # Fermat's Little Theorem

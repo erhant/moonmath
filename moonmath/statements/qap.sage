@@ -4,8 +4,6 @@ def qap(r1cs, p: int):
   '''
   Given a R1CS and a prime, returns the QAP (Quadratic Arithmetic Program).
   '''
-  
-
   # k := number of constraints
   k = len(r1cs[0])
   assert(k < p)

@@ -81,7 +81,7 @@ See the code [here](./embedding-and-extension.sage)
 
 ## Exercise 80 ✨
 
-> Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element frmo the curve's full torsion group that is not the point at infinity.
+> Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
 todo
 

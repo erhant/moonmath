@@ -219,4 +219,4 @@ def exercise_bls12_381():
   print_ordermod(E) 
 
 if __name__ == "__main__": 
-  exercise_67()
+  exercise_70()

@@ -10,9 +10,9 @@ The map $\cdot$ (multiplication) of all elements in $\mathbb{Z}_5$ have the foll
 - Associative due to multiplication
 - Commutative due to multiplication
 - Identity is $1 \in \mathbb{Z}_5$
-- Inverse as all elements are co-prime to $5$
+- Inverse exists as all elements are co-prime to $5$
 
-With all these properties, the group is commutative.
+With all these properties, the group is commutative. We can also see this from the table at example 16.
 
 ## Exercise 35
 

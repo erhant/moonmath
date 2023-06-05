@@ -133,6 +133,23 @@ Q = Z5x(3*x^3 + 2*x^2 + 2*x + 2)
 Q == A / B # true
 ```
 
+## Exercise 25
+
+> Consider the polynomial $(x - 2)(x + 3)(x - 5)$ in both $\mathbb{Z}$ and $\mathbb{Z}_6$. Can you see how the definition of the polynomial in $\mathbb{Z}$ projects to the definition over $\mathbb{Z}_6$ if you consider the residue classes of $\mathbb{Z}_6$?
+
+If we do calculations by hand, we get:
+
+- $x^3 - 4x^2 - 11x + 30 \in \mathbb{Z}[X]$
+- $x^3 + x^2 + x \in \mathbb{Z}_6[X]$
+
+We verify this in Sage, see [here](./polynomials.sage). We find out that we can do calculations in $\mathbb{Z}$ and then apply the modulo operations afterwards, that is equal to doing everything in $\mathbb{Z}_6$ in the first place!
+
+## Exercise 27
+
+> Consider the polynomials $A(x) := -3x^4 + 4x^3 + 2x^2 + 4$ and $B(x) := x^2 - 4x + 2$. Compute the Euclidean Division of $A$ by $B$ in the following types: $\mathbb{Z}[X], \mathbb{Z}_6[X], \mathbb{Z}_5[X]$.
+
+See the code [here](./polynomials.sage).
+
 ## Exercise 29 ✨
 
 > Show that if a polynomial $P \in \mathbb{R}[X]$ of degree $\deg(P) = m$ has less than $m$ roots, it must have a prime factor $F$ such that $\deg(F) > 1$.
@@ -144,6 +161,12 @@ P(x) = (x - z_1)(x - z_2)\ldots(x - z_k)Q(x)
 $$
 
 From this, we can see that $P(x) = (x^k + \ldots)Q(x)$, meaning that $Q(x)$ must have degree $m - k$. $Q(x)$ itself may be reducible; however, none of it's factors may be linear because that would imply the existence of another root. So, $Q(x)$ must have at least one prime factor that is not linear (i.e. degree greater than 1), which implies $P(x)$ such a factor.
+
+## Exercise 30
+
+> Consider $P = x^7 + 3x^6 + 3x^5 + x^4 - x^3 - 3x^2 - 3x - 1$ in $\mathbb{Z}_6[X]$. Find the set of all roots $R_0(P)$ and then compute the prime factorization of $P$.
+
+See the code [here](./polynomials.sage).
 
 ## Exercise 31
 
