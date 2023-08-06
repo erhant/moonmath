@@ -457,7 +457,21 @@ From this, we can see that $P(x) = (x^k + \ldots)Q(x)$, meaning that $Q(x)$ must
 
 > Consider $P = x^7 + 3x^6 + 3x^5 + x^4 - x^3 - 3x^2 - 3x - 1$ in $\mathbb{Z}_6[X]$. Find the set of all roots $R_0(P)$ and then compute the prime factorization of $P$.
 
-See the code [here](./polynomials.sage).
+Let's use Sage to find the roots.
+
+```py
+sage: Z6 = Integers(6)
+sage: Z6x = Z6['x']
+sage: P = Z6x(x^7 + 3*x^6 + 3*x^5 + x^4 - x^3 - 3*x^2 - 3*x - 1)
+
+# find roots
+sage: P.roots(multiplicities=False)
+[1, 5]
+```
+
+To find factors, we can divide $x - r$ for each root $r$ until the quotient does not have $r$ as a root anymore. Once we are done with all roots, if the remaining result is not $1$ we can also include that as a factor.
+
+I have implemented this [here](./polynomials.sage).
 
 ## Exercise 31
 
@@ -466,8 +480,8 @@ See the code [here](./polynomials.sage).
 We need to do lagrange interpolation for this. We could do by hand, but let's just use Sage for this one!
 
 ```py
-Integers(5)[x].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
-# 4*x^3 + 3*x^2 + 4*x
+sage: Integers(5)[x].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
+4*x^3 + 3*x^2 + 4*x
 ```
 
 Apparently, $4x^3 + 3x^2 + 4x$ does the job!

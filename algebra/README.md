@@ -10,9 +10,17 @@ The map $\cdot$ (multiplication) of all elements in $\mathbb{Z}_5$ have the foll
 - Associative due to multiplication
 - Commutative due to multiplication
 - Identity is $1 \in \mathbb{Z}_5$
-- Inverse exists as all elements are co-prime to $5$
+- Inverse exists for every element, as all elements are co-prime to $5$
 
 With all these properties, the group is commutative. We can also see this from the table at example 16.
+
+## Exercise 34
+
+> Generalizing the previous exercise, consider $n$ and let $\mathbb{Z}_n^*$ be the set of all remainder classes from $\mathbb{Z}_n$ without the class 0, i.e. $\mathbb{Z}_n^* = \{1, 2, \ldots, n - 1\}$. Provide a counter-example to show that $(\mathbb{Z}_n^*, \cdot)$ is not a group in general.
+>
+> Find a condition such that $(\mathbb{Z}_n^*, \cdot)$ is a commutative group, compute the neutral element, give a closed form for the inverse of any element and prove the commutative group axioms.
+
+TODO
 
 ## Exercise 35
 

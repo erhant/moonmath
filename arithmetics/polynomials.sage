@@ -43,11 +43,33 @@ def exercise_30():
   print("Roots:")
   print(roots)
 
-  R1 = Z6x(x - 1)
-  R5 = Z6x(x - 5)
-  
-  # ???
+  # factorize by consuming root polynomial one-at-a-time
+  factors = []
+  Q = P
+  for r in roots:
+    R = Z6x([-r, 1])
+    count = 1
+    while True:
+      Q = Q // R 
+      if r not in Q.roots(multiplicities=False):
+        break
+      count += 1
+    factors.append((R, count))
 
+  if Q != Z6x(1):
+    factors.append((Q, 1))
+
+  print("Factors:")
+  print(factors)
+
+  # make sure it is correct
+  PP = Z6x(1)
+  for f in factors:
+    assert(f[1] > 0)
+    for _ in range(f[1]):
+      PP = PP * f[0]
+  
+  assert(P == PP)
   
 
 if __name__ == '__main__':
