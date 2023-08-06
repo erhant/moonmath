@@ -7,8 +7,8 @@ def exercise_25():
   # polynomial in ZZ
   ZZx.<x> = ZZ[] # type: ignore
 
-  print("Z6: ", Z6x((x - 2) * (x + 3) * (x - 5)))
-  print("ZZ: ", ZZx((x - 2) * (x + 3) * (x - 5)))
+  print("Z6: ", Z6x((x - 2) * (x + 3) * (x - 5))) # type: ignore
+  print("ZZ: ", ZZx((x - 2) * (x + 3) * (x - 5))) # type: ignore
 
 def exercise_27():
   # polynomial in Z6
@@ -20,10 +20,10 @@ def exercise_27():
   # polynomial in ZZ
   ZZx.<x> = ZZ[] # type: ignore
 
-  for ring in [Z6x, Z5x, ZZx]:
+  for ring in [Z6x, Z5x, ZZx]: # type: ignore
     print(ring)
-    A = ring(-3*x^4 + 4*x^3 + 2*x^2 + 4)
-    B = ring(x^2 - 4*x + 2)
+    A = ring(-3*x^4 + 4*x^3 + 2*x^2 + 4) # type: ignore
+    B = ring(x^2 - 4*x + 2)              # type: ignore
     print("A:    ", A)
     print("B:    ", B)
     D = A.quo_rem(B)

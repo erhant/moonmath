@@ -21,16 +21,16 @@ sage
 Within Sage, you can run files via:
 
 ```py
-> load("./path-to-file.sage")
+sage: load("./path-to-file.sage")
 ```
 
 ## Chapters
 
-1. Introduction
-2. Software Used in This Book
-3. [Arithmetics](./arithmetics/)
-4. [Algebra](./algebra/)
-5. [Elliptic Curves](./elliptic-curves/)
-6. [Statements](./statements/)
-7. [Circuit Compilers](./circuit-compilers/)
-8. [Zero-Knowledge Protocols](./zero-knowledge/)
+1. **Introduction**
+2. **Software Used in This Book**
+3. [**Arithmetics**](./arithmetics/)
+4. [**Algebra**](./algebra/),
+5. [**Elliptic Curves**](./elliptic-curves/)
+6. [**Statements**](./statements/)
+7. [**Circuit Compilers**](./circuit-compilers/)
+8. [**Zero-Knowledge Protocols**](./zero-knowledge/)

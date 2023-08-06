@@ -15,5 +15,5 @@ if __name__ == "__main__":
   t = F5_2.gen()
   print("F3_2:", F5_2)
 
-  assert(F5_2(t+2) * F5_2(2*t + 2) == F5_2(t))
+  assert(F5_2(t + 2) * F5_2(2*t + 2) == F5_2(t))
     
