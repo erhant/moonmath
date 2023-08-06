@@ -1,4 +1,4 @@
-# Selected Exercises
+# Chapter 5: Elliptic Curves
 
 Also see this <https://curves.xargs.org/> for great animations, especially about Chord & Tangent rule. Furthermore, I have drawn the example TinyJubJub curves in WolframAlpha:
 

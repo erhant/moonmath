@@ -115,6 +115,12 @@ $$
 
 To provide an instance with knowledge proof, we can just pick two points in the curve and sum them as the witness. To provide an instance with no proof, we can let one of the points to be outside the curve and that would suffice.
 
+## Exercise 100
+
+> Consider the language $L_{add}$ from exercise 99. Define an R1CS such that words in $L_{add}$ are in 1:1 correspondance with solutions to this R1CS.
+
+TODO
+
 ## Exercise 101
 
 > Consider the circuit $C_{tiny-jj}(\mathbb{F}_{13})$ with it's associated language $L_{tiny-jj}$. Construct a proof $\pi$ for the instance $\langle 11, 6 \rangle$ and verify the proof.

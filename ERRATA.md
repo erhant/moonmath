@@ -36,3 +36,8 @@ Some possible errors in version 1.1.1.
 - Page 138, Example 119 second equation has $m = m$, should say $m = 2$.
 - Page 140, Footnote, says equation XXX
 - Page 158, Eqn 6.15 probably should say $j = 0$ instead of $h = 0$?
+
+## Chapter 7
+
+- Page 177, exercise 103, extra `,` at the end of line with `fn foo`.
+- Page 177, exercise 103, in `fn main` should be `in_2 : F`.

@@ -2,7 +2,7 @@
 
 ## Exercise 33
 
-> Let $\mathbb{Z}_5^*$ be the set of all remainder classes from $\mathbb{Z}_5$ without the class 0, meaning that $\mathbb{Z}_5^* = \mathbb{Z}_5 \backslash \{0\}$. Show that $(\mathbb{Z}_5, \cdot)$ is a commutative group (aka. Abelian Group).
+> Let $\mathbb{Z}_5^*$ be the set of all remainder classes from $\mathbb{Z}_5$ without the class 0, meaning that $\mathbb{Z}_5^* = \mathbb{Z}_5 \setminus \{0\}$. Show that $(\mathbb{Z}_5, \cdot)$ is a commutative group (aka. Abelian Group).
 
 The map $\cdot$ (multiplication) of all elements in $\mathbb{Z}_5$ have the following properties:
 
