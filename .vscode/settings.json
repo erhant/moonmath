@@ -6,7 +6,9 @@
     "arithmetics": "Import",
     "circuit-compilers": "Core",
     "statements": "Json",
-    "zero-knowledge": "Resolver"
+    "zero-knowledge": "Resolver",
+    "software-used": "Project",
+    "introduction": "Base"
   },
   // https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/images/fileIcons.png
   "material-icon-theme.files.associations": {
