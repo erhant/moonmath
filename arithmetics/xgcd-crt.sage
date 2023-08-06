@@ -81,7 +81,11 @@ def xgcd_arrayless(a: int, b: int):
      
   return r_prev, s_prev, t_prev
 
+def exercise_22():
+  print(xgcd(24, 7))
+  print(xgcd(24, 13))
+  print(xgcd(24, 17))
+
 if __name__ == '__main__':
-  a, b = 12, 5
-  print(xgcd_arrayless(12, 5))
-  print(xgcd(12, 5))
+  # print(xgcd_arrayless(12, 5))
+  exercise_22()

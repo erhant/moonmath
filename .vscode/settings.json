@@ -1,9 +1,15 @@
 {
   // https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/images/folderIcons.png
-  "material-icon-theme.folders.associations": {},
+  "material-icon-theme.folders.associations": {
+    "elliptic-curves": "Functions",
+    "algebra": "Animation",
+    "arithmetics": "Import",
+    "circuit-compilers": "Core",
+    "statements": "Json",
+    "zero-knowledge": "Resolver"
+  },
   // https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/images/fileIcons.png
   "material-icon-theme.files.associations": {
     "*.sage": "Python"
-  },
-  "python.linting.enabled": true
+  }
 }

@@ -1,4 +1,4 @@
-# Selected Exercises
+# Chapter 4: Algebra
 
 ## Exercise 33
 
