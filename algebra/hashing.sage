@@ -14,6 +14,21 @@ def sha256_try_and_increment(s, mod):
 
   return z
 
+# Pedersen hash
+def pedersen(xs, gs, N):
+  assert(len(xs) == len(gs))
+
+  Z = Integers(N)
+  ans = 1
+  for i in range(len(gs)):
+    ans *= Z(gs[i]) ^ xs[i]
+  
+  return ans
+
+# Pedersen pseudo-random function with seed
+def pedersen_prf(bs, seeds, k, g, N):
+  pass # TODO
+
 # Pedersen hash on top of SHA256, hash to cyclic-group
 def sha256_pedersen(s, gs, N):
 
@@ -34,7 +49,7 @@ def sha256_pedersen(s, gs, N):
 # Simple SHA256 to integer mapping
 def sha256(s):
   # create hasher
-  hasher = hashlib.sha256(s)
+  hasher = hashlib.sha256(s.encode())
 
   # hash as hex string
   hexdigest = hasher.hexdigest()

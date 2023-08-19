@@ -2,7 +2,7 @@
 
 ## Exercise 1
 
-> What is the absolute value of integers -123, 27 and 0?
+> What are the absolute values of integers -123, 27 and 0?
 
 123, 27 and 0.
 
@@ -42,12 +42,6 @@ We can also find an $x$ such that $|x| \ne 1$ by dividing both sides by $x^2 - 1
 - $\{1, -1\} \in \mathbb{Z}$
 - $\{1, -1, 1/2\} \in \mathbb{Q}$
 
-## Exercise 6
-
-> Using the programming language of your choice, write an algorithm that computes integer long divison and handles all edge cases properly.
-
-TODO
-
 ## Exercise 5
 
 > Find an $m \in \mathbb{Z}$ and an $r \in \mathbb{N}$ with $0 \leq r < |b|$ such that $a = mb + r$ holds for the following pairs:
@@ -67,6 +61,12 @@ TODO
 5. $m = 0, r = 0$.
 
 All solutions are unique.
+
+## Exercise 6
+
+> Using the programming language of your choice, write an algorithm that computes integer long divison and handles all edge cases properly.
+
+TODO
 
 ## Exercise 7
 
@@ -116,7 +116,7 @@ Well, it's 1. In particular, a prime number is defined to be only divisible by i
 ```py
 p = random_prime(2 ^ 256)
 n = ZZ.random_element(p)
-print(gcd(p, n))`
+print(gcd(p, n))
 ```
 
 ## Exercise 10

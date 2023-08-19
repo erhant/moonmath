@@ -14,6 +14,7 @@ Some possible errors in version 1.1.1.
 - Page 41, Algorithm 5: it says example XXX
 - Page 47, Example 45: bugged?
 - Page 47, we have $H_(x_2)$ instead of $H(x_2)$
+- Page 50, "see section4.1.6.1" missing space
 - Page 55, above 4.35 it says "rage" instead of "range"
 - Page 59, Alg. 6, `return z` instead of `return x`
 

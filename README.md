@@ -7,27 +7,12 @@
   </p>
 </p>
 
-## Usage
-
-For Sage I use [Conda installation](https://doc.sagemath.org/html/en/installation/conda.html), which can be activated as follows:
-
-```sh
-# activate sage environment
-conda activate sage
-# launch sage
-sage
-```
-
-Within Sage, you can run files via:
-
-```py
-sage: load("./path-to-file.sage")
-```
-
-## Chapters
+<h3 align="center">
+    Chapters
+</h3>
 
 1. [**Introduction**](./introduction/)
-2. [**Software Used in This Book**](./software/)
+2. [**Software Used in This Book**](./software-used/)
 3. [**Arithmetics**](./arithmetics/)
 4. [**Algebra**](./algebra/)
 5. [**Elliptic Curves**](./elliptic-curves/)

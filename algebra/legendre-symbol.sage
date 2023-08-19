@@ -1,3 +1,4 @@
+from sage.all import GF
 
 def legendre_symbol(y, p):
   '''
@@ -7,11 +8,19 @@ def legendre_symbol(y, p):
   '''
   assert(p % 2 == 1)
   l = y ^ ((p - 1) // 2) % p
-  if l == p - 1:
-    return -1
-  else:
-    return l
+  return -1 if l == p - 1 else l
    
+def exercise_52():
+  F13, legendres, sqrts = GF(13), {}, {}
+  for e in F13:
+    sqrts[e] = []
+  for e in F13:
+    legendres[e] = legendre_symbol(e, 13)
+    sqrts[e * e].append(e)
+  
+  for e in F13:
+    print("N = {}\tSymbol: {}\tSqrts: {}".format(e, legendres[e], sqrts[e]))
+
 
 if __name__ == "__main__":
-  print(legendre_symbol(3, 5))
+  exercise_52()
