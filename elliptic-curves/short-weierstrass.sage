@@ -115,15 +115,12 @@ def print_points(E, compressed=False):
 
 def print_ordermod(E):
   '''
-  Prints the prime modulus and order (number of elements)
+  Prints the prime modulus (base field order) and order (number of elements)
   of the elliptic curve.
   '''
-  # prime modulus
-  prime = E.base_field().order()
-  print("Prime:\n{0}\n({1} bits)".format(prime, prime.nbits()))
-  # order
-  order = E.order()
-  print("Order:\n{0}\n({1} bits)".format(order, order.nbits()))
+  base_order, scalar_order = E.base_field().order(), E.order()
+  print("Base Field Order:\n{0}\n({1} bits)".format(base_order, base_order.nbits()))
+  print("Scalar Field Order:\n{0}\n({1} bits)".format(scalar_order, scalar_order.nbits()))
 
 def discriminant(a, b, p):
   '''

@@ -16,7 +16,7 @@ def exercise_53():
 def exercise_54():
   F3 = GF(3)
   F3x = F3['x']
-  Q = F3x([2, 1, 2]) # x^2 + x + 2
+  Q = F3x([2, 1, 1]) # x^2 + x + 2
 
   # is irreducible?
   is_irreducible = True

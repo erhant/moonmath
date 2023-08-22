@@ -8,21 +8,56 @@ Also see this <https://curves.xargs.org/> for great animations, especially about
 
 ## Exercise 58
 
-> Compute the set of all points $(x, y) \in E_1(\mathbb{F})$ from example 70.
+> Compute the set of all points $(x, y) \in E_{1, 1}(\mathbb{F}_5)$ from example 70.
 
-TODO
+Using Sage, we can check for pairs of field elements that satisfy the curve equation.
+
+```py
+F5 = GF(5)
+points = ['O'] # point at infinity
+for x in F5:
+  for y in F5:
+    if y ** 2 == x ** 3 + x + 1:
+      points.append((x, y))
+print(points)
+print(len(points), "points")
+```
+
+The set of all points is the one computed above, together with the point at infinity.
 
 ## Exercise 59
 
 > Compute the set of all points $(x, y) \in TJJ_{13}$ example 71.
 
-TODO
+Using Sage, we can check for pairs of field elements that satisfy the curve equation.
+
+```py
+F13 = GF(13)
+points = ['O'] # point at infinity
+for x in F13:
+  for y in F13:
+    if y**2 == x**3 + 8*x + 8:
+      points.append((x, y))
+print(points)
+print(len(points), "points")
+```
+
+The set of all points is the one computed above, together with the point at infinity.
 
 ## Exercise 60
 
 > Look up the definition of curve BLS12-381, implement it in Sage, and compute the number of all curve points.
 
-See the code [here](./short-weierstrass.sage).
+```py
+p = 52435875175126190479447740508185965837690552500527637822603658699938581184513
+E = EllipticCurve(GF(p), [0, 4])
+
+base_order, scalar_order = E.base_field().order(), E.order()
+print("Base Field Order:\n{0}\n({1} bits)".format(base_order, base_order.nbits()))
+print("Scalar Field Order:\n{0}\n({1} bits)".format(scalar_order, scalar_order.nbits()))
+```
+
+The number of all curve points is given by the scalar field order, which is 52435875175126190479447740508185965838148530120832936978733365853859369451521.
 
 ## Exercise 61
 
@@ -38,7 +73,7 @@ $$
 c^6 \cdot y^2 = c^6 \cdot x^3 + c^6 \cdot a \cdot x + c^6 \cdot b
 $$
 
-Notice how we have $c^6$ on both sides, and we are told that $c$ has a multiplicative inverse, and therefore we can compute $(c^{-1})^6$ and multiply both sides with it to obtain:
+Notice how we have $c^6$ on both sides, and we are told that $c$ has a multiplicative inverse, and therefore we can compute $c^{-6} = (c^{-1})^6$ and multiply both sides with it to obtain:
 
 $$
 y^2 = x^3 + a \cdot x + b
@@ -65,7 +100,30 @@ TODO
 > 1. Compute the inverse of $(10, 10), \mathcal{O}, (4, 0), (1, 2)$
 > 2. Solve the equation $x \oplus (9, 4) = (5, 2)$ for some point $x$ on the curve.
 
-See the code [here](./short-weierstrass.sage).
+Lets construct the curve first:
+
+```py
+E = EllipticCurve(GF(13), [8, 8])
+```
+
+Now, we can invert the given points:
+
+```py
+points = [E(10, 10), E(0), E(4, 0), E(1, 2)]
+inverses = list(map(lambda p : -p, points))
+# print point & its inverse
+for p, ip in zip(points, inverses):
+  print("{0} --> {1}".format(p, ip))
+```
+
+Finally, we can solve the equation:
+
+```py
+A, B = E(9, 4), E(5, 2)
+X = B - A
+assert(X + A == B)
+print("X:", X.xy())
+```
 
 ## Exercise 64
 
@@ -95,11 +153,20 @@ See the code [here](./short-weierstrass.sage).
 
 > Show that `secp256k1` is not a Montgomery curve.
 
-See the code [here](./montgomery.sage).
+One of the conditions to be a Montogomery curve is that order of the scalar field should be divisible by 4.
+
+```py
+sage: p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+sage: E = EllipticCurve(GF(p), [0, 7])
+sage: E.order() % 4
+1
+```
+
+As we can see, the order is not divisible by 4, therefore `secp256k1` is not a Montgomery curve.
 
 ## Exercise 73 ✨
 
-> Consider the commutative group defined by the Montgomery group law and TinyJubJub with base field $\mathbb{F}_{13} in Montgomery form$.
+> Consider the commutative group defined by the Montgomery group law and TinyJubJub with base field $\mathbb{F}_{13}$ in Montgomery form.
 >
 > - Compute the inverse of $(1, 9), \mathcal{O}, (7, 12), (4, 9)$.
 > - Solve the equation $x \oplus (3, 8) = (10, 3)$ for some point in the Montgomery curve.
@@ -112,11 +179,20 @@ See the code [here](./montgomery.sage). **Generator part is still TO-DO**
 
 > Show that `alt_bn128` is not a Montgomery curve.
 
-See the code [here](./montgomery.sage).
+One of the conditions to be a Montogomery curve is that order of the scalar field should be divisible by 4.
+
+```py
+sage: p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
+sage: E = EllipticCurve(GF(p), [0, 3])
+sage: E.order() % 4
+1
+```
+
+As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a Montgomery curve.
 
 ## Exercise 75 ✨
 
-> Consider the commutative group defined by the Twisted Edwards group law and TinyJubJub with base field $\mathbb{F}_{13} in Twisted Edwards form$.
+> Consider the commutative group defined by the Twisted Edwards group law and TinyJubJub with base field $\mathbb{F}_{13}$ in Twisted Edwards form.
 >
 > - Compute the inverse of $(1, 11), (0, 1), (3, 0), (5, 8)$.
 > - Solve the equation $x \oplus (5, 8) = (1, 11)$ for some point in the Montgomery curve.
