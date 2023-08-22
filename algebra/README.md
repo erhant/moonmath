@@ -1,5 +1,12 @@
 # Chapter 4: Algebra
 
+Topics in this chapter:
+
+- Commutative Groups
+- Commutative Rings
+- Fields
+- Projective Planes
+
 ## Exercise 33
 
 > Let $\mathbb{Z}_5^*$ be the set of all remainder classes from $\mathbb{Z}_5$ without the class 0, meaning that $\mathbb{Z}_5^* = \mathbb{Z}_5 \setminus \{0\}$. Show that $(\mathbb{Z}_5, \cdot)$ is a commutative group (aka. Abelian Group).
@@ -474,11 +481,11 @@ Now, let's find the Legendre symbol & square root for each element:
 
 ```py
 F13, legendres, sqrts = GF(13), {}, {}
-  for e in F13:
-    sqrts[e] = []
-  for e in F13:
-    legendres[e] = legendre_symbol(e, 13)
-    sqrts[e * e].append(e)
+for e in F13:
+  sqrts[e] = []
+for e in F13:
+  legendres[e] = legendre_symbol(e, 13)
+  sqrts[e * e].append(e)
 ```
 
 When we print this nicely, we see the following:
@@ -509,13 +516,68 @@ As observed, we have two square roots (positive and negative) for each element t
 > y^2 = x^3 + 4
 > $$
 
-TODO
+Using Sage:
+
+```py
+F3_2 = GF(3^2, name="x", modulus=GF(3)['x']([1, 0, 1]))
+solutions = []
+for x in F3_2:
+  for y in F3_2:
+    if y^2 == x^3 + 4:
+      solutions.append((x, y))
+print(solutions)
+```
+
+We get the results:
+
+```sh
+[(0, 2), (0, 1), (x + 2, 2*x + 2), (x + 2, x + 1), (2*x + 2, x + 2), (2*x + 2, 2*x + 1), (2, 0), (1, x), (1, 2*x)]
+```
 
 ## Exercise 54
 
 > Show that the polynomial $Q = x^2 + x + 2$ from $\mathbb{F}_3[x]$ is irreducible. Construct the multiplication table of $\mathbb{F}_{3^2}$ with respect to $Q$ polynomial.
 
-TODO
+Using Sage:
+
+```py
+F3 = GF(3)
+F3x = F3['x']
+Q = F3x([2, 1, 1]) # x^2 + x + 2
+```
+
+To check if it is irreducible, we will evaluate it over all elements in the field and see if the result is zero or not. If there is a zero, it means there is a factor for that element, i.e. if $Q(a) = 0$ then there is a factor $(x - a)$, meaning that it is reducible.
+
+```py
+is_irreducible = True
+for elem in F3:
+  if Q(elem) == 0:
+    is_irreducible = False
+
+# compare with Sage's function for this
+assert(is_irreducible == Q.is_irreducible())
+```
+
+Finally, we print the multiplication table:
+
+```py
+F3_2 = GF(3^2, name="x", modulus=Q)
+print(F3_2.multiplication_table('elements'))
+```
+
+```sh
+      *        0       1       2       x   x + 1   x + 2     2*x 2*x + 1 2*x + 2
+       +------------------------------------------------------------------------
+      0|       0       0       0       0       0       0       0       0       0
+      1|       0       1       2       x   x + 1   x + 2     2*x 2*x + 1 2*x + 2
+      2|       0       2       1     2*x 2*x + 2 2*x + 1       x   x + 2   x + 1
+      x|       0       x     2*x 2*x + 1       1   x + 1   x + 2 2*x + 2       2
+  x + 1|       0   x + 1 2*x + 2       1   x + 2     2*x       2       x 2*x + 1
+  x + 2|       0   x + 2 2*x + 1   x + 1     2*x       2 2*x + 2       1       x
+    2*x|       0     2*x       x   x + 2       2 2*x + 2 2*x + 1   x + 1       1
+2*x + 1|       0 2*x + 1   x + 2 2*x + 2       x       1   x + 1       2     2*x
+2*x + 2|       0 2*x + 2   x + 1       2 2*x + 1       x       1     2*x   x + 2
+```
 
 ## Exercise 55
 
@@ -531,10 +593,61 @@ TODO
 
 > Consider the prime field $\mathbb{F}_5$. Show that the polynomial $P = x^2 + 2$ from $\mathbb{F}_5[X]$ is irreducible. Implement the finite field $\mathbb{F}_{5^2}$ in Sage.
 
-See the code [here](./extension-field.sage).
+Similar to exercise 54, we use Sage:
+
+```py
+F5 = GF(5)
+F5x.<x> = F5[] # type: ignore
+
+# is irreducible?
+P = F5x(x^2 + 2) # type: ignore
+is_irreducible = True
+for elem in F5:
+  if P(elem) == 0:
+    is_irreducible = False
+assert(is_irreducible == P.is_irreducible())
+
+# print elements
+F5_2 = GF(5^2, name="x", modulus=P)
+print(F5_2, ":")
+for elem in F5_2:
+  print(" ", elem)
+```
 
 ## Exercise 57
 
 > Construct the so-called Fano Plane, i.e. the projective plane over the finite field $\mathbb{F}_2$
 
-TODO
+From the formula of number of elements $p^{2m} + p^m + 1$ for the projective plane over $\mathbb{F}_{p^m}$, we know that $F_{2^1}$ should have $4 + 2 + 1 = 7$ points. Let's write each:
+
+```py
+   [0:0:0] (excluded)
+# affine points [X:Y:1]
+1. [0:0:1]
+2. [0:1:1]
+3. [1:0:1]
+4. [1:1:1]
+# points at infinity [X:Y:0]
+5. [0:1:0]
+6. [1:0:0]
+7. [1:1:0]
+```
+
+Notice that since $\mathbb{F}_2^* = \{1\}$, we cant obtain another point from a given point, because we can only multiply the coordinate by 1.
+
+Double checking our results with Sage:
+
+```py
+for e in ProjectiveSpace(GF(2), 2):
+  print(e)
+```
+
+```sh
+(0 : 0 : 1)
+(0 : 1 : 1)
+(1 : 0 : 1)
+(1 : 1 : 1)
+(0 : 1 : 0)
+(1 : 1 : 0)
+(1 : 0 : 0)
+```

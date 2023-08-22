@@ -1,5 +1,11 @@
 # Chapter 3: Arithmetics
 
+Topics in this chapter:
+
+- Integer Arithmetic
+- Modular Arithmetic
+- Polynomial Arithmetic
+
 ## Exercise 1
 
 > What are the absolute values of integers -123, 27 and 0?

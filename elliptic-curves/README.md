@@ -6,11 +6,57 @@ Also see this <https://curves.xargs.org/> for great animations, especially about
 - [Montgomery](https://www.wolframalpha.com/input?i2d=true&i=7Power%5By%2C2%5D%3DPower%5Bx%2C3%5D%2B6Power%5Bx%2C2%5D%2Bx+for+x%5C%2844%29+y+in+GF%5C%2840%2913%5C%2841%29)
 - [Twisted Edwards](https://www.wolframalpha.com/input?i2d=true&i=3Power%5Bx%2C2+%5D%2B+Power%5By%2C2%5D+%3D+1+%2B+8+Power%5Bx%2C2%5D+Power%5By%2C2%5D+for+x%5C%2844%29+y+in+GF%5C%2840%2913%5C%2841%29)
 
+## Exercise 58
+
+> Compute the set of all points $(x, y) \in E_1(\mathbb{F})$ from example 70.
+
+TODO
+
+## Exercise 59
+
+> Compute the set of all points $(x, y) \in TJJ_{13}$ example 71.
+
+TODO
+
 ## Exercise 60
 
 > Look up the definition of curve BLS12-381, implement it in Sage, and compute the number of all curve points.
 
 See the code [here](./short-weierstrass.sage).
+
+## Exercise 61
+
+> Let $\mathbb{F}$ be a finite field, let $(a, b)$ and $(a', b')$ be two pairs of parameters, and let $c \in \mathbb{F}^*$ be an invertible field element such that $a' = a \cdot c^4$ and $b' = b \cdot c^6$ hold. Show that the function $I$ from equation (5.3) maps curve points onto curve points.
+
+Let us write $x' := c^2 \cdot x$ and $y' := c^3 \cdot y$ as well as $a'$ and $b'$ in the curve equation:
+
+$$
+(c^3 \cdot y)^2 = (c^2 \cdot x)^3 + (c^4 \cdot a)(c^2 \cdot x) + (c^6 \cdot b)
+$$
+
+$$
+c^6 \cdot y^2 = c^6 \cdot x^3 + c^6 \cdot a \cdot x + c^6 \cdot b
+$$
+
+Notice how we have $c^6$ on both sides, and we are told that $c$ has a multiplicative inverse, and therefore we can compute $(c^{-1})^6$ and multiply both sides with it to obtain:
+
+$$
+y^2 = x^3 + a \cdot x + b
+$$
+
+which is our original curve equation, thus showing that the points are mapped onto curve points.
+
+## Exercise 62 ✨
+
+> Consider $TJJ_{13}$ example 71 and the curve $E_{7, 5}(\mathbb{F}_{13})$ defined as follows:
+>
+> $$
+> E_{5, 7}(\mathbb{F}_{13}) = \{(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13} \mid y^2 = x^3 + 7x + 5\}
+> $$
+>
+> Show that $TJJ_{13}$ and $E_{7, 5}(\mathbb{F}_{13})$ are isomorphic. Compute the set of all points from $E_{7, 5}(\mathbb{F}_{13})$, construct $I$ and map all points of $TJJ_{13}$ onto $E_{7, 5}(\mathbb{F}_{13})$
+
+TODO
 
 ## Exercise 63
 
@@ -20,6 +66,24 @@ See the code [here](./short-weierstrass.sage).
 > 2. Solve the equation $x \oplus (9, 4) = (5, 2)$ for some point $x$ on the curve.
 
 See the code [here](./short-weierstrass.sage).
+
+## Exercise 64
+
+> Consider example 79 and compute the set $\{[1](0, 1), [2](0, 1), \ldots, [8](0, 1), [9](0, 1)\}$ using the tangent rule only.
+
+TODO
+
+## Exercise 65
+
+> Consider example 80 and compute the scalar multiplications $[10](5, 11)$ as well as $[10](9, 4)$ and $[4](9, 4)$ with pen and paper using the algorithm from exercise 38 (Efficient Scalar Multiplication).
+
+TODO
+
+## Exercise 66
+
+> Consider example 81 and compute the set shown in equation (5.23) by inserting all points from the projective plane $\mathbb{F}_5P^2$ into the defining projective Short Weierstrass equation.
+
+TODO
 
 ## Exercise 67 ✨
 

@@ -1,4 +1,4 @@
-# Selected Exercises
+# Chapter 6: Statements
 
 ## Exercise 96
 

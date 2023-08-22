@@ -21,8 +21,10 @@ Some possible errors in version 1.1.1.
 ## Chapter 5
 
 - Page 73, The discriminant in the snippet is different than `E.discriminant()`?
+- Page 77, exercise 62, says $E_{5, 2}$ but should say $E_{7, 5}$
 - Page 84, at the top why does it map to $\mathbb{G}_2$? Shouldn't it say $E_{1, 1}(\mathbb{F}_3)[3]$?
 - Page 84, instead of saying "tangent rule repeatedly" it should say "tangent & chord rules repeatedly"?
+- Page 86, exercise 64, parentheses missing at $[8](0, 1)$
 - Page 95, in eq 5.35 the paragraphs can use `\left(` and `\right)`
 - Page 96, above 5.37 it should probably say "Short Weierstrass or Montgomery representation"
 - Page 97, end of 3rd paragraph should be $(-x_1, y_1)$.
