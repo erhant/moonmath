@@ -1,3 +1,5 @@
+from sage.all import GF
+
 def cge(g: int, x: int, n: int) -> int:
   '''
   Cyclic Group Exponentiation using "square-and-multiply"
@@ -11,13 +13,13 @@ def cge(g: int, x: int, n: int) -> int:
   - `g^x (mod n)`
   '''
   h = g
-  y = 1 # natural element g^0
+  x >>= 1
   while x > 0:
+    h = (h * h) % n   # square
     if x & 1 == 1:
-      y = (y * h) % n
-    h = (h * h) % n
+      h = (h * g) % n # multiply
     x >>= 1
-  return y
+  return h
 
 def esm(g: int, x: int, n: int) -> int:
   '''
@@ -29,17 +31,20 @@ def esm(g: int, x: int, n: int) -> int:
   - `n`: order
 
   Returns:
-  - `g * x (mod n)`
+  - `g*x (mod n)`
   '''
   h = g
-  y = 0
+  x >>= 1
   while x > 0:
+    h = (h + h) % n   # double
     if x & 1 == 1:
-      y = (y + h) % n
-    h = (h << 1) % n
+      h = (h + g) % n # add
     x >>= 1
-  return y
+  return h
   
 if __name__ == "__main__":
-  print(cge(2, 3, 5))
+  F13 = GF(13)
+  assert(F13(4) ^ 7 == cge(4, 7, 13))
+  assert(F13(4) * 7 == esm(4, 7, 13))
+  
     

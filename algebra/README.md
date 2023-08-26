@@ -130,32 +130,34 @@ In fact, here we actually showed that there are $\phi(p-1)$ many generators that
 
 > Let $(\mathbb{G}, +)$ be a finite cyclic group of order $n$. Consider "cyclic group exponentiation" and define its analog for groups in additive notation.
 
-Cyclic group exponentiation made use of "square-and-multiply". In efficient scalar multiplication, we will essentially use it's equivalent operations in additive groups, that is, "double-and-add". We call this "efficient scalar multiplication".
+Cyclic group exponentiation made use of "square-and-multiply".
 
 ```py
 # g^x (mod n)
 def cge(g: int, x: int, n: int) -> int:
-  h = g # generator
-  y = 1 # neutral element g^0
+  h = g
+  x >>= 1
   while x > 0:
-    if x & 1 == 1:
-      y = (y * h) % n # multiply
     h = (h * h) % n   # square
+    if x & 1 == 1:
+      h = (h * g) % n # multiply
     x >>= 1
-  return y
+  return h
 ```
+
+In efficient scalar multiplication, we will essentially use it's equivalent operations in additive groups, that is, "double-and-add". We call this "efficient scalar multiplication".
 
 ```py
 # g*x (mod n)
 def esm(g: int, x: int, n: int) -> int:
-  h = g # generator
-  y = 0 # neutral element g*0
+  h = g
+  x >>= 1
   while x > 0:
+    h = (h + h) % n   # double
     if x & 1 == 1:
-      y = (y + h) % n # add
-    h = (h << 1) % n  # double
+      h = (h + g) % n # add
     x >>= 1
-  return y
+  return h
 ```
 
 ## Exercise 39
