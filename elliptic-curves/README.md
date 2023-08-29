@@ -100,29 +100,35 @@ TODO
 > 1. Compute the inverse of $(10, 10), \mathcal{O}, (4, 0), (1, 2)$
 > 2. Solve the equation $x \oplus (9, 4) = (5, 2)$ for some point $x$ on the curve.
 
-Lets construct the curve first:
+The inverse of $(x, y)$ is given by $(x, -y)$ unless the point is the point at infinity. So:
+
+- $-(10, 10) = (10, 3)$
+- $-\mathcal{O} = \mathcal{)}$
+- $-(4, 0) = (4, 0)$
+- $-(1, 2) = (1, 11)$
+
+Let us solve the equation, which can be shown as:
+
+$$
+x = (5, 2) \oplus (9, 9)
+$$
+
+We will use the Chord rule to do this addition as the points are different. Letting $x = (x', y')$ for these equations:
+
+$$
+x' = \left(\frac{9-2}{9-5}\right)^2 - 5 - 9 = 5 \times 5 - 1 \equiv 11 \pmod{13}
+$$
+
+$$
+y' = \left(\frac{9-2}{9-5}\right)(5 - 11) - 2 = 5 \times 7 - 2 = 33 \equiv 7 \pmod{13}
+$$
+
+Our result is $x = (11, 7)$. We can confirm with Sage:
 
 ```py
-E = EllipticCurve(GF(13), [8, 8])
-```
-
-Now, we can invert the given points:
-
-```py
-points = [E(10, 10), E(0), E(4, 0), E(1, 2)]
-inverses = list(map(lambda p : -p, points))
-# print point & its inverse
-for p, ip in zip(points, inverses):
-  print("{0} --> {1}".format(p, ip))
-```
-
-Finally, we can solve the equation:
-
-```py
-A, B = E(9, 4), E(5, 2)
-X = B - A
-assert(X + A == B)
-print("X:", X.xy())
+sage: E = EllipticCurve(GF(13), [8, 8])
+sage: (E(5, 2) - E(9, 4)).xy()
+(11, 7)
 ```
 
 ## Exercise 64

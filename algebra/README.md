@@ -536,6 +536,8 @@ We get the results:
 [(0, 2), (0, 1), (x + 2, 2*x + 2), (x + 2, x + 1), (2*x + 2, x + 2), (2*x + 2, 2*x + 1), (2, 0), (1, x), (1, 2*x)]
 ```
 
+I'm not sure how to solve this one pen-and-paper.
+
 ## Exercise 54
 
 > Show that the polynomial $Q = x^2 + x + 2$ from $\mathbb{F}_3[x]$ is irreducible. Construct the multiplication table of $\mathbb{F}_{3^2}$ with respect to $Q$ polynomial.
@@ -589,7 +591,43 @@ print(F3_2.multiplication_table('elements'))
 > (2t^2 + 4)(x - (t^2 + 4t + 2)) = (2t + 3)
 > $$
 
-TODO
+To show irreducibility, I cant see any other way than showing it evaluates to non-zero on all points. Indeed, $P(0) = 1, P(1) = 3, P(2) = 1, P(3) = 1, P(4) = 4$ so $P$ is irreducible.
+
+I've used Sage to find the inverse:
+
+```py
+F5 = GF(5)
+F5x = F5['t']
+P = F5x([1, 1, 0, 1])
+
+F5_3 = GF(5^3, name="t", modulus=P)
+
+print(xgcd(F5_3([4, 0, 2]), P))
+# (1, 4*t^2 + 4*t + 1, 0)
+```
+
+Here we see that $4*t^2 + 4*t + 1$ is the inverse of $2t^2 + 4$. Let's solve the equation now. We can begin by multiplying both sides with $(2t^2 + 4)^{-1}$ which we have just found:
+
+$$
+x - (t^2 + 4t + 2) = (2t + 3)(4t^2 + 4t + 1)
+$$
+
+$$
+x - (t^2 + 4t + 2) = 3t^3 + 3t^2 + 2t + 2t^2 + 2t + 3 = 3t^3 + 4t + 3
+$$
+
+$$
+x = t^2 + 4t + 2 + 3t^3 + 4t + 3 = 3t^3 + t^2 + 3t
+$$
+
+Note that this is larger than our modulus with equal degree, so we have to find the remainder:
+
+```py
+F5x([0, 3, 1, 3]) % F5x([1, 1, 0, 1])
+# t^2 + 2
+```
+
+We find $x = t^2 + 2$ as the solution.
 
 ## Exercise 56
 
@@ -607,6 +645,7 @@ is_irreducible = True
 for elem in F5:
   if P(elem) == 0:
     is_irreducible = False
+# also check Sage
 assert(is_irreducible == P.is_irreducible())
 
 # print elements
@@ -615,6 +654,16 @@ print(F5_2, ":")
 for elem in F5_2:
   print(" ", elem)
 ```
+
+Another way to show that $P$ is irreducible would be to check that all evaluations of this polynomial are non-zero. In other words, we must show that $\forall x \in \mathbb{F}_5 : x^2 + 2 \ne 0$.
+
+This is equivalent to checking for $\forall x \in \mathbb{F}_5 : x^2 \ne 3$, which would be true if $3$ is a quadratic non-residue in this field. We can use Legendre Symbol to check for that:
+
+$$
+3^\frac{5-1}{2} = 3^2 = 9 \equiv 4 \equiv -1 \pmod{5}
+$$
+
+Finding -1 means that it is a quadratic non-residue, therefore $P$ is irreducible!
 
 ## Exercise 57
 
