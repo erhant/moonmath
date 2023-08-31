@@ -48,6 +48,31 @@ So, the string $\langle 8 \rangle$ is a constructive proof and the computation $
 
 Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \langle 2 \rangle, \langle 3 \rangle, \langle 4 \rangle, \langle 5 \rangle$. From these, $\langle 1 \rangle$ and $\langle 5 \rangle$ fit the whole grammar as $3(1) + 3 = 6 \equiv 0 \pmod{6}$ and $3(5)+3 = 18 \equiv 0 \pmod{6}$.
 
+## Exercise 98
+
+> Consider modular 6 arithmetic $(\mathbb{Z}_6)$, the alphabets $\Sigma_I$ and $\Sigma_W$ and the following decision function:
+>
+> $$
+>  R_{linear} : \Sigma^* \times \Sigma^* \to \{true, false\} ;
+> $$
+>
+> $$
+> (i; w)
+>   \mapsto
+>   \begin{cases}
+>   true & |i| = 3 \text{ and } |w| = 1 \text{ and } i_1 \cdot w_1 + i_2 = i_3 \\
+>   false & else
+>   \end{cases}
+> $$
+>
+> Which of the following instances has a proof of knowledge in $R_{linear}$?
+>
+> - $(3, 3, 0)$
+> - $(2, 1, 0)$
+> - $(4, 4, 2)$
+
+TODO
+
 ## Exercise 99 ✨
 
 > Consider the TinyJubJub curve together with its twisted Edwards addition law. Define an instance alphabet $\Sigma_I$, a witness alphabet $\Sigma_W$ and a decision function $R_{add}$ with associated language $L_{add}$ such that a string $(i;w) \in \Sigma_I^* \times \Sigma_W^*$ is a word in $L_{add}$ if and only if $i$ is a pair of curve points on the TinyJubJub curve in Edwards form, and $w$ is the sum of those curve points.
@@ -238,3 +263,64 @@ $$
 > Consider the R1CS for points on the TinyJubJub curve. Compute an associated QAP for this R1CS and check your results with Sage.
 
 See the code [here](./qap.sage)
+
+We can define the `qap` function as:
+
+```py
+def qap(r1cs, p: int):
+  '''
+  Given a R1CS and a prime, returns the QAP (Quadratic Arithmetic Program).
+  '''
+  # k := number of constraints
+  k = len(r1cs[0])
+  assert(k < p)
+
+  # make sure lengths are alright
+  cnt = len(r1cs[0][0])
+  for term in range(3):
+    # each term must have k constraints
+    # and each constraint must have same amount of terms
+    for cons in range(k):
+      assert(cnt == len(r1cs[term][cons]))
+
+  # polynomial over GF(p)
+  Fp = GF(p)
+  Fpx = Fp["x"]
+
+  # pick k random elements, unique & invertible
+  elems = []
+  for _ in range(k):
+    rand_elem = Fp.random_element()
+    if rand_elem not in elems:
+      elems.append(rand_elem)
+
+  # compute the target polynomial
+  target = Fpx(1)
+  for e in elems:
+    target *= Fpx([-e, 1]) # x - e
+
+  # compute the lagrange polynomials
+  polys = ([], [], [])
+  for term in range(3):
+    for c in range(cnt):
+      points = [(elems[cons], r1cs[term][cons][c]) for cons in range(k)]
+      polys[term].append(Fpx.lagrange_polynomial(points))
+
+  return (target, polys)
+```
+
+When we run this over the R1CS from example 121, we get:
+
+```sh
+Target Polynomial
+x^4 + 11*x^3 + 12*x^2 + 3*x + 12
+
+Polynomials (A)
+[12*x^3 + x^2 + 2*x + 12, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 7*x^3 + 8*x + 8, x^3 + 12*x^2 + 11*x + 1, 12*x^3 + x^2 + 2*x + 12]
+
+Polynomials (B)
+[12*x^3 + x^2 + 2*x + 12, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 0, 7*x^3 + 2*x^2 + 5*x + 12, 12*x^3 + x^2 + 2*x + 12]
+
+Polynomials (C)
+[0, 0, 0, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 7*x^3 + 2*x^2 + 5*x + 12]
+```

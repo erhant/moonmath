@@ -91,7 +91,49 @@ which is our original curve equation, thus showing that the points are mapped on
 >
 > Show that $TJJ_{13}$ and $E_{7, 5}(\mathbb{F}_{13})$ are isomorphic. Compute the set of all points from $E_{7, 5}(\mathbb{F}_{13})$, construct $I$ and map all points of $TJJ_{13}$ onto $E_{7, 5}(\mathbb{F}_{13})$
 
-TODO
+Let's remember the TinyJubJub curve over field of prime order 13:
+
+$$
+TJJ_{13} = \{(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13} \mid y^2 = x^3 + 8x + 8\}
+$$
+
+If we can find a $c \in \mathbb{F}_{13}^*$ such that $7 = 8 \times c^4$ (for $a$) and $5 = 8 \times c^6$ (for $b$); then, as shown in exercise 61, we would have an isomorphism and a mapping from TinyJubJub to the other curve.
+
+The inverse of 8 in this field is 5, so lets multiply both sides with it in both equations to obtain $9 = c^4$ and $12 = c^6$. From this, we get $12 = 9 \times c^2$ and find $c^2 = 10$. Turns out that $6 \times 6 \equiv 10 \pmod{13}$ so $c = 6$ is a square root, as well as $c = 13 - 6 = 7$ (which is the negative root).
+
+Equation (5.3) gives us the following isomorphism:
+
+$$
+I : TJJ_{13}(\mathbb{F}_{13}) \to E_{7, 5}(\mathbb{F}_{13})  : \begin{cases}
+(x, y) \\
+\mathcal{O}
+\end{cases}
+
+\mapsto
+
+\begin{cases}
+(10\cdot x, 8\cdot y) \\
+\mathcal{O}
+\end{cases}
+$$
+
+Let's use Sage to confirm this:
+
+```py
+F13 = GF(13)
+TJJ = EllipticCurve(F13, [8, 8])
+E75 = EllipticCurve(F13, [7, 5])
+
+def I(xy):
+  return (xy[0] * F13(10), xy[1] * F13(8))
+
+TJJ_pts = [p.xy() for p in TJJ.points() if p != TJJ(0)]
+E75_pts = [p.xy() for p in E75.points() if p != E75(0)]
+I_TJJ_E75pts = [I(pt) for pt in TJJ_pts]
+print(I_TJJ_E75pts == E75_pts)
+```
+
+Indeed when we run this, we see `True` as the result!
 
 ## Exercise 63
 
@@ -135,7 +177,7 @@ sage: (E(5, 2) - E(9, 4)).xy()
 
 > Consider example 79 and compute the set $\{[1](0, 1), [2](0, 1), \ldots, [8](0, 1), [9](0, 1)\}$ using the tangent rule only.
 
-TODO
+**Isn't this done in example 79 already?**
 
 ## Exercise 65
 
@@ -145,15 +187,107 @@ TODO
 
 ## Exercise 66
 
-> Consider example 81 and compute the set shown in equation (5.23) by inserting all points from the projective plane $\mathbb{F}_5P^2$ into the defining projective Short Weierstrass equation.
+> Consider example 81 and compute the set shown in equation (5.23) by inserting all points from the projective plane $\mathbb{F}_5\mathbb{P}^2$ into the defining projective Short Weierstrass equation.
 
-TODO
+Using Sage, we can try the equation with $z=1$, since we know there are not solutions for $z=0$ other than point at infinity:
+
+```py
+F5 = GF(5)
+E = EllipticCurve(F5, [1, 1])
+def eqn(x, y, z):
+  return y^2 * z == x^3 + x * z^2 + z^3
+affine_points = [p.xy() for p in E.points() if p != E(0)]
+proj_points = [(p[0], p[1], 1) for p in affine_points if eqn(p[0], p[1], F5(1))]
+```
+
+We find the points (point at infinity ignored):
+
+```py
+sage: print(proj_points)
+[(0, 1, 1), (0, 4, 1), (2, 1, 1), (2, 4, 1), (3, 1, 1), (3, 4, 1), (4, 2, 1), (4, 3, 1)]
+```
 
 ## Exercise 67 ✨
 
 > Compute the projective representation of the TinyJubJub curve with base field $\mathbb{F}_{13}$. Then, print the logarithmic order of its large prime-order subgroup with respect to the generator $[ 7 : 11 : 1 ]$.
 
-See the code [here](./short-weierstrass.sage).
+Let's begin by finding the co-factor:
+
+```py
+TJJ = EllipticCurve(GF(13), [8, 8])
+order = TJJ.order()
+factorization = factor(order)
+lpf = max(factorization)[0] # largest-prime factor
+cf = order // lpf # co-factor
+```
+
+Now let's do co-factor clearing:
+
+```py
+Esub = set([p * cf for p in TJJ.points()])
+assert(len(Esub) == lpf) # order should be equal to lpf
+```
+
+Let's also make sure our generator for the exercise is in this subgroup:
+
+```py
+g = TJJ(7, 11) # [7 : 11 : 1]
+assert(g in Esub) # make sure it is in the subgroup
+```
+
+We can then add the generator to itself many times to find the logarithmic order:
+
+```py
+log_order = [g]
+for _ in range(1, lpf):
+  log_order.append(log_order[-1] + g)
+```
+
+When we print the logarithmic order, we find:
+
+$$
+(7, 11) \to (8, 5) \to (8, 8) \to (7, 2) \to \mathcal{O}
+$$
+
+which has 5 elements, as expected from the large prime-order subgroup of $TJJ_{13}$ which has order 5.
+
+## Exercise 68
+
+> Consider example 81 again. Compute the following expressions for projective points $E_1(\mathbb{F}_5\mathbb{P}^2)$ using algorithm 7.
+>
+> - $[0 : 1 : 0] \oplus [4 : 3 : 1]$
+> - $[0 : 3 : 0] \oplus [3 : 1 : 2]$
+> - $-[0 : 4 : 1] \oplus [3 : 4 : 1]$
+> - $[4 : 3 : 1] \oplus [4 : 2 : 1]$
+>
+> and then solve the equation $[X : Y : Z] \oplus [0 : 1 : 1] = [2 : 4 : 1]$ for some point from the projective Short Weierstrass curve $E_1(\mathbb{F}_5\mathbb{P}^2)$
+
+TODO
+
+## Exercise 69
+
+> Compare the affine addition law for Short Weierstrass curves with the projective addition rule. Which branch in the projective branch corresponds to which case in the affine law?
+
+The first two if-else's handle the addition with neutral element (point at infinity) case.
+
+Then, we have a major branching after $V_1 = V_2$ check, which is true if $X_1 = X_2$. If $X$ coordinates match for two points, they are either the same point or on the opposite sides of the curve:
+
+- $U_1 \ne U_2$ is true if these points are on the opposite sides, and we know this means $Y_1 = -Y_2$ and their addition results in $\mathcal{O}$
+- $U_1 = U_2$ means this is the same point, and we apply the Tangent rule. However, there is one case where the tangent rule results in point at infinity, and that is when $Y = 0$ which is checked by $Y_1 = 0$ in the algorithm.
+
+Naturally, the remaining branch (where $V_1 \ne V_2$) handles the Chord rule where we add two different points with different $X$ coordinates.
+
+## Exercise 70
+
+> Consider example 82 and compute the set in (5.30) by inserting every pair of field elements $(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13}$ into the defining Montgomery equation.
+
+TODO
+
+## Exercise 71
+
+> Consider $E_1(\mathbb{F})$ from example 70 and show that this curve is not a Montgomery curve.
+
+TODO
 
 ## Exercise 72
 
@@ -225,32 +359,54 @@ See the code [here](./embedding-and-extension.sage)
 
 See the code [here](./embedding-and-extension.sage)
 
+## Exercise 79
+
+> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$
+
+TODO
+
 ## Exercise 80 ✨
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
-todo
+TODO
 
 ## Exercise 81
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
-todo
+TODO
 
 ## Exercise 83
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
-todo
+TODO
 
 ## Exercise 84
 
-todo
+> Consider the `alt_bn128` curve from example 73, and the generators $g_1$ and $g_2$ of $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$ from exercise 83. Write a Sage program that computes the Weil pairing $e(g_1, g_2)$
+
+TODO
 
 ## Exercise 85
 
-todo
+> Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^* \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
+
+TODO
 
 ## Exercise 86
 
-todo
+> Implement a cryptographic hash function $H_{secp256k1} : \{0, 1\}^* \to secp256k1$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
+
+TODO
+
+## Exercise 87
+
+> Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
+
+TODO
+
+## Exercise 88
+
+> Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.

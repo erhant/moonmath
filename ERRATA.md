@@ -38,6 +38,7 @@ Some possible errors in version 1.1.1.
 - Page 136, Exercise 96, missing double quote at the end
 - Page 138, Example 119 second equation has $m = m$, should say $m = 2$.
 - Page 140, Footnote, says equation XXX
+- Page 152, just above exercise 101, "126implies" space bug
 - Page 158, Eqn 6.15 probably should say $j = 0$ instead of $h = 0$?
 
 ## Chapter 7

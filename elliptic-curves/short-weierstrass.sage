@@ -9,49 +9,30 @@ Projective Short Weierstrass form:
 
 '''
 
-from sage.all import GF, EllipticCurve, factor, Set
+from sage.all import GF, EllipticCurve, factor
 
 def exercise_67():
-  # TinyJubJub_13
-  E = EllipticCurve(GF(13), [8, 8])
-
-  # points (projective)
-  print("Projective Points (TJJ_13):")
-  Ps = E.points()
-  for p in Ps:
-    print(p)
-  
-  # Get it's largest prime factor
-  print("\nCofactor Clearing")
-  order = E.order()
+  TJJ = EllipticCurve(GF(13), [8, 8])
+  order = TJJ.order()
   factorization = factor(order)
-  lpf = max(factorization)[0]
-  # Find co-factor
-  cf = order // lpf
+  lpf = max(factorization)[0] # largest-prime factor
+  cf = order // lpf # co-factor
   print("\tOrder: {0}\n\tFactorization: {1}\n\tLargest Prime: {2}\n\tCofactor: {3}".format(order, factorization, lpf, cf))
 
-  # Do co-factor clearing
-  Ps_sub = [] # subgroup points
-  for p in Ps:
-    Ps_sub.append(p * cf)
-  Ps_sub = Set(Ps_sub)
-  # order (#elements) should be equal to largest prime factor
-  assert(len(Ps_sub) == lpf)
-  print("\nSubgroup Points:")
-  for p in Ps_sub:
-    print(p)
+  # co-factor clearing
+  Esub = set([p * cf for p in TJJ.points()])
+  assert(len(Esub) == lpf) # order should be equal to lpf
 
-  # Generator given in exercise
-  g = E(7, 11) # [7 : 11 : 1]
-  assert(g in Ps_sub) # make sure it is in the subgroup
-
-  # Find log order
   print("\nFinding logarithmic ordering:")
+  g = TJJ(7, 11) # [7 : 11 : 1]
+  assert(g in Esub) # make sure it is in the subgroup
+
+  # add g to itself many times
   log_order = [g]
   for _ in range(1, lpf):
-    # adding g to itself many times
     log_order.append(log_order[-1] + g)
     
+  # pretty print
   print("     ", log_order[0])
   for p in log_order[1:]:
     print(" --> ", p)
@@ -216,4 +197,4 @@ def exercise_bls12_381():
   print_ordermod(E) 
 
 if __name__ == "__main__": 
-  pass
+  exercise_67()
