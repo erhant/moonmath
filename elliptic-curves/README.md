@@ -189,6 +189,12 @@ TODO
 
 > Consider example 81 and compute the set shown in equation (5.23) by inserting all points from the projective plane $\mathbb{F}_5\mathbb{P}^2$ into the defining projective Short Weierstrass equation.
 
+The equation that we have to satisfy over projective points is the following:
+
+$$
+\forall (x, y, z) \in [X : Y : Z] : y^2z = x^3 + 1\cdot xz^2 + 1 \cdot z^3
+$$
+
 Using Sage, we can try the equation with $z=1$, since we know there are not solutions for $z=0$ other than point at infinity:
 
 ```py
@@ -205,6 +211,14 @@ We find the points (point at infinity ignored):
 ```py
 sage: print(proj_points)
 [(0, 1, 1), (0, 4, 1), (2, 1, 1), (2, 4, 1), (3, 1, 1), (3, 4, 1), (4, 2, 1), (4, 3, 1)]
+```
+
+Alternatively, we can use `ProjectiveSpace` within Sage (thanks to [@skaunov](https://github.com/skaunov) for letting me know about `ProjectiveSpace` in issue [#1](https://github.com/erhant/moonmath/issues/1)):
+
+```py
+F5 = GF(5)
+F5P2 = ProjectiveSpace(F5, 2)
+points = [(x, y, z) for (x, y, z) in F5P2 if y^2 * z == x^3 + x * z^2 + z^3]
 ```
 
 ## Exercise 67 ✨
