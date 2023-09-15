@@ -36,6 +36,7 @@ class MontgomeryCurve:
 
     If P == Q, tangent law is used.
     If P != Q, chord law is used.
+    If P == -Q, method fails.
     '''
     assert(P in self.points)
     assert(Q in self.points)
@@ -137,8 +138,26 @@ def exercise_73():
   assert(MTJJ.in_curve(X))
 
   # part 3
-  # TODO
-
+  print("\nSearching for a generator")
+#   inf = MTJJ.add(X, MTJJ.inverse(X))
+#   print("DEBUG")
+  for point in points:
+    runner = point
+    i = 1
+    while (i < (len(points) - 1)):
+      try:
+        print("DEBUG {}".format(MTJJ.point(point[0], point[1])))
+        runner = MTJJ.add(MTJJ.point(runner[0], runner[1]), MTJJ.point(point[0], point[1]))
+        i += 1
+#       if runner == inf:
+      except:
+        print("{} is not a generator".format(point))
+        i = 1
+        break
+    if (i == len(points)):
+#       assert(MTJJ.add(runner, point) == inf)
+      print("{} is a generator".format(point))
+      break
 
 def exercise_74():
   # alt_bn128
