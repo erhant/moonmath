@@ -50,7 +50,7 @@ class TwistedEdwardsCurve:
     '''
     Inverts a point.
     '''
-    return (self.F.order() - P[0], P[1])
+    return (P[0], self.F.order() - P[1])
 
   def point(self, x, y):
     '''
