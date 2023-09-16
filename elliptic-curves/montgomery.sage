@@ -146,7 +146,7 @@ def exercise_73():
     i = 1
     while (i < (len(points) - 1)):
       try:
-        print("DEBUG {}".format(MTJJ.point(point[0], point[1])))
+        # print("DEBUG {}".format(MTJJ.point(point[0], point[1])))
         runner = MTJJ.add(MTJJ.point(runner[0], runner[1]), MTJJ.point(point[0], point[1]))
         i += 1
 #       if runner == inf:
@@ -154,7 +154,7 @@ def exercise_73():
         print("{} is not a generator".format(point))
         i = 1
         break
-    if (i == len(points)):
+    if (i == len(points) - 1):
 #       assert(MTJJ.add(runner, point) == inf)
       print("{} is a generator".format(point))
       break
