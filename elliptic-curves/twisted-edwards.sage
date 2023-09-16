@@ -49,6 +49,7 @@ class TwistedEdwardsCurve:
   def inverse(self, P):
     '''
     Inverts a point.
+    TODO add _point at infinity_ processing and self-inverses
     '''
     return (P[0], self.F.order() - P[1])
 
