@@ -46,7 +46,7 @@ class MontgomeryCurve:
       common = (y2 - y1) / (x2 - x1)
     else:
       # tangent
-      common = (3 * x1 * x1 + 2 * self.A * x1 + 1) / (2 * self.B & y1)
+      common = (3 * x1 * x1 + 2 * self.A * x1 + 1) / (2 * self.B * y1)
 
     x3 = common * common * self.B - (x1 + x2) - self.A
     y3 = common * (x1 - x3) - y1
