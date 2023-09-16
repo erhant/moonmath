@@ -89,7 +89,21 @@ def exercise_75():
   assert(TETJJ.in_curve(X))
 
   # part 3
-  # TODO
+  print("\nSearching for a generator")
+  for point in points:
+    runner = point
+    i = 1
+    while (i < (len(points) - 1)):
+      if runner == (0, 1):
+        print("{} is not a generator".format(point))
+        i = 1
+        break
+      runner = TETJJ.add(TETJJ.point(runner[0], runner[1]), TETJJ.point(point[0], point[1]))
+      i += 1
+    if (i == len(points) - 1):
+      assert(TETJJ.add(runner, point) == (0, 1))
+      print("{} is a generator".format(point))
+      break
 
 if __name__ == "__main__": 
   exercise_75()
