@@ -67,7 +67,7 @@ def exercise_77():
   # tiny jub jub
   TJJ_F13_4 = EllipticCurve(F13_4, [8, 8])
 
-  print("Order of E(F_13^2):", TJJ_F13_4.order())
+  print("Order of E(F_13^4):", TJJ_F13_4.order())
 
 def exercise_78():
   # curve parameters for alt_bn128
