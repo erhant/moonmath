@@ -375,9 +375,13 @@ See the code [here](./embedding-and-extension.sage)
 
 ## Exercise 79
 
-> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$
+> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$.
 
-TODO
+Applying the notions from the subsection we can conclude that $TJJ_{13}(\mathbb{F}_{13^2})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ as the order $2$ of the extension is less than $k$ -- embeding degree.
+
+$TJJ_{13}[5]$ is defined on line #434 at p.103 of MMM v.<1.1.1>, and $TJJ_{13}(\mathbb{F}_{13})[5]$ is on #446 at p.104. Given this printing them out is trivial. Identification of the element is pretty simple too since it's the element which has only $t^0$ components in their coordinate.
+
+And $TJJ_{13}(\mathbb{F}_{13^8})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ since we're asked about *5-torsion* group, and not _full torsion_.
 
 ## Exercise 80 ✨
 
