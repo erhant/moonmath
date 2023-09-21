@@ -23,7 +23,7 @@ def qap(r1cs, p: int):
 
     # pick k random elements, unique & invertible
     elems = []
-    for _ in range(k):
+    while len(elems) < k:
         rand_elem = Fp.random_element()
         if rand_elem not in elems:
             elems.append(rand_elem)

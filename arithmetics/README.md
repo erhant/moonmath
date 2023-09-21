@@ -80,7 +80,7 @@ TODO
 
 There are many many implementations out there, but here is one for Circom:
 
-```cs
+```cpp
 template Num2Bits(n) {
   assert(n < 254); // due to BN128
   signal input in;
