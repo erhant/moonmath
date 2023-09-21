@@ -310,13 +310,14 @@ TODO
 One of the conditions to be a Montogomery curve is that order of the scalar field should be divisible by 4.
 
 ```py
-sage: p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
-sage: E = EllipticCurve(GF(p), [0, 7])
-sage: E.order() % 4
-1
+# order of the base field
+p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+E = EllipticCurve(GF(p), [0, 7])
+E.order() % 4
+# 1
 ```
 
-As we can see, the order is not divisible by 4, therefore `secp256k1` is not a Montgomery curve.
+As we can see, the order of the scalar field is not divisible by 4, therefore `secp256k1` is not a Montgomery curve.
 
 ## Exercise 73 ✨
 
@@ -327,7 +328,7 @@ As we can see, the order is not divisible by 4, therefore `secp256k1` is not a M
 >
 > Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's logarithmic order.
 
-See the code [here](./montgomery.sage). **Generator part is still TO-DO**
+See the code [here](./montgomery.sage).
 
 ## Exercise 74
 
@@ -336,10 +337,10 @@ See the code [here](./montgomery.sage). **Generator part is still TO-DO**
 One of the conditions to be a Montogomery curve is that order of the scalar field should be divisible by 4.
 
 ```py
-sage: p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
-sage: E = EllipticCurve(GF(p), [0, 3])
-sage: E.order() % 4
-1
+# order of the base field
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+E = EllipticCurve(GF(p), [0, 3])
+E.order() % 4 #1
 ```
 
 As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a Montgomery curve.
@@ -353,7 +354,7 @@ As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a M
 >
 > Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's logarithmic order.
 
-See the code [here](./twisted-edwards.sage). **Generator part is still TO-DO**
+See the code [here](./twisted-edwards.sage).
 
 ## Exercise 76
 
@@ -424,3 +425,5 @@ TODO
 ## Exercise 88
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
+
+TODO
