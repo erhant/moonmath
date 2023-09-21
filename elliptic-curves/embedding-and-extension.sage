@@ -67,11 +67,11 @@ def exercise_77():
   # tiny jub jub
   TJJ_F13_4 = EllipticCurve(F13_4, [8, 8])
 
-  print("Order of E(F_13^2):", TJJ_F13_4.order())
+  print("Order of E(F_13^4):", TJJ_F13_4.order())
 
 def exercise_78():
   # curve parameters for alt_bn128
-  p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
+  p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
   a = 0
   b = 3
 
