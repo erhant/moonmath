@@ -387,7 +387,13 @@ And $TJJ_{13}(\mathbb{F}_{13^8})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ since we're 
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
-TODO
+Couple of paragraphs above the book states that
+> ..., without any optimizations, representing such an element would need $k\cdot 256$ bits, which is too much to be representable in the observable universe. It follows that it is not only infeasible to compute the full $r$-torsion group of \curvename{secp256k1}, but moreover to even write down single elements of that group in general.
+
+So, the question boils down to some optimization. Futher in the exercise #96 in the end of next section the book mentions following.
+> ... according to example 93 we can not store average curve points from the extension curve $secp256k1(\F_{p^k})$ on any computer, ...
+
+And _point at infinity_ is excluded as a solution explicitly by the exercise we're dealing with now.
 
 ## Exercise 81
 
