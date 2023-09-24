@@ -310,13 +310,14 @@ TODO
 One of the conditions to be a Montogomery curve is that order of the scalar field should be divisible by 4.
 
 ```py
-sage: p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
-sage: E = EllipticCurve(GF(p), [0, 7])
-sage: E.order() % 4
-1
+# order of the base field
+p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+E = EllipticCurve(GF(p), [0, 7])
+E.order() % 4
+# 1
 ```
 
-As we can see, the order is not divisible by 4, therefore `secp256k1` is not a Montgomery curve.
+As we can see, the order of the scalar field is not divisible by 4, therefore `secp256k1` is not a Montgomery curve.
 
 ## Exercise 73 ✨
 
@@ -325,9 +326,9 @@ As we can see, the order is not divisible by 4, therefore `secp256k1` is not a M
 > - Compute the inverse of $(1, 9), \mathcal{O}, (7, 12), (4, 9)$.
 > - Solve the equation $x \oplus (3, 8) = (10, 3)$ for some point in the Montgomery curve.
 >
-> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's lograithmic order.
+> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's logarithmic order.
 
-See the code [here](./montgomery.sage). **Generator part is still TO-DO**
+See the code [here](./montgomery.sage).
 
 ## Exercise 74
 
@@ -336,10 +337,10 @@ See the code [here](./montgomery.sage). **Generator part is still TO-DO**
 One of the conditions to be a Montogomery curve is that order of the scalar field should be divisible by 4.
 
 ```py
-sage: p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
-sage: E = EllipticCurve(GF(p), [0, 3])
-sage: E.order() % 4
-1
+# order of the base field
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+E = EllipticCurve(GF(p), [0, 3])
+E.order() % 4 #1
 ```
 
 As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a Montgomery curve.
@@ -351,13 +352,13 @@ As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a M
 > - Compute the inverse of $(1, 11), (0, 1), (3, 0), (5, 8)$.
 > - Solve the equation $x \oplus (5, 8) = (1, 11)$ for some point in the Montgomery curve.
 >
-> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's lograithmic order.
+> Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's logarithmic order.
 
-See the code [here](./twisted-edwards.sage). **Generator part is still TO-DO**
+See the code [here](./twisted-edwards.sage).
 
 ## Exercise 76
 
-> Consider the short Weierstrass curve $y^2 = x^3 + x + 1$ over extension field $\mathbb{F}_{5^2}. Compute $(4t + 3, 2t + 1) \oplus (3t + 3, 2)$, and double-check the result in sage. Then, solve the equation $x \oplus (3t + 3, 3) = (3, 4)$ for some $x$ in the curve. Also, compute $[5](2t + 1, 4t + 4)$.
+> Consider the short Weierstrass curve $y^2 = x^3 + x + 1$ over extension field $\mathbb{F}_{5^2}$. Compute $(4t + 3, 2t + 1) \oplus (3t + 3, 2)$, and double-check the result in sage. Then, solve the equation $x \oplus (3t + 3, 3) = (3, 4)$ for some $x$ in the curve. Also, compute $[5](2t + 1, 4t + 4)$.
 
 See the code [here](./embedding-and-extension.sage)
 
@@ -425,6 +426,12 @@ print(altbn128_order)
 altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_fulltorsion)
 ```
 
+## Exercise 82
+
+> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$
+
+TODO
+
 ## Exercise 83
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
@@ -458,3 +465,5 @@ TODO
 ## Exercise 88
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
+
+TODO

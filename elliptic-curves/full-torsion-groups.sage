@@ -34,7 +34,7 @@ def example_91():
 
   # generate extension
   FPt.<t> = FP[] # type: ignore
-  P_MOD_M = FPt(t^k + 2)
+  P_MOD_M = FPt(t^k + 2) # type: ignore
   assert(P_MOD_M.is_irreducible())
 
   FP_M = GF(p^k, name='t', modulus=P_MOD_M)

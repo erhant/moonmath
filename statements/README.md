@@ -262,8 +262,6 @@ $$
 
 > Consider the R1CS for points on the TinyJubJub curve. Compute an associated QAP for this R1CS and check your results with Sage.
 
-See the code [here](./qap.sage)
-
 We can define the `qap` function as:
 
 ```py
