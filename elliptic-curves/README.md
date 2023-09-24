@@ -399,7 +399,31 @@ And _point at infinity_ is excluded as a solution explicitly by the exercise we'
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
-TODO
+```sage
+prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+Z78 = GF(prime_the)
+Z78t.<t> = Z78[]
+
+P_irred = Z78t.irreducible_element(12)
+print("a polynomial over which the field will be extended")
+print(P_irred)
+
+Z78_12.<t> = GF(prime_the^12, name='t', modulus=P_irred)
+altbn128_12 = EllipticCurve(Z78_12, [0, 3])
+
+# the book states that full torsion group has order of $r^2$ \
+# let's just take the initial curve order from page 76 of the book without defining that curve here
+altbn128_order = 21888242871839275222246405745257275088548364400416034343698204186575808495617
+order_fulltorsion = altbn128_order^2
+print("order of full torsion group is...")
+print(altbn128_order)
+
+# and for the final step we will actually need to define the initial curve (done implicitly) \
+# As soon as the whole initial curve is $p=r$-torsion group, any point of it will generate full torsion group
+# in the extension. We can see it by taking any point of the initial curve and check that it yields
+# _point at infinity_ being multiplied by the order of full torsion group.
+altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_fulltorsion)
+```
 
 ## Exercise 83
 
