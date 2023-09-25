@@ -396,7 +396,71 @@ TODO
 
 > Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$
 
-TODO
+```sage
+︠c1366dcd-c91e-4f93-8532-608572d5f4fas︠
+# Compute the ~~full~~ 2-torsion group
+F13 = GF(13)
+TJJ_F13 = EllipticCurve(F13, [8, 8])
+for point in TJJ_F13.points():
+    if point.order() == 2:
+        print(point)
+︡c812c302-90b6-44a7-9b3f-16cea3376f4a︡{"stdout":"(4 : 0 : 1)\n"}︡{"done":true}
+︠7930c117-ee02-48b7-8ab2-88988114af87s︠
+L_TJJ_T2 = []
+# i = 0
+# point = i * TJJ_F13(4, 0)
+# while L_TJJ_FT2.contain(point) == false:
+
+# as I couldn't use `contains`, let just rely on the order of torsion group
+for i in range(1, 3):
+#     print(i) #+= 1
+#     print(i * TJJ_F13([4, 0]))
+    L_TJJ_T2.append(i * TJJ_F13([4, 0]))
+TJJ_T2 = Set(L_TJJ_T2)
+print(TJJ_T2)
+︡9c2d04c4-282d-47c0-8a1e-d5c6774ac44f︡{"stdout":"{(4 : 0 : 1), (0 : 1 : 0)}\n"}︡{"done":true}
+︠8fe23122-f9f6-45a1-9e1d-c3baa8b43228s︠
+F13t.<t> = F13[]
+P_MOD_4 = F13t(t^4 + 2)
+F13_4.<t> = GF(13^4, name='t', modulus=P_MOD_4)
+
+TJJ_F13_4 = EllipticCurve(F13_4, [8, 8])
+# There's a dozen of elements of order $2^2$!
+# for point in TJJ_F13_4.points():
+#     if point.order() == 4:
+#         print(point)
+# So let's fall back to the approach from <p.103>.
+TJJF13_4_2 = Set(TJJ_F13_4(0).division_points(2))
+TJJF13_4_2
+︡067041eb-22d6-411a-9248-c494c1fd2874︡{"stdout":"{(4 : 0 : 1), (7*t^2 + 11 : 0 : 1), (6*t^2 + 11 : 0 : 1), (0 : 1 : 0)}\n"}︡{"done":true}
+︠83b68b8c-f865-4885-a905-def01d0523f8s︠
+# $\mathbb{G}_{1}[2]$ equals 2-torsion group
+TJJ_G1 = Set([TJJ_F13_4(point) for point in TJJ_T2])
+TJJ_G1
+
+# TJJ_F13.order()
+# TJJ_G2 = Set([TJJ_F13.order() * TJJ_F13_4(point) for point in TJJ_FT2])
+# print(TJJ_G2)
+
+L_TJJ_G2 = []
+for P in TJJF13_4_2:
+#     PiP = TJJ_F13_4([a.frobenius() for a in P]) # pi(P)
+    if P != TJJ_F13_4(0):
+        (x, y) = P.xy()
+        PiP = TJJ_F13_4(x^13, y^13) # pi(P)
+        print(PiP, "PiP")
+
+        pP = 13*P # [13]P
+        print(pP, "pP")
+        if pP == PiP: # pi(P) ==[13]P
+            L_TJJ_G2.append(P)
+    else:
+        L_TJJ_G2.append(P)
+TJJ_G2 = Set(L_TJJ_G2)
+TJJ_G2
+︡d584af65-c6c6-4846-85de-2e34b5c45aa8︡{"stdout":"{(4 : 0 : 1), (0 : 1 : 0)}\n"}︡{"stdout":"(4 : 0 : 1) PiP\n(4 : 0 : 1) pP\n(6*t^2 + 11 : 0 : 1) PiP\n(7*t^2 + 11 : 0 : 1) pP\n(7*t^2 + 11 : 0 : 1) PiP\n(6*t^2 + 11 : 0 : 1) pP\n"}︡{"stdout":"{(4 : 0 : 1), (0 : 1 : 0)}\n"}︡{"done":true}
+︠b6b3e6f5-fc1b-4157-8190-267099b8526c︠
+```
 
 ## Exercise 83
 
