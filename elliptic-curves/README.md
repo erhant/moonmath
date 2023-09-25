@@ -466,7 +466,7 @@ TJJ_G2
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
-TODO
+This one differs from #81 very slightly, since $\mathbb{G}_1[p]$ generator is any point on the initial `alt_bn128` curve, and generator of $\mathbb{G}_2[p]$ is absolutely same any point in initial `alt_bn128` curve *but* now over field extension of degree greater than embedding degree (which is $12$). So you can take the last line of #81 solution (`altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_fulltorsion)`) and just remove scalar multiplication in the end to get a generator coorsinates, and depending of your interpretation and further usage, it will serve you as $\mathbb{G}_1[p]$ and/or $\mathbb{G}_2[p]$.
 
 ## Exercise 84
 
