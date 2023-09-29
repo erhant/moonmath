@@ -394,7 +394,7 @@ TODO
 
 ## Exercise 82
 
-> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$
+> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
 Here's a solution which avoids few obvious short-cut treating given very simple subgroup as something bigger in the sake of learning and studying.
 ```sage
@@ -428,23 +428,8 @@ TJJF13_4_2
 # $\mathbb{G}_{1}[2]$ equals 2-torsion group
 TJJ_G1 = Set([TJJ_F13_4(point) for point in TJJ_T2])
 TJJ_G1
-
-L_TJJ_G2 = []
-for P in TJJF13_4_2:
-# If you're using an older version of Sage it can be not immediately happy with `.frobenius()` method, so you can do same thing "manually".
-    if P != TJJ_F13_4(0):
-        (x, y) = P.xy()
-        PiP = TJJ_F13_4(x^13, y^13) # pi(P)
-
-        pP = 13*P # [13]P
-        if pP == PiP: # pi(P) ==[13]P
-            L_TJJ_G2.append(P)
-    else:
-        L_TJJ_G2.append(P)
-TJJ_G2 = Set(L_TJJ_G2)
-TJJ_G2
-# {(4 : 0 : 1), (0 : 1 : 0)}
 ```
+Let's look more closely at TJJF13_4_2. It contains (0 : 1 : 0) and three more points. We know that there's $r +1$ r-torsion subgroups, and we have $r = 2$, so each of this three points would suit; remember that zero-degree (4, 0) gives us $\mathbb{G}_1[2]$, so $\mathbb{G}_2[2]$ is equally good to generate with either one of two other points from TJJF13_4_2. The second element will be inevitable $(0 : 1 : 0)$.
 
 ## Exercise 83
 
@@ -452,7 +437,7 @@ TJJ_G2
 
 For $\mathbb{G}_1[p]$ see #81, since its generator is any point on the initial `alt_bn128` curve.
 
-$\mathbb{G}_2[p]$ generator is quite easy to find from there.
+Let's see that $\mathbb{G}_2[p]$ generator is quite easy to find from there.
 ```sage
 # #81 stuff
 prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
@@ -475,7 +460,7 @@ print(point_random_cofactorCleared)
 # is it a full r-torsion subgroup?
 point_random_cofactorCleared * EllipticCurve(GF(prime_the), [0, 3]).order() == altbn128_12(0)
 ```
-It's important to note, that choice of pairing group $\mathbb{G}_2[p]$ is much more delicate than depicted in this exercise. Any one we get in this exercise is good enough for demonstrative purposes of this chapter, but as soon as you go further than doing an isolated pairing $\mathbb{G}_2[p]$ should be chosen with utmost care.
+It's important to note, that choice of pairing group $\mathbb{G}_2[p]$ is much more delicate than depicted in this exercise. Any one we get in this exercise is good enough for demonstrative purposes of this chapter, but as soon as you go further than doing an isolated pairing, $\mathbb{G}_2[p]$ should be chosen with utmost care.
 
 ## Exercise 84
 
