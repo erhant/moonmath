@@ -450,7 +450,32 @@ TJJ_G2
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
-This one differs from #81 very slightly, since $\mathbb{G}_1[p]$ generator is any point on the initial `alt_bn128` curve, and generator of $\mathbb{G}_2[p]$ is again any point from the initial `alt_bn128` curve multiplied by the order of the field before extension. So you can take the last line of #81 solution (`altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_fulltorsion)`) and just remove scalar multiplication in the end to get a $\mathbb{G}_1[p]$ generator (`altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy())`), and *do* the scalar multiplication, but to the field order to get $\mathbb{G}_2[p]$ (`altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (prime_the -1)`).
+For $\mathbb{G}_1[p]$ see #81, since its generator is any point on the initial `alt_bn128` curve.
+
+$\mathbb{G}_2[p]$ generator is quite easy to find from there.
+```sage
+# #81 stuff
+prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+Z78 = GF(prime_the)
+Z78t.<t> = Z78[]
+P_irred = Z78t.irreducible_element(12)
+print(P_irred)
+Z78_12.<t> = GF(prime_the^12, name='t', modulus=P_irred)
+altbn128_12 = EllipticCurve(Z78_12, [0, 3])
+
+# "good part" of the solution starts here
+# ===================
+point_random_cofactorCleared = altbn128_12.random_point() * (altbn128_12.order() / EllipticCurve(GF(prime_the), [0, 3]).order()^2)
+
+# TODO check it's not in the $\mathbb{G}_1$, ie not zero-degree polynomial!
+# I guess you can do it just by looking at it, if it's zero-degree you could win a lotery today instead -- get one more `altbn128_12.random_point()`
+print("Today your $\mathbb{G}_1$ generator is...")
+print(point_random_cofactorCleared) 
+
+# is it a full r-torsion subgroup?
+point_random_cofactorCleared * EllipticCurve(GF(prime_the), [0, 3]).order() == altbn128_12(0)
+```
+It's important to note, that choice of pairing group $\mathbb{G}_2[p]$ is much more delicate than depicted in this exercise. Any one we get in this exercise is good enough for demonstrative purposes of this chapter, but as soon as you go further than doing an isolated pairing $\mathbb{G}_2[p]$ should be chosen with utmost care.
 
 ## Exercise 84
 
