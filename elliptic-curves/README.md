@@ -454,7 +454,68 @@ TODO
 
 > Implement a cryptographic hash function $H_{secp256k1} : \{0, 1\}^* \to secp256k1$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
 
-TODO
+This solution hashes plain strings since it reuse code from the book. Switching to bytestring would be an improvement for this solution. Also note that edge cases, especially when $y$ get in the middle of the field aren't tested and probably buggy.
+```sage
+# parameters from previous exercises
+p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+field_the = GF(p)
+E = EllipticCurve(field_the, [0, 7])
+
+# some pasting to be used as a helper; taken from <https://gist.github.com/Deathnerd/0cf26dd66ebbaf8880e3458242d0f8b8>
+def incr(bit_string):
+    carry = False
+    bits = list(bit_string[::-1])
+    for i, bit in enumerate(bits):
+        carry = bit != "0"
+        if bit == "0":
+            bits[i] = "1"
+            break
+        else:
+            bits[i] = "0"
+    if carry:
+        bits.append("1")
+    return "".join(bits[::-1])
+
+# actual solution starts here!
+# =========
+import hashlib
+def tryhash(s):
+    c = "0"
+    while c != "":
+        z = ZZ(hashlib.sha256((s+c).encode('utf-8')).hexdigest(), 16)
+        if z > p:
+            c = incr(c)
+        else:
+            try:
+                point_the = E.lift_x(z)
+                auxiliaryBit = c[-1]
+                y = point_the.xy()[1]
+                half = field_the((p-1)/2)
+
+                match auxiliaryBit:
+                    case "0":
+                        c = ""
+                        if (y <= half):
+                            c = ""
+                            print(point_the)
+                        else:
+                            c = ""
+                            print(-point_the)
+                    case "1":
+                        if (y > half):
+                            c = ""
+                            print(point_the)
+                        else:
+                            c = ""
+                            print(-point_the)
+                    case _:
+                        print("panic: counter must be binary")
+                # note that cofactor clearing isn't needed here due to sec256k1 is of prime order
+            except:
+                c = incr(c)
+
+tryhash("")
+```
 
 ## Exercise 87
 
