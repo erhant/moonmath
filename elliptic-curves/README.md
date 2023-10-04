@@ -521,7 +521,16 @@ tryhash("")
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
-TODO
+```sage
+prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+altbn128 = EllipticCurve(GF(prime_the), [0, 3])
+
+# altbn128.order() = prime_the + 1 - t
+t = prime_the + 1 - altbn128.order()
+print(t)
+
+altbn128.order() < prime_the
+```
 
 ## Exercise 88
 
