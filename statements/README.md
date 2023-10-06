@@ -71,7 +71,9 @@ Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \lan
 > - $(2, 1, 0)$
 > - $(4, 4, 2)$
 
-TODO
+- It's $1$ for $(3, 3, 0)$,
+- $1$ for $(4, 4, 2)$,
+- and for $(2, 1, 0)$ there's no witness to balance the parity of the equality.
 
 ## Exercise 99 ✨
 
