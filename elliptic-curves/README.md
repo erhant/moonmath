@@ -536,4 +536,4 @@ altbn128.order() < prime_the
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
 
-TODO
+Not quite a Sage program, but all curves with $a=0$ has $j=0$, including this one.
