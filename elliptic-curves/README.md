@@ -376,21 +376,55 @@ See the code [here](./embedding-and-extension.sage)
 
 ## Exercise 79
 
-> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$
+> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$.
 
-TODO
+Applying the notions from the subsection we can conclude that $TJJ_{13}(\mathbb{F}_{13^2})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ as the order $2$ of the extension is less than $k$ -- embeding degree.
+
+$TJJ_{13}[5]$ is defined on line #434 at p.103 of MMM v.<1.1.1>, and $TJJ_{13}(\mathbb{F}_{13})[5]$ is on #446 at p.104. Given this printing them out is trivial. Identification of the element is pretty simple too since it's the element which has only $t^0$ components in their coordinate.
+
+And $TJJ_{13}(\mathbb{F}_{13^8})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ since we're asked about *5-torsion* group, and not _full torsion_.
 
 ## Exercise 80 ✨
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
-TODO
+Couple of paragraphs above the book states that
+> ..., without any optimizations, representing such an element would need $k\cdot 256$ bits, which is too much to be representable in the observable universe. It follows that it is not only infeasible to compute the full $r$-torsion group of \curvename{secp256k1}, but moreover to even write down single elements of that group in general.
+
+So, the question boils down to some optimization. Futher in the exercise #96 in the end of next section the book mentions following.
+> ... according to example 93 we can not store average curve points from the extension curve $secp256k1(\F_{p^k})$ on any computer, ...
+
+And _point at infinity_ is excluded as a solution explicitly by the exercise we're dealing with now.
 
 ## Exercise 81
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
-TODO
+```sage
+prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+Z78 = GF(prime_the)
+Z78t.<t> = Z78[]
+
+P_irred = Z78t.irreducible_element(12)
+print("a polynomial over which the field will be extended")
+print(P_irred)
+
+Z78_12.<t> = GF(prime_the^12, name='t', modulus=P_irred)
+altbn128_12 = EllipticCurve(Z78_12, [0, 3])
+
+# the book states that full torsion group has order of $r^2$ \
+# let's just take the initial curve order from page 76 of the book without defining that curve here
+altbn128_order = 21888242871839275222246405745257275088548364400416034343698204186575808495617
+order_fulltorsion = altbn128_order^2
+print("order of full torsion group is...")
+print(altbn128_order)
+
+# and for the final step we will actually need to define the initial curve (done implicitly) \
+# As soon as the whole initial curve is $p=r$-torsion group, any point of it will generate full torsion group
+# in the extension. We can see it by taking any point of the initial curve and check that it yields
+# _point at infinity_ being multiplied by the order of full torsion group.
+altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_fulltorsion)
+```
 
 ## Exercise 82
 
@@ -420,16 +454,86 @@ TODO
 
 > Implement a cryptographic hash function $H_{secp256k1} : \{0, 1\}^* \to secp256k1$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
 
-TODO
+This solution hashes plain strings since it reuse code from the book. Switching to bytestring would be an improvement for this solution. Also note that edge cases, especially when $y$ get in the middle of the field aren't tested and probably buggy.
+```sage
+# parameters from previous exercises
+p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+field_the = GF(p)
+E = EllipticCurve(field_the, [0, 7])
+
+# some pasting to be used as a helper; taken from <https://gist.github.com/Deathnerd/0cf26dd66ebbaf8880e3458242d0f8b8>
+def incr(bit_string):
+    carry = False
+    bits = list(bit_string[::-1])
+    for i, bit in enumerate(bits):
+        carry = bit != "0"
+        if bit == "0":
+            bits[i] = "1"
+            break
+        else:
+            bits[i] = "0"
+    if carry:
+        bits.append("1")
+    return "".join(bits[::-1])
+
+# actual solution starts here!
+# =========
+import hashlib
+def tryhash(s):
+    c = "0"
+    while c != "":
+        z = ZZ(hashlib.sha256((s+c).encode('utf-8')).hexdigest(), 16)
+        if z > p:
+            c = incr(c)
+        else:
+            try:
+                point_the = E.lift_x(z)
+                auxiliaryBit = c[-1]
+                y = point_the.xy()[1]
+                half = field_the((p-1)/2)
+
+                match auxiliaryBit:
+                    case "0":
+                        c = ""
+                        if (y <= half):
+                            c = ""
+                            print(point_the)
+                        else:
+                            c = ""
+                            print(-point_the)
+                    case "1":
+                        if (y > half):
+                            c = ""
+                            print(point_the)
+                        else:
+                            c = ""
+                            print(-point_the)
+                    case _:
+                        print("panic: counter must be binary")
+                # note that cofactor clearing isn't needed here due to sec256k1 is of prime order
+            except:
+                c = incr(c)
+
+tryhash("")
+```
 
 ## Exercise 87
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
-TODO
+```sage
+prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+altbn128 = EllipticCurve(GF(prime_the), [0, 3])
+
+# altbn128.order() = prime_the + 1 - t
+t = prime_the + 1 - altbn128.order()
+print(t)
+
+altbn128.order() < prime_the
+```
 
 ## Exercise 88
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
 
-TODO
+Not quite a Sage program, but all curves with $a=0$ has $j=0$, including this one.
