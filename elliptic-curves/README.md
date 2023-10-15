@@ -428,15 +428,73 @@ altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_f
 
 ## Exercise 82
 
-> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$
+> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
-TODO
+Here's a solution which avoids few obvious short-cut treating given very simple subgroup as something bigger in the sake of learning and studying.
+```sage
+# Compute the 2-torsion group
+F13 = GF(13)
+TJJ_F13 = EllipticCurve(F13, [8, 8])
+for point in TJJ_F13.points():
+    if point.order() == 2:
+        print(point)
+# "(4 : 0 : 1)
+L_TJJ_T2 = []
+for i in range(1, 3):
+    L_TJJ_T2.append(i * TJJ_F13([4, 0]))
+TJJ_T2 = Set(L_TJJ_T2)
+print(TJJ_T2)
+# {(4 : 0 : 1), (0 : 1 : 0)}
+F13t.<t> = F13[]
+P_MOD_4 = F13t(t^4 + 2) # see previous exercises with this curve
+F13_4.<t> = GF(13^4, name='t', modulus=P_MOD_4)
+
+TJJ_F13_4 = EllipticCurve(F13_4, [8, 8])
+# There's a dozen of elements of order $2^2$!
+# for point in TJJ_F13_4.points():
+#     if point.order() == 4:
+#         print(point)
+# So let's fall back to the approach from the page #103.
+TJJF13_4_2 = Set(TJJ_F13_4(0).division_points(2))
+TJJF13_4_2
+# {(4 : 0 : 1), (7*t^2 + 11 : 0 : 1), (6*t^2 + 11 : 0 : 1), (0 : 1 : 0)}
+
+# $\mathbb{G}_{1}[2]$ equals 2-torsion group
+TJJ_G1 = Set([TJJ_F13_4(point) for point in TJJ_T2])
+TJJ_G1
+```
+Let's look more closely at TJJF13_4_2. It contains (0 : 1 : 0) and three more points. We know that there's $r +1$ r-torsion subgroups, and we have $r = 2$, so each of this three points would suit; remember that zero-degree (4, 0) gives us $\mathbb{G}_1[2]$, so $\mathbb{G}_2[2]$ is equally good to generate with either one of two other points from TJJF13_4_2. The second element will be inevitable $(0 : 1 : 0)$.
 
 ## Exercise 83
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
-TODO
+For $\mathbb{G}_1[p]$ see #81, since its generator is any point on the initial `alt_bn128` curve.
+
+Let's see that $\mathbb{G}_2[p]$ generator is quite easy to find from there.
+```sage
+# #81 stuff
+prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+Z78 = GF(prime_the)
+Z78t.<t> = Z78[]
+P_irred = Z78t.irreducible_element(12)
+print(P_irred)
+Z78_12.<t> = GF(prime_the^12, name='t', modulus=P_irred)
+altbn128_12 = EllipticCurve(Z78_12, [0, 3])
+
+# "good part" of the solution starts here
+# ===================
+point_random_cofactorCleared = altbn128_12.random_point() * (altbn128_12.order() / EllipticCurve(GF(prime_the), [0, 3]).order()^2)
+
+# TODO check it's not in the $\mathbb{G}_1$, ie not zero-degree polynomial!
+# I guess you can do it just by looking at it, if it's zero-degree you could win a lotery today instead -- get one more `altbn128_12.random_point()`
+print("Today your $\mathbb{G}_1$ generator is...")
+print(point_random_cofactorCleared) 
+
+# is it a full r-torsion subgroup?
+point_random_cofactorCleared * EllipticCurve(GF(prime_the), [0, 3]).order() == altbn128_12(0)
+```
+It's important to note, that choice of pairing group $\mathbb{G}_2[p]$ is much more delicate than depicted in this exercise. Any one we get in this exercise is good enough for demonstrative purposes of this chapter, but as soon as you go further than doing an isolated pairing, $\mathbb{G}_2[p]$ should be chosen with utmost care.
 
 ## Exercise 84
 
