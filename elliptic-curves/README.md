@@ -173,13 +173,13 @@ sage: (E(5, 2) - E(9, 4)).xy()
 (11, 7)
 ```
 
-## Exercise 64
+## Exercise 64 🔴
 
 > Consider example 79 and compute the set $\{[1](0, 1), [2](0, 1), \ldots, [8](0, 1), [9](0, 1)\}$ using the tangent rule only.
 
 **Isn't this done in example 79 already?**
 
-## Exercise 65
+## Exercise 65 🔴
 
 > Consider example 80 and compute the scalar multiplications $[10](5, 11)$ as well as $[10](9, 4)$ and $[4](9, 4)$ with pen and paper using the algorithm from exercise 38 (Efficient Scalar Multiplication).
 
@@ -265,7 +265,7 @@ $$
 
 which has 5 elements, as expected from the large prime-order subgroup of $TJJ_{13}$ which has order 5.
 
-## Exercise 68
+## Exercise 68 🔴
 
 > Consider example 81 again. Compute the following expressions for projective points $E_1(\mathbb{F}_5\mathbb{P}^2)$ using algorithm 7.
 >
@@ -291,13 +291,13 @@ Then, we have a major branching after $V_1 = V_2$ check, which is true if $X_1 =
 
 Naturally, the remaining branch (where $V_1 \ne V_2$) handles the Chord rule where we add two different points with different $X$ coordinates.
 
-## Exercise 70
+## Exercise 70 🔴
 
 > Consider example 82 and compute the set in (5.30) by inserting every pair of field elements $(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13}$ into the defining Montgomery equation.
 
 TODO
 
-## Exercise 71
+## Exercise 71 🔴
 
 > Consider $E_1(\mathbb{F})$ from example 70 and show that this curve is not a Montgomery curve.
 
@@ -376,31 +376,39 @@ See the code [here](./embedding-and-extension.sage)
 
 ## Exercise 79
 
+// TODO: review
+
 > Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$.
 
 Applying the notions from the subsection we can conclude that $TJJ_{13}(\mathbb{F}_{13^2})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ as the order $2$ of the extension is less than $k$ -- embeding degree.
 
 $TJJ_{13}[5]$ is defined on line #434 at p.103 of MMM v.<1.1.1>, and $TJJ_{13}(\mathbb{F}_{13})[5]$ is on #446 at p.104. Given this printing them out is trivial. Identification of the element is pretty simple too since it's the element which has only $t^0$ components in their coordinate.
 
-And $TJJ_{13}(\mathbb{F}_{13^8})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ since we're asked about *5-torsion* group, and not _full torsion_.
+And $TJJ_{13}(\mathbb{F}_{13^8})[5] = TJJ_{13}(\mathbb{F}_{13})[5]$ since we're asked about _5-torsion_ group, and not _full torsion_.
 
 ## Exercise 80 ✨
+
+// TODO: review
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
 Couple of paragraphs above the book states that
-> ..., without any optimizations, representing such an element would need $k\cdot 256$ bits, which is too much to be representable in the observable universe. It follows that it is not only infeasible to compute the full $r$-torsion group of \curvename{secp256k1}, but moreover to even write down single elements of that group in general.
+
+> ..., without any optimizations, representing such an element would need $k\cdot 256$ bits, which is too much to be representable in the observable universe. It follows that it is not only infeasible to compute the full $r$-torsion group of $\text{secp256k1}$, but moreover to even write down single elements of that group in general.
 
 So, the question boils down to some optimization. Futher in the exercise #96 in the end of next section the book mentions following.
-> ... according to example 93 we can not store average curve points from the extension curve $secp256k1(\F_{p^k})$ on any computer, ...
+
+> ... according to example 93 we can not store average curve points from the extension curve $\text{secp256k1}(F_{p^k})$ on any computer, ...
 
 And _point at infinity_ is excluded as a solution explicitly by the exercise we're dealing with now.
 
 ## Exercise 81
 
+// TODO: review
+
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
-```sage
+```py
 prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
 Z78 = GF(prime_the)
 Z78t.<t> = Z78[]
@@ -411,27 +419,34 @@ print(P_irred)
 
 Z78_12.<t> = GF(prime_the^12, name='t', modulus=P_irred)
 altbn128_12 = EllipticCurve(Z78_12, [0, 3])
+```
 
-# the book states that full torsion group has order of $r^2$ \
-# let's just take the initial curve order from page 76 of the book without defining that curve here
+The book states that full torsion group has order of $r^2$, let's just take the initial curve order from page 76 of the book without defining that curve here:
+
+```py
 altbn128_order = 21888242871839275222246405745257275088548364400416034343698204186575808495617
 order_fulltorsion = altbn128_order^2
 print("order of full torsion group is...")
 print(altbn128_order)
+```
 
-# and for the final step we will actually need to define the initial curve (done implicitly) \
-# As soon as the whole initial curve is $p=r$-torsion group, any point of it will generate full torsion group
-# in the extension. We can see it by taking any point of the initial curve and check that it yields
-# _point at infinity_ being multiplied by the order of full torsion group.
+And for the final step we will actually need to define the initial curve (done implicitly). As soon as the whole initial curve is $p=r$-torsion group, any point of it will generate the full torsion group in the extension.
+
+We can test this out by taking any point of the initial curve and check that it yields _point at infinity_ being multiplied by the order of full torsion group.
+
+```py
 altbn128_12(EllipticCurve(GF(prime_the), [0, 3]).random_point().xy()) * (order_fulltorsion)
 ```
 
 ## Exercise 82
 
+// TODO: review
+
 > Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
 Here's a solution which avoids few obvious short-cut treating given very simple subgroup as something bigger in the sake of learning and studying.
-```sage
+
+```py
 # Compute the 2-torsion group
 F13 = GF(13)
 TJJ_F13 = EllipticCurve(F13, [8, 8])
@@ -463,16 +478,20 @@ TJJF13_4_2
 TJJ_G1 = Set([TJJ_F13_4(point) for point in TJJ_T2])
 TJJ_G1
 ```
+
 Let's look more closely at TJJF13_4_2. It contains (0 : 1 : 0) and three more points. We know that there's $r +1$ r-torsion subgroups, and we have $r = 2$, so each of this three points would suit; remember that zero-degree (4, 0) gives us $\mathbb{G}_1[2]$, so $\mathbb{G}_2[2]$ is equally good to generate with either one of two other points from TJJF13_4_2. The second element will be inevitable $(0 : 1 : 0)$.
 
 ## Exercise 83
+
+// TODO: review
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
 For $\mathbb{G}_1[p]$ see #81, since its generator is any point on the initial `alt_bn128` curve.
 
 Let's see that $\mathbb{G}_2[p]$ generator is quite easy to find from there.
-```sage
+
+```py
 # #81 stuff
 prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
 Z78 = GF(prime_the)
@@ -489,11 +508,12 @@ point_random_cofactorCleared = altbn128_12.random_point() * (altbn128_12.order()
 # TODO check it's not in the $\mathbb{G}_1$, ie not zero-degree polynomial!
 # I guess you can do it just by looking at it, if it's zero-degree you could win a lotery today instead -- get one more `altbn128_12.random_point()`
 print("Today your $\mathbb{G}_1$ generator is...")
-print(point_random_cofactorCleared) 
+print(point_random_cofactorCleared)
 
 # is it a full r-torsion subgroup?
 point_random_cofactorCleared * EllipticCurve(GF(prime_the), [0, 3]).order() == altbn128_12(0)
 ```
+
 It's important to note, that choice of pairing group $\mathbb{G}_2[p]$ is much more delicate than depicted in this exercise. Any one we get in this exercise is good enough for demonstrative purposes of this chapter, but as soon as you go further than doing an isolated pairing, $\mathbb{G}_2[p]$ should be chosen with utmost care.
 
 ## Exercise 84
@@ -510,10 +530,13 @@ TODO
 
 ## Exercise 86
 
+// TODO: review
+
 > Implement a cryptographic hash function $H_{secp256k1} : \{0, 1\}^* \to secp256k1$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
 
 This solution hashes plain strings since it reuse code from the book. Switching to bytestring would be an improvement for this solution. Also note that edge cases, especially when $y$ get in the middle of the field aren't tested and probably buggy.
-```sage
+
+```py
 # parameters from previous exercises
 p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
 field_the = GF(p)
@@ -577,9 +600,11 @@ tryhash("")
 
 ## Exercise 87
 
+// TODO: review
+
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
-```sage
+```py
 prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
 altbn128 = EllipticCurve(GF(prime_the), [0, 3])
 
@@ -591,6 +616,8 @@ altbn128.order() < prime_the
 ```
 
 ## Exercise 88
+
+// TODO: review
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
 
