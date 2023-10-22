@@ -173,7 +173,7 @@ sage: (E(5, 2) - E(9, 4)).xy()
 (11, 7)
 ```
 
-## Exercise 64 🔴
+## Exercise 64 ⚠️
 
 > Consider example 79 and compute the set $\{[1](0, 1), [2](0, 1), \ldots, [8](0, 1), [9](0, 1)\}$ using the tangent rule only.
 
@@ -485,7 +485,7 @@ print(TJJ_5)
 # (0 : 1 : 0) which is INF
 ```
 
-## Exercise 80
+## Exercise 80 ⚠️
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
@@ -559,8 +559,7 @@ assert is_prime(q)
 qq = q^2
 
 # try many times to make sure
-attempts = 100
-for _ in range(attempts):
+for _ in range(111):
   # pick a random point
   point = E.random_point()
 
@@ -568,7 +567,7 @@ for _ in range(attempts):
   assert E_K(point) * qq == E_K(0)
 ```
 
-When we run the code above, the `assert` works fine meaning that the random points are generators!
+When we run the code above, the `assert` works fine meaning that those random points are all generators!
 
 ## Exercise 82
 
@@ -576,16 +575,61 @@ When we run the code above, the `assert` works fine meaning that the random poin
 
 > Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
-Here's a solution which avoids few obvious short-cut treating given very simple subgroup as something bigger in the sake of learning and studying.
+First, let's find the embedding degree $k(2)$ for this curve.
 
 ```py
-# Compute the 2-torsion group
-F13 = GF(13)
-TJJ_F13 = EllipticCurve(F13, [8, 8])
-for point in TJJ_F13.points():
-    if point.order() == 2:
-        print(point)
-# "(4 : 0 : 1)
+# order of the base field for TJJ
+p = 13
+F13 = GF(p)
+F13t.<t> = F13[]
+TJJ = EllipticCurve(F13, [8, 8])
+
+# order of the curve's scalar field
+n = TJJ.order()
+# small prime factor
+r = 2
+assert n % r == 0
+
+# find embedding degree
+k = 1
+while k < r:
+  # Fermat's Little Theorem
+  if (p ^ k - 1) % r == 0:
+    break
+  k += 1
+print("Embedding degree:", k)
+```
+
+We find the embedding degree to be 1. In fact, you can immediately say that the embedding degree is 1, because notice that following operation in the congruence:
+
+$$
+13^k - 1 \bmod{2}
+$$
+
+We are looking for the smallest $k$ that results in 0 for the above operation, and it is obvious that $13-1$ is an even number and thus $k=1$. This also means that all 2-torsion groups of TJJ are equal!
+
+To compute the full 2-torsion group, we need to find $TJJ({\mathbb{F}_{13}})[2]$. We already have the curve computed above, so lets just choose points $P$ such that $[2]P = \mathcal{O}$ using Sage:
+
+```py
+# 2-torsion group
+TJJ_2 = Set(TJJ(0).division_points(2))
+print(TJJ_2)
+
+TJJ_2 = Set([TJJ(4, 0)])
+# {(4 : 0 : 1), (0 : 1 : 0)}
+```
+
+Let's compute the pairing groups now:
+
+```py
+# TODO: not working, cant find .frobenius for some reason
+G1 = [P for P in TJJ_2 if P == TJJ([a.frobenius() for a in P])]
+G2 = [P for P in TJJ_2 if p * P == TJJ([a.frobenius() for a in P])]
+```
+
+<!--
+
+```py
 L_TJJ_T2 = []
 for i in range(1, 3):
     L_TJJ_T2.append(i * TJJ_F13([4, 0]))
@@ -611,7 +655,7 @@ TJJ_G1 = Set([TJJ_F13_4(point) for point in TJJ_T2])
 TJJ_G1
 ```
 
-Let's look more closely at TJJF13_4_2. It contains (0 : 1 : 0) and three more points. We know that there's $r +1$ r-torsion subgroups, and we have $r = 2$, so each of this three points would suit; remember that zero-degree (4, 0) gives us $\mathbb{G}_1[2]$, so $\mathbb{G}_2[2]$ is equally good to generate with either one of two other points from TJJF13_4_2. The second element will be inevitable $(0 : 1 : 0)$.
+Let's look more closely at TJJF13_4_2. It contains (0 : 1 : 0) and three more points. We know that there's $r +1$ r-torsion subgroups, and we have $r = 2$, so each of this three points would suit; remember that zero-degree (4, 0) gives us $\mathbb{G}_1[2]$, so $\mathbb{G}_2[2]$ is equally good to generate with either one of two other points from TJJF13_4_2. The second element will be inevitable $(0 : 1 : 0)$. -->
 
 ## Exercise 83
 
