@@ -50,6 +50,8 @@ Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \lan
 
 ## Exercise 98
 
+// TODO: review
+
 > Consider modular 6 arithmetic $(\mathbb{Z}_6)$, the alphabets $\Sigma_I$ and $\Sigma_W$ and the following decision function:
 >
 > $$

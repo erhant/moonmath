@@ -344,7 +344,7 @@ def sha256_pedersen(s, gs, N):
 
 > Consider $\mathbb{Z}_{13}^*$ from example 34 and the parameter $k=3$. Choose a generator of $\mathbb{Z}_{13}^*$, a seed, and instantiate a member of the family given in equation (4.27) for that seed. Evaluate that member on the binary string $\langle 1, 0, 1 \rangle$.
 
-TODO (is $k$ really 3 here? in that case, the input must be 4 bits long.)
+TODO: (is $k$ really 3 here? in that case, the input must be 4 bits long.)
 
 ## Exercise 47
 

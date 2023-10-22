@@ -29,6 +29,7 @@ Some possible errors in version 1.1.1.
 - Page 96, above 5.37 it should probably say "Short Weierstrass or Montgomery representation"
 - Page 97, end of 3rd paragraph should be $(-x_1, y_1)$.
 - Page 102, end of exercise 78 should say $alt\_bn128(\mathbb{F}_{p^{12}})$
+- Page 103, Example 92, "doing this for 815730721 _elements_ is a bit too slow..."
 - Page 108, top of the page says "add this to references"
 - Page 110, Algorithm 9, should be $y^2 \gets x^3 + a\cdot x + b$
 
