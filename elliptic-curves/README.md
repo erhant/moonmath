@@ -495,7 +495,7 @@ print(TJJ_5)
 # (0 : 1 : 0) which is INF
 ```
 
-## Exercise 80 ⚠️
+## Exercise 80 🔴
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
@@ -526,7 +526,7 @@ print(random)
 
 Unfortunately, we can't seem to find any points like this, perhaps there is another way.
 
-## Exercise 81
+## Exercise 81 🔴
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
@@ -556,32 +556,9 @@ E = EllipticCurve(FP, [a, b])
 
 It is stated that the full $r$-torsion group has order of $r^2$, and since the order of `alt_bn128` is a prime, the $r$ in this case is the order of the scalar field itself.
 
-When the curve's order is a prime, and thus $r$ is equal to order in an $r$-torsion group, any point within the curve will generate the full torsion group in the extension field.
+TODO
 
-We can test this out by taking any point of the initial curve and check that it yields _point at infinity_ when multiplied with the order of full $r$-torsion group (i.e. $r^2$ in this case).
-
-```py
-# altbn128 order of the scalar field (i.e. number of points)
-q = E.cardinality()
-assert is_prime(q)
-
-# order of the full-torsion group as per the definition
-qq = q^2
-
-# try many times to make sure
-for _ in range(111):
-  # pick a random point
-  point = E.random_point()
-
-  # it should give INF when multiplied with the order
-  assert E_K(point) * qq == E_K(0)
-```
-
-When we run the code above, the `assert` works fine meaning that those random points are all generators!
-
-## Exercise 82
-
-// TODO: review
+## Exercise 82 🔴
 
 > Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
@@ -649,146 +626,133 @@ print("G2:", G1)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 ```
 
-It turns out they are equal! I am not sure about this solution though, please refer to issue #19.
+It turns out they are equal! I am not sure about this solution though, please refer to [this issue](https://github.com/erhant/moonmath/issues/19).
 
-## Exercise 83
-
-// TODO: review
+## Exercise 83 🔴
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
-For $\mathbb{G}_1[p]$ see #81, since its generator is any point on the initial `alt_bn128` curve.
-
-Let's see that $\mathbb{G}_2[p]$ generator is quite easy to find from there.
+First let's do our setup:
 
 ```py
-# #81 stuff
-prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
-Z78 = GF(prime_the)
-Z78t.<t> = Z78[]
-P_irred = Z78t.irreducible_element(12)
-print(P_irred)
-Z78_12.<t> = GF(prime_the^12, name='t', modulus=P_irred)
-altbn128_12 = EllipticCurve(Z78_12, [0, 3])
+# curve parameters for alt_bn128
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
 
-# "good part" of the solution starts here
-# ===================
-point_random_cofactorCleared = altbn128_12.random_point() * (altbn128_12.order() / EllipticCurve(GF(prime_the), [0, 3]).order()^2)
+FP = GF(p)      # field
+FPt.<t> = FP[]  # polynomial ring
+k = 12          # embedding degree
 
-# TODO check it's not in the $\mathbb{G}_1$, ie not zero-degree polynomial!
-# I guess you can do it just by looking at it, if it's zero-degree you could win a lotery today instead -- get one more `altbn128_12.random_point()`
-print("Today your $\mathbb{G}_1$ generator is...")
-print(point_random_cofactorCleared)
+# an irreducible polynomial of degree k
+P_MOD_K = FPt.irreducible_element(k)
 
-# is it a full r-torsion subgroup?
-point_random_cofactorCleared * EllipticCurve(GF(prime_the), [0, 3]).order() == altbn128_12(0)
+# extension field
+FP_K = GF(p^k, name='t', modulus=P_MOD_K)
+
+# curve over extension field
+E_K = EllipticCurve(FP_K, [a, b])
+
+# curve over the base field
+E = EllipticCurve(FP, [a, b])
 ```
 
-It's important to note, that choice of pairing group $\mathbb{G}_2[p]$ is much more delicate than depicted in this exercise. Any one we get in this exercise is good enough for demonstrative purposes of this chapter, but as soon as you go further than doing an isolated pairing, $\mathbb{G}_2[p]$ should be chosen with utmost care.
+TODO
 
-## Exercise 84
+## Exercise 84 🔴
 
 > Consider the `alt_bn128` curve from example 73, and the generators $g_1$ and $g_2$ of $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$ from exercise 83. Write a Sage program that computes the Weil pairing $e(g_1, g_2)$
 
 TODO
 
-## Exercise 85
+## Exercise 85 🔴
 
 > Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^\ast \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
 
 TODO
 
-## Exercise 86
-
-// TODO: review
+## Exercise 86 🔴
 
 > Implement a cryptographic hash function $H_{\text{secp256k1}} : \{0, 1\}^* \to \text{secp256k1}$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
 
-This solution hashes plain strings since it reuse code from the book. Switching to bytestring would be an improvement for this solution. Also note that edge cases, especially when $y$ get in the middle of the field aren't tested and probably buggy.
-
 ```py
-# parameters from previous exercises
+# parameters for secpk2561
 p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
-field_the = GF(p)
-E = EllipticCurve(field_the, [0, 7])
+a, b = 0, 7
 
-# some pasting to be used as a helper; taken from <https://gist.github.com/Deathnerd/0cf26dd66ebbaf8880e3458242d0f8b8>
-def incr(bit_string):
-    carry = False
-    bits = list(bit_string[::-1])
-    for i, bit in enumerate(bits):
-        carry = bit != "0"
-        if bit == "0":
-            bits[i] = "1"
-            break
-        else:
-            bits[i] = "0"
-    if carry:
-        bits.append("1")
-    return "".join(bits[::-1])
-
-# actual solution starts here!
-# =========
-import hashlib
-def tryhash(s):
-    c = "0"
-    while c != "":
-        z = ZZ(hashlib.sha256((s+c).encode('utf-8')).hexdigest(), 16)
-        if z > p:
-            c = incr(c)
-        else:
-            try:
-                point_the = E.lift_x(z)
-                auxiliaryBit = c[-1]
-                y = point_the.xy()[1]
-                half = field_the((p-1)/2)
-
-                match auxiliaryBit:
-                    case "0":
-                        c = ""
-                        if (y <= half):
-                            c = ""
-                            print(point_the)
-                        else:
-                            c = ""
-                            print(-point_the)
-                    case "1":
-                        if (y > half):
-                            c = ""
-                            print(point_the)
-                        else:
-                            c = ""
-                            print(-point_the)
-                    case _:
-                        print("panic: counter must be binary")
-                # note that cofactor clearing isn't needed here due to sec256k1 is of prime order
-            except:
-                c = incr(c)
-
-tryhash("")
+Fp = GF(p)
+E = EllipticCurve(Fp, [a, b])
 ```
 
-## Exercise 87
+TODO
 
-// TODO: review
+## Exercise 87 🔴
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
 ```py
-prime_the = 21888242871839275222246405745257275088696311157297823662689037894645226208583
-altbn128 = EllipticCurve(GF(prime_the), [0, 3])
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
+Fp = GF(p)
+E = EllipticCurve(Fp, [a, b])
 
-# altbn128.order() = prime_the + 1 - t
-t = prime_the + 1 - altbn128.order()
+
+t = p + 1 - E.order()
 print(t)
 
-altbn128.order() < prime_the
+assert E.order() < p
 ```
 
-## Exercise 88
+TODO
 
-// TODO: review
+## Exercise 88 🔴
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
 
-Not quite a Sage program, but all curves with $a=0$ has $j=0$, including this one.
+TODO
+
+## Exercise 89 🔴
+
+> Show that the Hilbert class polynomials for the CM-discriminants $D = -3$ and $D = -4$ are given by $H_{-3, q}(x) = x$ and $H_{-4, q}(x) = x - (1728 \bmod{q})$
+
+TODO
+
+## Exercise 90 🔴
+
+> Use the complex multiplication method to construct an elliptic curve of order 7 over the prime field $\mathbb{F}_{13}$
+
+TODO
+
+## Exercise 91 🔴
+
+> Use the complex multiplication method to compute all isomorphism classes of all elliptic curves of order 7 over the prime field $\mathbb{F}_{13}$
+
+TODO
+
+## Exercise 92 🔴
+
+> Consider the prime modulus $p$ of curve `alt_bn128` from example 73, and its trace $t$ from exercise 92. Use the complex multiplication method to synthesize an elliptic curve over $F_p$ that is isomorphic to `alt_bn128` and compute an explicit isomorphism between these two curves.
+
+TODO
+
+## Exercise 93 🔴
+
+> Consider the point $P = (9, 2)$. Show that $P$ is a point on the `BLS6_6` curve and compute the scalar product $[3]P$
+
+TODO
+
+## Exercise 94 🔴
+
+> Compute the following expressions:
+>
+> - $-(26, 34)$
+> - $(26, 9) \oplus (13, 28)$
+> - $(35, 15) \oplus \mathcal{O}$
+> - $(27, 9) \oplus (33, 9)$
+
+TODO
+
+## Exercise 95 🔴
+
+> Consider the extended `BLS6_6` curve as defined in 5.67 and the two curve points $g1 = (13, 15)$ and $g2 = (7v^2, 16v^3)$. Compute the Weil pairing $e(g1, g2)$ using definition 5.49 and Miller's algorithm.
+
+TODO
