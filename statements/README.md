@@ -2,7 +2,9 @@
 
 ## Exercise 96
 
-> Define a decision function such that the associated language $L_{Exercise_1}$ consists of all solutions to the equation $5x + 4 = 28 + 2x$ over $\mathbb{F}_{13}$. Provide a constructive proof for the claim: "There exists a word in $L_{Exercise_1}$" and verify the proof.
+> Define a decision function such that the associated language $L_{Exercise_1}$ consists of all solutions to the equation $5x + 4 = 28 + 2x$ over $\mathbb{F}_{13}$.
+>
+> Provide a constructive proof for the claim: "There exists a word in $L_{Exercise_1}$" and verify the proof.
 
 The decision function can be written as follows:
 
@@ -32,7 +34,7 @@ So, the string $\langle 8 \rangle$ is a constructive proof and the computation $
 > Consider modular 6 arithmetic $(\mathbb{Z}_6)$, the alphabet $\Sigma = \mathbb{Z}_6$ and the following decision function:
 >
 > $$
->  R_{example_{11}} : \Sigma^* \to \{true, false\} ;
+>  R_{example_{11}} : \Sigma^\ast \to \{true, false\} ;
 > $$
 >
 > $$
@@ -55,7 +57,7 @@ Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \lan
 > Consider modular 6 arithmetic $(\mathbb{Z}_6)$, the alphabets $\Sigma_I$ and $\Sigma_W$ and the following decision function:
 >
 > $$
->  R_{linear} : \Sigma^* \times \Sigma^* \to \{true, false\} ;
+>  R_{linear} : \Sigma^\ast \times \Sigma^\ast \to \{true, false\} ;
 > $$
 >
 > $$
@@ -79,7 +81,7 @@ Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \lan
 
 ## Exercise 99 ✨
 
-> Consider the TinyJubJub curve together with its twisted Edwards addition law. Define an instance alphabet $\Sigma_I$, a witness alphabet $\Sigma_W$ and a decision function $R_{add}$ with associated language $L_{add}$ such that a string $(i;w) \in \Sigma_I^* \times \Sigma_W^*$ is a word in $L_{add}$ if and only if $i$ is a pair of curve points on the TinyJubJub curve in Edwards form, and $w$ is the sum of those curve points.
+> Consider the TinyJubJub curve together with its twisted Edwards addition law. Define an instance alphabet $\Sigma_I$, a witness alphabet $\Sigma_W$ and a decision function $R_{add}$ with associated language $L_{add}$ such that a string $(i;w) \in \Sigma_I^\ast \times \Sigma_W^\ast$ is a word in $L_{add}$ if and only if $i$ is a pair of curve points on the TinyJubJub curve in Edwards form, and $w$ is the sum of those curve points.
 >
 > With that, give example of an instance with a proof, and another example with an instance with no proof.
 
@@ -112,7 +114,7 @@ To make things easier, we will also re-use $L_{tiny-jj}$ from a previous example
 With that, our grammar $R_{add}$ is defined as:
 
 $$
-R_{add} : (\mathbb{F}_{13})^* \times (\mathbb{F}_{13})^* \to \{true, false\} ;
+R_{add} : (\mathbb{F}_{13})^\ast \times (\mathbb{F}_{13})^\ast \to \{true, false\} ;
 $$
 
 $$
@@ -139,7 +141,7 @@ $$
 The language $L_{add}$ is defined as:
 
 $$
-L_{add} := \{(i;w) \in \Sigma_I^* \times \Sigma_W^* | R_{add}(i; w) = true \}
+L_{add} := \{(i;w) \in \Sigma_I^\ast \times \Sigma_W^\ast | R_{add}(i; w) = true \}
 $$
 
 To provide an instance with knowledge proof, we can just pick two points in the curve and sum them as the witness. To provide an instance with no proof, we can let one of the points to be outside the curve and that would suffice.
@@ -314,15 +316,15 @@ def qap(r1cs, p: int):
 When we run this over the R1CS from example 121, we get:
 
 ```sh
-Target Polynomial
+# Target Polynomial
 x^4 + 11*x^3 + 12*x^2 + 3*x + 12
 
-Polynomials (A)
+# Polynomials (A)
 [12*x^3 + x^2 + 2*x + 12, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 7*x^3 + 8*x + 8, x^3 + 12*x^2 + 11*x + 1, 12*x^3 + x^2 + 2*x + 12]
 
-Polynomials (B)
+# Polynomials (B)
 [12*x^3 + x^2 + 2*x + 12, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 0, 7*x^3 + 2*x^2 + 5*x + 12, 12*x^3 + x^2 + 2*x + 12]
 
-Polynomials (C)
+# Polynomials (C)
 [0, 0, 0, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 7*x^3 + 2*x^2 + 5*x + 12]
 ```

@@ -9,7 +9,7 @@ Topics in this chapter:
 
 ## Exercise 33
 
-> Let $\mathbb{Z}_5^*$ be the set of all remainder classes from $\mathbb{Z}_5$ without the class 0, meaning that $\mathbb{Z}_5^* = \mathbb{Z}_5 \setminus \{0\}$. Show that $(\mathbb{Z}_5, \cdot)$ is a commutative group (aka. Abelian Group).
+> Let $\mathbb{Z}_5^\ast$ be the set of all remainder classes from $\mathbb{Z}_5$ without the class 0, meaning that $\mathbb{Z}_5^\ast = \mathbb{Z}_5 \setminus \{0\}$. Show that $(\mathbb{Z}_5, \cdot)$ is a commutative group (aka. Abelian Group).
 
 The map $\cdot$ (multiplication) of all elements in $\mathbb{Z}_5$ have the following properties:
 
@@ -23,11 +23,11 @@ With all these properties, the group is commutative. We can also see this from t
 
 ## Exercise 34
 
-> Generalizing the previous exercise, consider $n$ and let $\mathbb{Z}_n^*$ be the set of all remainder classes from $\mathbb{Z}_n$ without the class 0, i.e. $\mathbb{Z}_n^* = \{1, 2, \ldots, n - 1\}$. Provide a counter-example to show that $(\mathbb{Z}_n^*, \cdot)$ is not a commutative group in general.
+> Generalizing the previous exercise, consider $n$ and let $\mathbb{Z}_n^\ast$ be the set of all remainder classes from $\mathbb{Z}_n$ without the class 0, i.e. $\mathbb{Z}_n^\ast = \{1, 2, \ldots, n - 1\}$. Provide a counter-example to show that $(\mathbb{Z}_n^\ast, \cdot)$ is not a commutative group in general.
 >
-> Find a condition such that $(\mathbb{Z}_n^*, \cdot)$ is a commutative group, compute the neutral element, give a closed form for the inverse of any element and prove the commutative group axioms.
+> Find a condition such that $(\mathbb{Z}_n^\ast, \cdot)$ is a commutative group, compute the neutral element, give a closed form for the inverse of any element and prove the commutative group axioms.
 
-In general, $(\mathbb{Z}_n^*, \cdot)$ is a commutative group when $n$ is a prime number. In these groups, neutral element is always 1 and the inverse of any element can be given by Fermat's Little Theorem, which states:
+In general, $(\mathbb{Z}_n^\ast, \cdot)$ is a commutative group when $n$ is a prime number. In these groups, neutral element is always 1 and the inverse of any element can be given by Fermat's Little Theorem, which states:
 
 $$
 a^{n} \equiv a \pmod{n}
@@ -65,13 +65,13 @@ sage: list(map(lambda k : (6-4)*k % 6, range(1, 7)))
 
 ## Exercise 37 ✨
 
-> Let $p \in \mathbb{P}$ be prime number and show that $(\mathbb{Z}_p^*, \cdot)$ is cyclic, i.e. it has a not necessarily unique single element that is able to generate the entire group.
+> Let $p \in \mathbb{P}$ be prime number and show that $(\mathbb{Z}_p^\ast, \cdot)$ is cyclic, i.e. it has a not necessarily unique single element that is able to generate the entire group.
 
 I couldn't prove this myself, here is a [proof from YouTube](https://www.youtube.com/watch?v=EiM7U-WT40Q) that I saw in ZKHACK MoonMath study group. There is also this [question on StackExchange](https://math.stackexchange.com/questions/290427/is-mathbb-z-p-1-2-3-p-1-a-cyclic-group).
 
 We must first recall **Euler's Phi (or Totient) Function**: $\phi(n)$ is the number of integers in $\{1,2,3, \ldots ,n\}$ which are relatively prime to $n$. You can use `euler_phi` in Sage to compute the Euler Totient Function.
 
-Now, define a function $N_p(d)$ that counts the number of generators that have order $d$ in $\mathbb{Z}_p^*$. For example, consider elements in $\mathbb{Z}_5^* = \{1, 2, 3, 4\}$ which for this function result in:
+Now, define a function $N_p(d)$ that counts the number of generators that have order $d$ in $\mathbb{Z}_p^\ast$. For example, consider elements in $\mathbb{Z}_5^\ast = \{1, 2, 3, 4\}$ which for this function result in:
 
 - $N_5(1) = 1$ due to element $\{1\}$
 - $N_5(2) = 1$ due to element $\{4\}$
@@ -124,7 +124,7 @@ $$
 
 Euler's Totient Function is a positive function, meaning that it can never be equal to 0. So, $N_p(p-1)$ must also be positive, meaning that for any prime $p$ there is always at least 1 generator that can generate the group.
 
-In fact, here we actually showed that there are $\phi(p-1)$ many generators that can generate the group for prime $p$. Indeed looking at our example of $\mathbb{Z}_5^*$ with order $4$, there were 2 generators $\{2, 3\}$ and $\phi(4) = 2$.
+In fact, here we actually showed that there are $\phi(p-1)$ many generators that can generate the group for prime $p$. Indeed looking at our example of $\mathbb{Z}_5^\ast$ with order $4$, there were 2 generators $\{2, 3\}$ and $\phi(4) = 2$.
 
 ## Exercise 38
 
@@ -219,9 +219,9 @@ The largest prime order here is that of `Z6[3]` with elements `{0, 2, 4}`. Also 
 
 ## Exercise 41 ✨
 
-> Let $(\mathbb{Z}_p^*, \cdot)$ be a cyclic group. Show that for $p \geq 5$ not every element of $\mathbb{Z}_p^*$ is a generator of $\mathbb{Z}_p^*$.
+> Let $(\mathbb{Z}_p^\ast, \cdot)$ be a cyclic group. Show that for $p \geq 5$ not every element of $\mathbb{Z}_p^\ast$ is a generator of $\mathbb{Z}_p^\ast$.
 
-A trivial answer is that $1 \in \mathbb{Z}_p^*$ but does not generate the group. Other than that, for larger groups for prime $p$, their order will be $p-1$. This is an even number, indicating that all these prime order groups have a subgroup of order 2.
+A trivial answer is that $1 \in \mathbb{Z}_p^\ast$ but does not generate the group. Other than that, for larger groups for prime $p$, their order will be $p-1$. This is an even number, indicating that all these prime order groups have a subgroup of order 2.
 
 So, there will always be an element other than 1 that generates the subgroup of order 2, which obviously can't generate the group itself. The only expection is when $p=3$, since that group has order 2, hence the reason the question asks for $p \geq 5$ for us.
 
@@ -291,9 +291,9 @@ The bilinearity property holds due to distribute law of integers mod $n$, simila
 
 ## Exercise 44
 
-> Consider $\mathbb{Z}_{13}^*$. Choose a set of 3 generators from this group, define it's associated Pedersen Hash Function and compute the Pedersen hash of $(3, 7, 11) \in \mathbb{Z}_{12}$.
+> Consider $\mathbb{Z}_{13}^\ast$. Choose a set of 3 generators from this group, define it's associated Pedersen Hash Function and compute the Pedersen hash of $(3, 7, 11) \in \mathbb{Z}_{12}$.
 
-Generators of $\mathbb{Z}_{13}^*$ are $\{2, 6, 7, 11\}$. Let's choose $2, 6, 7$ and define our Pedersen Hash Function as:
+Generators of $\mathbb{Z}_{13}^\ast$ are $\{2, 6, 7, 11\}$. Let's choose $2, 6, 7$ and define our Pedersen Hash Function as:
 
 $$
 H(x_1, x_2, x_3) = 2^{x_1}6^{x_2}11^{x_3} \pmod{13}
@@ -342,17 +342,9 @@ def sha256_pedersen(s, gs, N):
 
 ## Exercise 46
 
-> Consider $\mathbb{Z}_{13}^*$ from example 34 and the parameter $k=3$. Choose a generator of $\mathbb{Z}_{13}^*$, a seed, and instantiate a member of the family given in equation (4.27) for that seed. Evaluate that member on the binary string $\langle 1, 0, 1 \rangle$.
+> Consider $\mathbb{Z}_{13}^\ast$ from example 34 and the parameter $k=3$. Choose a generator of $\mathbb{Z}_{13}^\ast$, a seed, and instantiate a member of the family given in equation (4.27) for that seed. Evaluate that member on the binary string $\langle 1, 0, 1 \rangle$.
 
 TODO: (is $k$ really 3 here? in that case, the input must be 4 bits long.)
-
-## Exercise 47
-
-> Consider the ring $\mathbb{Z}_5$. Show that it is also a field and write its characteristic. Then, prove that $ax = b$ has only a single solution $x \in \mathbb{Z}_5$ for any given $a, b \in \mathbb{Z}_5^*$.
-
-We have the ring $\mathbb{Z}_5$ which is $(\{0, 1, 2, 3, 4\}, +, \times) $. This is a field, because all field rules hold and every member expect 0 has a multiplicative inverse. The characteristic of this field is $5$, because $\sum_{i=1}^5 1 = 0$ in $\mathbb{Z}_5$.
-
-As for $ax = b$, there is only one solution because each $a$ has a single multiplicative inverse $a^{-1}$ in the multiplicative field, and we get $x = ba^{-1}$ which is a single element in the field.
 
 ## Exercise 47
 

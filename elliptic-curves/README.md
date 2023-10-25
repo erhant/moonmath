@@ -86,7 +86,9 @@ which is our original curve equation, thus showing that the points are mapped on
 > Consider $TJJ_{13}$ example 71 and the curve $E_{7, 5}(\mathbb{F}_{13})$ defined as follows:
 >
 > $$
-> E_{5, 7}(\mathbb{F}_{13}) = \{(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13} \mid y^2 = x^3 + 7x + 5\}
+> E_{5, 7}(\mathbb{F}_{13})
+> =    \{(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13}
+> \mid y^2 = x^3 + 7x + 5\}
 > $$
 >
 > Show that $TJJ_{13}$ and $E_{7, 5}(\mathbb{F}_{13})$ are isomorphic. Compute the set of all points from $E_{7, 5}(\mathbb{F}_{13})$, construct $I$ and map all points of $TJJ_{13}$ onto $E_{7, 5}(\mathbb{F}_{13})$
@@ -386,7 +388,9 @@ print(
 
 ## Exercise 77
 
-> Consider TinyJubJub. Show that $t^4 + 2 \in \mathbb{F}_{13}[t]$ is irreducible. Then, write a sage program to implement the finite field extension $\mathbb{F}_{13^4}$. Implement the curve extension in the extension field, and compute the number of curve points (i.e. order).
+> Consider TinyJubJub. Show that $t^4 + 2 \in \mathbb{F}_{13}[t]$ is irreducible.
+>
+> Then, write a sage program to implement the finite field extension $\mathbb{F}_{13^4}$. Implement the curve extension in the extension field, and compute the number of curve points (i.e. order).
 
 Here is the solution in Sage:
 
@@ -406,7 +410,10 @@ print("Order of E(F_13^4):", TJJ_F13_4.order())
 
 ## Exercise 78 ✨
 
-> Consider `alt_bn128` curve. We know from example 89 that this curve has embedding degree 12. Use Sage to find an irreducible polynomial in $\mathbb{F}_p[t]$, and then compute the field extension $\mathbb{F}_{p^{12}}$ to implement the curve extension of `alt_bn128`. Compute the number of curve points.
+> Consider `alt_bn128` curve. We know from example 89 that this curve has embedding degree 12.
+>
+> - Use Sage to find an irreducible polynomial in $\mathbb{F}_p[t]$
+> - Then compute the field extension $\mathbb{F}_{p^{12}}$ to implement the curve extension of `alt_bn128`. Compute the number of curve points.
 
 Here is the solution in Sage:
 
@@ -433,7 +440,10 @@ print("Order of alt_bn128 extension:\n", E.order())
 
 ## Exercise 79 ✨
 
-> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$.
+> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92.
+>
+> - Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$.
+> - Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$.
 
 First, let's compute the full 5-torsion group $TJJ_{13}[5]$ as shown in the example. For a full $r$-torsion group, we need the curve defined over the extension field over a polynomial with degree equal to $k(r)$. We know from a previous example that $k(5) = 4$ so we will use a degree 4 polynomial.
 
@@ -581,8 +591,8 @@ First, let's find the embedding degree $k(2)$ for this curve.
 # order of the base field for TJJ
 p = 13
 F13 = GF(p)
-F13t.<t> = F13[]
 TJJ = EllipticCurve(F13, [8, 8])
+INF = TJJ(0) # point at infinity
 
 # order of the curve's scalar field
 n = TJJ.order()
@@ -593,8 +603,7 @@ assert n % r == 0
 # find embedding degree
 k = 1
 while k < r:
-  # Fermat's Little Theorem
-  if (p ^ k - 1) % r == 0:
+  if (p^k - 1) % r == 0:
     break
   k += 1
 print("Embedding degree:", k)
@@ -606,56 +615,41 @@ $$
 13^k - 1 \bmod{2}
 $$
 
-We are looking for the smallest $k$ that results in 0 for the above operation, and it is obvious that $13-1$ is an even number and thus $k=1$. This also means that all 2-torsion groups of TJJ are equal!
+We are looking for the smallest $k$ that results in 0 for the above operation, and it is obvious that $13-1$ is an even number and thus $k=1$. We also know this result from example 87 by the way.
 
-To compute the full 2-torsion group, we need to find $TJJ({\mathbb{F}_{13}})[2]$. We already have the curve computed above, so lets just choose points $P$ such that $[2]P = \mathcal{O}$ using Sage:
+To compute the **full** 2-torsion group, we need to find the 2-torsion group of the curve over field extension with order $p^{k(2)}$. We have just shown that $k(2) = 1$, so it turns out that our original curve serves the purpose to find the full torsion group! We can simply choose points $P$ such that $[2]P = \mathcal{O}$ using Sage:
 
 ```py
-# 2-torsion group
-TJJ_2 = Set(TJJ(0).division_points(2))
-print(TJJ_2)
-
-TJJ_2 = Set([TJJ(4, 0)])
+# full r-torsion group, using the original curve
+# because k=1 and F_{p^1} = F_p
+TJJ_tor = Set([P for P in TJJ if r*P == TJJ(0)])
+print("{}-torsion group:".format(r))
+print(TJJ_tor)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 ```
+
+We expect $r^2$ elements (i.e. 4) in the full-torsion group, which is indeed the case.
 
 Let's compute the pairing groups now:
 
 ```py
-# TODO: not working, cant find .frobenius for some reason
-G1 = [P for P in TJJ_2 if P == TJJ([a.frobenius() for a in P])]
-G2 = [P for P in TJJ_2 if p * P == TJJ([a.frobenius() for a in P])]
-```
+def fro_pi(P):
+  if P != TJJ(0):
+    (x, y) = P.xy()
+    return TJJ(x^p, y^p)
+  else:
+    return P
 
-<!--
-
-```py
-L_TJJ_T2 = []
-for i in range(1, 3):
-    L_TJJ_T2.append(i * TJJ_F13([4, 0]))
-TJJ_T2 = Set(L_TJJ_T2)
-print(TJJ_T2)
+G1 = [P for P in TJJ_tor if fro_pi(P) == P]
+print("G1:", G1)
 # {(4 : 0 : 1), (0 : 1 : 0)}
-F13t.<t> = F13[]
-P_MOD_4 = F13t(t^4 + 2) # see previous exercises with this curve
-F13_4.<t> = GF(13^4, name='t', modulus=P_MOD_4)
 
-TJJ_F13_4 = EllipticCurve(F13_4, [8, 8])
-# There's a dozen of elements of order $2^2$!
-# for point in TJJ_F13_4.points():
-#     if point.order() == 4:
-#         print(point)
-# So let's fall back to the approach from the page #103.
-TJJF13_4_2 = Set(TJJ_F13_4(0).division_points(2))
-TJJF13_4_2
-# {(4 : 0 : 1), (7*t^2 + 11 : 0 : 1), (6*t^2 + 11 : 0 : 1), (0 : 1 : 0)}
-
-# $\mathbb{G}_{1}[2]$ equals 2-torsion group
-TJJ_G1 = Set([TJJ_F13_4(point) for point in TJJ_T2])
-TJJ_G1
+G2 = [P for P in TJJ_tor if fro_pi(P) == p*P]
+print("G2:", G1)
+# {(4 : 0 : 1), (0 : 1 : 0)}
 ```
 
-Let's look more closely at TJJF13_4_2. It contains (0 : 1 : 0) and three more points. We know that there's $r +1$ r-torsion subgroups, and we have $r = 2$, so each of this three points would suit; remember that zero-degree (4, 0) gives us $\mathbb{G}_1[2]$, so $\mathbb{G}_2[2]$ is equally good to generate with either one of two other points from TJJF13_4_2. The second element will be inevitable $(0 : 1 : 0)$. -->
+It turns out they are equal! I am not sure about this solution though, please refer to issue #19.
 
 ## Exercise 83
 
@@ -700,7 +694,7 @@ TODO
 
 ## Exercise 85
 
-> Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^* \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
+> Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^\ast \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
 
 TODO
 
@@ -708,7 +702,7 @@ TODO
 
 // TODO: review
 
-> Implement a cryptographic hash function $H_{secp256k1} : \{0, 1\}^* \to secp256k1$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
+> Implement a cryptographic hash function $H_{\text{secp256k1}} : \{0, 1\}^* \to \text{secp256k1}$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
 
 This solution hashes plain strings since it reuse code from the book. Switching to bytestring would be an improvement for this solution. Also note that edge cases, especially when $y$ get in the middle of the field aren't tested and probably buggy.
 
