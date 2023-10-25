@@ -63,12 +63,12 @@ We can also find an $x$ such that $|x| \ne 1$ by dividing both sides by $x^2 - 1
 1. $m = 5, r = 2$
 2. $m = -5, r = 2$
 3. No solutions possible because we get $0 \leq r < 0$ due to $b = 0$.
-4. $m = -153, r = 7$, which we find by solving for $(1687, 11)$ first.
+4. $m = -154, r = 7$, which we find by solving for $(1687, 11)$ first.
 5. $m = 0, r = 0$.
 
 All solutions are unique.
 
-## Exercise 6
+## Exercise 6 🔴
 
 > Using the programming language of your choice, write an algorithm that computes integer long divison and handles all edge cases properly.
 

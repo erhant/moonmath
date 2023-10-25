@@ -86,7 +86,9 @@ which is our original curve equation, thus showing that the points are mapped on
 > Consider $TJJ_{13}$ example 71 and the curve $E_{7, 5}(\mathbb{F}_{13})$ defined as follows:
 >
 > $$
-> E_{5, 7}(\mathbb{F}_{13}) = \{(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13} \mid y^2 = x^3 + 7x + 5\}
+> E_{5, 7}(\mathbb{F}_{13})
+> =    \{(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13}
+> \mid y^2 = x^3 + 7x + 5\}
 > $$
 >
 > Show that $TJJ_{13}$ and $E_{7, 5}(\mathbb{F}_{13})$ are isomorphic. Compute the set of all points from $E_{7, 5}(\mathbb{F}_{13})$, construct $I$ and map all points of $TJJ_{13}$ onto $E_{7, 5}(\mathbb{F}_{13})$
@@ -173,13 +175,13 @@ sage: (E(5, 2) - E(9, 4)).xy()
 (11, 7)
 ```
 
-## Exercise 64
+## Exercise 64 ⚠️
 
 > Consider example 79 and compute the set $\{[1](0, 1), [2](0, 1), \ldots, [8](0, 1), [9](0, 1)\}$ using the tangent rule only.
 
 **Isn't this done in example 79 already?**
 
-## Exercise 65
+## Exercise 65 🔴
 
 > Consider example 80 and compute the scalar multiplications $[10](5, 11)$ as well as $[10](9, 4)$ and $[4](9, 4)$ with pen and paper using the algorithm from exercise 38 (Efficient Scalar Multiplication).
 
@@ -265,7 +267,7 @@ $$
 
 which has 5 elements, as expected from the large prime-order subgroup of $TJJ_{13}$ which has order 5.
 
-## Exercise 68
+## Exercise 68 🔴
 
 > Consider example 81 again. Compute the following expressions for projective points $E_1(\mathbb{F}_5\mathbb{P}^2)$ using algorithm 7.
 >
@@ -291,13 +293,13 @@ Then, we have a major branching after $V_1 = V_2$ check, which is true if $X_1 =
 
 Naturally, the remaining branch (where $V_1 \ne V_2$) handles the Chord rule where we add two different points with different $X$ coordinates.
 
-## Exercise 70
+## Exercise 70 🔴
 
 > Consider example 82 and compute the set in (5.30) by inserting every pair of field elements $(x, y) \in \mathbb{F}_{13} \times \mathbb{F}_{13}$ into the defining Montgomery equation.
 
 TODO
 
-## Exercise 71
+## Exercise 71 🔴
 
 > Consider $E_1(\mathbb{F})$ from example 70 and show that this curve is not a Montgomery curve.
 
@@ -313,8 +315,8 @@ One of the conditions to be a Montogomery curve is that order of the scalar fiel
 # order of the base field
 p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
 E = EllipticCurve(GF(p), [0, 7])
-E.order() % 4
-# 1
+
+E.order() % 4 # returns 1
 ```
 
 As we can see, the order of the scalar field is not divisible by 4, therefore `secp256k1` is not a Montgomery curve.
@@ -340,7 +342,7 @@ One of the conditions to be a Montogomery curve is that order of the scalar fiel
 # order of the base field
 p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
 E = EllipticCurve(GF(p), [0, 3])
-E.order() % 4 #1
+E.order() % 4 # returns 1
 ```
 
 As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a Montgomery curve.
@@ -360,76 +362,397 @@ See the code [here](./twisted-edwards.sage).
 
 > Consider the short Weierstrass curve $y^2 = x^3 + x + 1$ over extension field $\mathbb{F}_{5^2}$. Compute $(4t + 3, 2t + 1) \oplus (3t + 3, 2)$, and double-check the result in sage. Then, solve the equation $x \oplus (3t + 3, 3) = (3, 4)$ for some $x$ in the curve. Also, compute $[5](2t + 1, 4t + 4)$.
 
-See the code [here](./embedding-and-extension.sage)
+Here is the solution in Sage:
+
+```py
+F5 = GF(5)              # field
+F5t.<t> = F5[]          # polynomial ring
+P_MOD_2 = F5t(t^2 + 2)  # irreducible polynomial
+
+# extension field
+F5_2 = GF(5^2, name='t', modulus=P_MOD_2)
+
+# curve over extension field
+E1F5_2 = EllipticCurve(F5_2, [1, 1])
+
+print(
+  "(4t+3, 2t+1) + (3t + 3, 2) =",
+  (E1F5_2(4*t + 3, 2*t + 1) + E1F5_2(3*t + 3, 2)).xy())
+print(
+  "x + (3t + 3, 3) = (3, 4)\tx =",
+  (E1F5_2(3, 4) - E1F5_2(3*t + 3, 2)).xy())
+print(
+  "[5](2t + 1, 4t + 4) =",
+  (5 * E1F5_2(2*t + 1, 4*t + 4)).xy())
+```
 
 ## Exercise 77
 
-> Consider TinyJubJub. Show that $t^4 + 2 \in \mathbb{F}_{13}[t]$ is irreducible. Then, write a sage program to implement the finite field extension $\mathbb{F}_{13^4}$. Implement the curve extension in the extension field, and compute the number of curve points (i.e. order).
+> Consider TinyJubJub. Show that $t^4 + 2 \in \mathbb{F}_{13}[t]$ is irreducible.
+>
+> Then, write a sage program to implement the finite field extension $\mathbb{F}_{13^4}$. Implement the curve extension in the extension field, and compute the number of curve points (i.e. order).
 
-See the code [here](./embedding-and-extension.sage)
+Here is the solution in Sage:
+
+```py
+F13 = GF(13)              # field
+F13t.<t> = F13[]          # polynomial ring
+P_MOD_4 = F13t(t^4 + 2)   # irreducible polynomial
+assert P_MOD_4.is_irreducible()
+
+# extension field
+F13_4 = GF(13^4, name='t', modulus=P_MOD_4)
+
+# TinyJubJub over the extension field
+TJJ_F13_4 = EllipticCurve(F13_4, [8, 8])
+print("Order of E(F_13^4):", TJJ_F13_4.order())
+```
 
 ## Exercise 78 ✨
 
-> Consider `alt_bn128` curve. We know from example 89 that this curve has embedding degree 12. Use Sage to find an irreducible polynomial in $\mathbb{F}_p[t]$, and then compute the field extension $\mathbb{F}_{p^{12}}$ to implement the curve extension of `alt_bn128`. Compute the number of curve points.
+> Consider `alt_bn128` curve. We know from example 89 that this curve has embedding degree 12.
+>
+> - Use Sage to find an irreducible polynomial in $\mathbb{F}_p[t]$
+> - Then compute the field extension $\mathbb{F}_{p^{12}}$ to implement the curve extension of `alt_bn128`. Compute the number of curve points.
 
-See the code [here](./embedding-and-extension.sage)
+Here is the solution in Sage:
 
-## Exercise 79
+```py
+# curve parameters for alt_bn128
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
 
-> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92. Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$. Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$
+FP = GF(p)      # field
+FPt.<t> = FP[]  # polynomial ring
 
-TODO
+k = 12 # embedding degree
+P_MOD_K = FPt.irreducible_element(k) # an irreducible polynomial of degree k
+print("Irreducible polynomial:\n", P_MOD_K)
 
-## Exercise 80 ✨
+# extension field
+FP_K = GF(p^k, name='t', modulus=P_MOD_K)
+
+# curve over extension field
+E = EllipticCurve(FP_K, [a, b])
+
+print("Order of alt_bn128 extension:\n", E.order())
+```
+
+## Exercise 79 ✨
+
+> Consider the full 5-torsion group $TJJ_{13}[5]$ from example 92.
+>
+> - Write down the set of all elements from this group, and identify the subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ as well as $TJJ_{13}(\mathbb{F}_{13^2})[5]$.
+> - Then compute the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$.
+
+First, let's compute the full 5-torsion group $TJJ_{13}[5]$ as shown in the example. For a full $r$-torsion group, we need the curve defined over the extension field over a polynomial with degree equal to $k(r)$. We know from a previous example that $k(5) = 4$ so we will use a degree 4 polynomial.
+
+```py
+F13 = GF(13)          # field
+F13t.<t> = F13[]      # polynomial ring
+
+# degree 4 irreducible polynomial
+P_MOD_4 = F13t(t^4 + 2)
+assert P_MOD_4.is_irreducible()
+
+# extension field
+F13_4 = GF(13^4, name='t', modulus=P_MOD_4)
+
+# curve over the extension
+TJJF13_4 = EllipticCurve(F13_4, [8, 8])
+
+# full 5-torsion group, that is the
+# set of points P such that [5]P == INF
+TJJF13_4_5 = Set(TJJF13_4(0).division_points(5))
+print("Number of elements:", TJJF13_4_5.cardinality()) # 25
+```
+
+From the definition of $r$-torsion groups, we know that the following holds:
+
+$$
+TJJ_{13}(\mathbb{F}_{13})[5] = TJJ_{13}(\mathbb{F}_{13^2})[5] \subset TJJ_{13}(\mathbb{F}_{13^4})[5] = TJJ_{13}(\mathbb{F}_{13^8})[5]
+$$
+
+Remember that this is because 4 is the embedding degree. So, with our code so far we have already computed the 5-torsion group $TJJ_{13}(\mathbb{F}_{13^8})[5]$. We can compute the other one over the curve itself, without the field extension.
+
+```py
+# curve over the field
+TJJ = EllipticCurve(F13, [8, 8])
+
+# 5-torsion group
+TJJ_5 = Set(TJJ(0).division_points(5))
+print("Number of elements:", TJJ_5.cardinality()) # 5
+```
+
+The subset of all elements from $TJJ_{13}(\mathbb{F}_{13})[5]$ and $TJJ_{13}(\mathbb{F}_{13^2})[5]$ are those that are simply composed of field elements, not polynomials. We can just print the points on $TJJ_{13}(\mathbb{F}_{13})[5]$ to see them:
+
+```py
+print(TJJ_5)
+# (7 : 11 : 1)
+# (8 : 8 : 1)
+# (7 : 2 : 1)
+# (8 : 5 : 1)}
+# (0 : 1 : 0) which is INF
+```
+
+## Exercise 80 🔴
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
-TODO
+In example 93, we learn the following:
 
-## Exercise 81
+> ..., without any optimizations, representing such an element would need $k \cdot 256$ bits, which is too much to be representable in the observable universe. It follows that it is not only infeasible to compute the full $r$-torsion group of $\text{secp256k1}$, but moreover to even write down single elements of that group in general.
+
+So, the question boils down to some optimization. Futher in the exercise 96 at the end of next section, it mentions the following:
+
+> ... according to example 93 we can not store average curve points from the extension curve $\text{secp256k1}(F_{p^k})$ on any computer, ...
+
+We are looking for a point other than the point at infinity, and with the knowledge we have so far that seems to be impossible.
+
+However, we could maybe find a value from the curve itself instead of an extension field, which would be in the full $r$-torsion group due to the subset rule. Also note that $r$ here is $k$, because the order of `secp256k1` is a prime meaning that the order itself is the largest prime factor.
+
+```py
+p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+E = EllipticCurve(GF(p), [0, 7])
+INF = E(0)
+# embedding degree
+k = 19298681539552699237261830834781317975472927379845817397100860523586360249056
+
+random = E.random_point()
+while k * random != INF:
+  random = E.random_point()
+print(random)
+```
+
+Unfortunately, we can't seem to find any points like this, perhaps there is another way.
+
+## Exercise 81 🔴
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
+We know from example 89 that this curve has an embedding degree of 12. So, we must compute the curve over the extension field with a degree 12 polynomial. Let's do that in Sage:
+
+```py
+# curve parameters for alt_bn128
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
+
+FP = GF(p)      # field
+FPt.<t> = FP[]  # polynomial ring
+k = 12          # embedding degree
+
+# an irreducible polynomial of degree k
+P_MOD_K = FPt.irreducible_element(k)
+
+# extension field
+FP_K = GF(p^k, name='t', modulus=P_MOD_K)
+
+# curve over extension field
+E_K = EllipticCurve(FP_K, [a, b])
+
+# curve over the base field
+E = EllipticCurve(FP, [a, b])
+```
+
+It is stated that the full $r$-torsion group has order of $r^2$, and since the order of `alt_bn128` is a prime, the $r$ in this case is the order of the scalar field itself.
+
 TODO
 
-## Exercise 82
+## Exercise 82 🔴
 
-> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$
+> Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
-TODO
+First, let's find the embedding degree $k(2)$ for this curve.
 
-## Exercise 83
+```py
+# order of the base field for TJJ
+p = 13
+F13 = GF(p)
+TJJ = EllipticCurve(F13, [8, 8])
+INF = TJJ(0) # point at infinity
+
+# order of the curve's scalar field
+n = TJJ.order()
+# small prime factor
+r = 2
+assert n % r == 0
+
+# find embedding degree
+k = 1
+while k < r:
+  if (p^k - 1) % r == 0:
+    break
+  k += 1
+print("Embedding degree:", k)
+```
+
+We find the embedding degree to be 1. In fact, you can immediately say that the embedding degree is 1, because notice that following operation in the congruence:
+
+$$
+13^k - 1 \bmod{2}
+$$
+
+We are looking for the smallest $k$ that results in 0 for the above operation, and it is obvious that $13-1$ is an even number and thus $k=1$. We also know this result from example 87 by the way.
+
+To compute the **full** 2-torsion group, we need to find the 2-torsion group of the curve over field extension with order $p^{k(2)}$. We have just shown that $k(2) = 1$, so it turns out that our original curve serves the purpose to find the full torsion group! We can simply choose points $P$ such that $[2]P = \mathcal{O}$ using Sage:
+
+```py
+# full r-torsion group, using the original curve
+# because k=1 and F_{p^1} = F_p
+TJJ_tor = Set([P for P in TJJ if r*P == TJJ(0)])
+print("{}-torsion group:".format(r))
+print(TJJ_tor)
+# {(4 : 0 : 1), (0 : 1 : 0)}
+```
+
+We expect $r^2$ elements (i.e. 4) in the full-torsion group, which is indeed the case.
+
+Let's compute the pairing groups now:
+
+```py
+def fro_pi(P):
+  if P != TJJ(0):
+    (x, y) = P.xy()
+    return TJJ(x^p, y^p)
+  else:
+    return P
+
+G1 = [P for P in TJJ_tor if fro_pi(P) == P]
+print("G1:", G1)
+# {(4 : 0 : 1), (0 : 1 : 0)}
+
+G2 = [P for P in TJJ_tor if fro_pi(P) == p*P]
+print("G2:", G1)
+# {(4 : 0 : 1), (0 : 1 : 0)}
+```
+
+It turns out they are equal! I am not sure about this solution though, please refer to [this issue](https://github.com/erhant/moonmath/issues/19).
+
+## Exercise 83 🔴
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
+First let's do our setup:
+
+```py
+# curve parameters for alt_bn128
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
+
+FP = GF(p)      # field
+FPt.<t> = FP[]  # polynomial ring
+k = 12          # embedding degree
+
+# an irreducible polynomial of degree k
+P_MOD_K = FPt.irreducible_element(k)
+
+# extension field
+FP_K = GF(p^k, name='t', modulus=P_MOD_K)
+
+# curve over extension field
+E_K = EllipticCurve(FP_K, [a, b])
+
+# curve over the base field
+E = EllipticCurve(FP, [a, b])
+```
+
 TODO
 
-## Exercise 84
+## Exercise 84 🔴
 
 > Consider the `alt_bn128` curve from example 73, and the generators $g_1$ and $g_2$ of $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$ from exercise 83. Write a Sage program that computes the Weil pairing $e(g_1, g_2)$
 
 TODO
 
-## Exercise 85
+## Exercise 85 🔴
 
-> Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^* \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
-
-TODO
-
-## Exercise 86
-
-> Implement a cryptographic hash function $H_{secp256k1} : \{0, 1\}^* \to secp256k1$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
+> Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^\ast \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
 
 TODO
 
-## Exercise 87
+## Exercise 86 🔴
+
+> Implement a cryptographic hash function $H_{\text{secp256k1}} : \{0, 1\}^* \to \text{secp256k1}$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
+
+```py
+# parameters for secpk2561
+p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+a, b = 0, 7
+
+Fp = GF(p)
+E = EllipticCurve(Fp, [a, b])
+```
+
+TODO
+
+## Exercise 87 🔴
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
+```py
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
+Fp = GF(p)
+E = EllipticCurve(Fp, [a, b])
+
+
+t = p + 1 - E.order()
+print(t)
+
+assert E.order() < p
+```
+
 TODO
 
-## Exercise 88
+## Exercise 88 🔴
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
+
+TODO
+
+## Exercise 89 🔴
+
+> Show that the Hilbert class polynomials for the CM-discriminants $D = -3$ and $D = -4$ are given by $H_{-3, q}(x) = x$ and $H_{-4, q}(x) = x - (1728 \bmod{q})$
+
+TODO
+
+## Exercise 90 🔴
+
+> Use the complex multiplication method to construct an elliptic curve of order 7 over the prime field $\mathbb{F}_{13}$
+
+TODO
+
+## Exercise 91 🔴
+
+> Use the complex multiplication method to compute all isomorphism classes of all elliptic curves of order 7 over the prime field $\mathbb{F}_{13}$
+
+TODO
+
+## Exercise 92 🔴
+
+> Consider the prime modulus $p$ of curve `alt_bn128` from example 73, and its trace $t$ from exercise 92. Use the complex multiplication method to synthesize an elliptic curve over $F_p$ that is isomorphic to `alt_bn128` and compute an explicit isomorphism between these two curves.
+
+TODO
+
+## Exercise 93 🔴
+
+> Consider the point $P = (9, 2)$. Show that $P$ is a point on the `BLS6_6` curve and compute the scalar product $[3]P$
+
+TODO
+
+## Exercise 94 🔴
+
+> Compute the following expressions:
+>
+> - $-(26, 34)$
+> - $(26, 9) \oplus (13, 28)$
+> - $(35, 15) \oplus \mathcal{O}$
+> - $(27, 9) \oplus (33, 9)$
+
+TODO
+
+## Exercise 95 🔴
+
+> Consider the extended `BLS6_6` curve as defined in 5.67 and the two curve points $g1 = (13, 15)$ and $g2 = (7v^2, 16v^3)$. Compute the Weil pairing $e(g1, g2)$ using definition 5.49 and Miller's algorithm.
 
 TODO
