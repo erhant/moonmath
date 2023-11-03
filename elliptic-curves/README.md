@@ -495,7 +495,7 @@ print(TJJ_5)
 # (0 : 1 : 0) which is INF
 ```
 
-## Exercise 80 🔴
+## Exercise 80
 
 > Consider `secp256k1` curve and it's full $r$-torsion group. Write down a single element from the curve's full torsion group that is not the point at infinity.
 
@@ -509,7 +509,7 @@ So, the question boils down to some optimization. Futher in the exercise 96 at t
 
 We are looking for a point other than the point at infinity, and with the knowledge we have so far that seems to be impossible.
 
-However, we could maybe find a value from the curve itself instead of an extension field, which would be in the full $r$-torsion group due to the subset rule. Also note that $r$ here is $k$, because the order of `secp256k1` is a prime meaning that the order itself is the largest prime factor.
+However, we could maybe find a value from the curve itself instead of an extension field, which would be in the full $r$-torsion group due to the subset rule. Also note that $r$ here is equal to the scalar order, because the order of `secp256k1` is a prime meaning that the order itself is the largest prime factor.
 
 ```py
 p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
@@ -518,19 +518,24 @@ INF = E(0)
 # embedding degree
 k = 19298681539552699237261830834781317975472927379845817397100860523586360249056
 
-random = E.random_point()
-while k * random != INF:
-  random = E.random_point()
-print(random)
+# order of scalar field
+q = E.order()
+assert is_prime(q)
+
+# try for some random points
+for _ in range(200):
+  assert E.random_point() * q == INF
 ```
 
-Unfortunately, we can't seem to find any points like this, perhaps there is another way.
+Indeed any point within the original curve is a member of the torsion group $E(\mathbb{F}_p)[r]$ and we know that this is a subset of the full-torsion group!
 
 ## Exercise 81 🔴
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
-We know from example 89 that this curve has an embedding degree of 12. So, we must compute the curve over the extension field with a degree 12 polynomial. Let's do that in Sage:
+First of all, we should notice that $r$ is equal to the order of the scalar field of `alt_bn128` since that order is a prime and it is the largest prime factor on its own.
+
+We also know from example 89 that this curve has an embedding degree of 12. So, we must compute the curve over the extension field with a degree 12 polynomial. Let's do that in Sage:
 
 ```py
 # curve parameters for alt_bn128
@@ -543,6 +548,7 @@ k = 12          # embedding degree
 
 # an irreducible polynomial of degree k
 P_MOD_K = FPt.irreducible_element(k)
+assert P_MOD_K.is_irreducible()
 
 # extension field
 FP_K = GF(p^k, name='t', modulus=P_MOD_K)
@@ -554,11 +560,19 @@ E_K = EllipticCurve(FP_K, [a, b])
 E = EllipticCurve(FP, [a, b])
 ```
 
-It is stated that the full $r$-torsion group has order of $r^2$, and since the order of `alt_bn128` is a prime, the $r$ in this case is the order of the scalar field itself.
+It is stated that the full $r$-torsion group has order of $r^2$, we can use this to test whether our point is generator or not.
+
+```py
+# order of the scalar field
+q = E.order()
+
+# expected order of the full r-torsion group
+qq = q^2
+```
 
 TODO
 
-## Exercise 82 🔴
+## Exercise 82
 
 > Consider the small prime factor 2 of the TinyJubJub curve. Compute the full 2-torsion group of $TJJ_{13}$ and then compute the groups $\mathbb{G}_1[2]$ and $\mathbb{G}_2[2]$.
 
@@ -569,7 +583,6 @@ First, let's find the embedding degree $k(2)$ for this curve.
 p = 13
 F13 = GF(p)
 TJJ = EllipticCurve(F13, [8, 8])
-INF = TJJ(0) # point at infinity
 
 # order of the curve's scalar field
 n = TJJ.order()
@@ -594,43 +607,56 @@ $$
 
 We are looking for the smallest $k$ that results in 0 for the above operation, and it is obvious that $13-1$ is an even number and thus $k=1$. We also know this result from example 87 by the way.
 
+Yet another argument is that an embedding degree $1 \leq k < r$ is guaranteed for the prime order due to FLT, and we can only have $k=1$ for $r=2$ anyways.
+
 To compute the **full** 2-torsion group, we need to find the 2-torsion group of the curve over field extension with order $p^{k(2)}$. We have just shown that $k(2) = 1$, so it turns out that our original curve serves the purpose to find the full torsion group! We can simply choose points $P$ such that $[2]P = \mathcal{O}$ using Sage:
 
 ```py
 # full r-torsion group, using the original curve
-# because k=1 and F_{p^1} = F_p
-TJJ_tor = Set([P for P in TJJ if r*P == TJJ(0)])
+TJJ_1_tor = Set(TJJ(0).division_points(r))
 print("{}-torsion group:".format(r))
-print(TJJ_tor)
+print(TJJ_1_tor)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 ```
 
-We expect $r^2$ elements (i.e. 4) in the full-torsion group, which is indeed the case.
+> ![NOTE]
+>
+> We would expect $r^2$ elements (i.e. 4) in the full-torsion group, which is NOT the case here! After lengthy discussions with [@bufferhe4d](https://github.com/bufferhe4d) and his further discussions with more people, we have come to conclusion that the $r^2$ requirement is not strict when $k=1$. In these cases, we can have $r$ elements.
 
 Let's compute the pairing groups now:
 
 ```py
 def fro_pi(P):
-  if P != TJJ(0):
+  if P != INF:
     (x, y) = P.xy()
     return TJJ(x^p, y^p)
   else:
     return P
 
-G1 = [P for P in TJJ_tor if fro_pi(P) == P]
+G1 = [P for P in TJJ_1_tor if fro_pi(P) == P]
 print("G1:", G1)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 
-G2 = [P for P in TJJ_tor if fro_pi(P) == p*P]
+G2 = [P for P in TJJ_1_tor if fro_pi(P) == p*P]
 print("G2:", G1)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 ```
 
-It turns out they are equal! I am not sure about this solution though, please refer to [this issue](https://github.com/erhant/moonmath/issues/19).
+> ![NOTE]
+>
+> Regarding the note above about finding $r$ elements instead of $r^2$, there is also another thing to mention. If you find the 2-torsion group of TJJ over $\mathbb{F}_{p^4}$ you do actually get $r^2$ elements. 4 is the first time this happens, where the torsion group has 2 elements up until this point and has 4 elements beyond this point.
+>
+> This would be in-line with (5.44) in the book; however, 4 is not the embedding degree for $r=2$ in this case.
+>
+> Regardless of this fact, the pairing groups for the torsion group at $k=4$ is equal to the pairing groups computed for $k=1$ in this exercise!
+>
+> See this [code](./pairings.sage) here for a better presentation of this exercise.
 
 ## Exercise 83 🔴
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
+
+Note here that instead of $r$ we have used $p$ in the question. This refers to the characteristic $p$, which is the characteristic of this elliptic curve. Since the curve order is prime, we have $p=r$ so this exercise is actually very similar to previous exercise 81.
 
 First let's do our setup:
 
@@ -656,7 +682,9 @@ E_K = EllipticCurve(FP_K, [a, b])
 E = EllipticCurve(FP, [a, b])
 ```
 
-TODO
+Generator of $\mathbb{G}_1$ is easy to find since a generator of the curve serves that purpose when $r$ is equal to the scalar field order, as also shown in exercise 81.
+
+TODO: calculate gen for G2?
 
 ## Exercise 84 🔴
 
@@ -666,7 +694,7 @@ TODO
 
 ## Exercise 85 🔴
 
-> Use our definition of the _try_hash_ algorithm to implement a hash function $H_{TJJ_{13}[5]} : \{0, 1\}^\ast \to TJJ_{13}(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ_{13}(\mathbb{F}_{13})[5]$
+> Use our definition of the `try-hash` algorithm to implement a hash function $H_{TJJ[5]} : \{0, 1\}^\ast \to TJJ(\mathbb{F}_{13})[5]$ that maps binary strings of arbitrary length onto the 5-torsion group of $TJJ(\mathbb{F}_{13})[5]$
 
 TODO
 
@@ -685,24 +713,31 @@ E = EllipticCurve(Fp, [a, b])
 
 TODO
 
-## Exercise 87 🔴
+## Exercise 87
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
 ```py
+# curve parameters
 p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
 a, b = 0, 3
 Fp = GF(p)
 E = EllipticCurve(Fp, [a, b])
 
+# order of the scalar field
+q = E.order()
 
-t = p + 1 - E.order()
+# trace of Frobenius
+t = p + 1 - q
 print(t)
 
-assert E.order() < p
+if q < p:
+  print("curve contains less elements than Fp")
+else:
+  print("curve contains more elements than Fp")
 ```
 
-TODO
+We see that the curve `alt_bn128` contains less elements than its base field.
 
 ## Exercise 88 🔴
 
