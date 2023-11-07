@@ -52,15 +52,15 @@ Since there are $n$ different remainders possible for some integer division by $
 If 5 is a generator, then multiplications (i.e. multiple additions) of it should give the group members. Let us say that $(6 - 1)k$ results in group members for $k = 1, 2, ..., 6$. Indeed we have $-1, -2, ..., -6$ for the results, which are $5, 4, ..., 0$ in mod 6, giving out all elements in the group.
 
 ```py
-sage: list(map(lambda k : (6-1)*k % 6, range(1, 7)))
-[5, 4, 3, 2, 1, 0]
+list(map(lambda k : (6-1)*k % 6, range(1, 7)))
+# [5, 4, 3, 2, 1, 0]
 ```
 
 When we consider the same logic for 2, we think of $(6 - 4)k$, but notice that for $k = 3$ we get $18 - 12 \equiv 0 \pmod{6}$. This means that $k=4$ will result in same with $k=1$, so we can't generate all group members.
 
 ```py
-sage: list(map(lambda k : (6-4)*k % 6, range(1, 7)))
-[2, 4, 0, 2, 4, 0]
+list(map(lambda k : (6-4)*k % 6, range(1, 7)))
+# [2, 4, 0, 2, 4, 0]
 ```
 
 ## Exercise 37 ✨
@@ -369,16 +369,17 @@ Not every element in $\mathbb{Z}_6^*$ have an inverse, therefore this ring is no
 
 > Construct the addition and multiplication table of the prime field $\mathbb{F}_3$
 
-```js
-sage: F3 = GF(3)
-sage: F3.addition_table('elements')
+Sage has built-in methods for both of these functions.
+
+```py
+# GF(3).addition_table('elements')
 +  0 1 2
  +------
 0| 0 1 2
 1| 1 2 0
 2| 2 0 1
 
-sage: F3.multiplication_table('elements')
+# GF(3).multiplication_table('elements')
 *  0 1 2
  +------
 0| 0 0 0
@@ -390,9 +391,10 @@ sage: F3.multiplication_table('elements')
 
 > Construct the addition and multiplication table of the prime field $\mathbb{F}_{13}$
 
-```js
-sage: F13 = GF(13)
-sage: F13.addition_table('elements')
+Again we can use the built-in methods.
+
+```py
+# GF(13).addition_table('elements')
  +   0  1  2  3  4  5  6  7  8  9 10 11 12
   +---------------------------------------
  0|  0  1  2  3  4  5  6  7  8  9 10 11 12
@@ -409,7 +411,7 @@ sage: F13.addition_table('elements')
 11| 11 12  0  1  2  3  4  5  6  7  8  9 10
 12| 12  0  1  2  3  4  5  6  7  8  9 10 11
 
-sage: F13.multiplication_table('elements')
+# GF(13).multiplication_table('elements')
  *   0  1  2  3  4  5  6  7  8  9 10 11 12
   +---------------------------------------
  0|  0  0  0  0  0  0  0  0  0  0  0  0  0

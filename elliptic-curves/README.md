@@ -170,9 +170,9 @@ $$
 Our result is $x = (11, 7)$. We can confirm with Sage:
 
 ```py
-sage: E = EllipticCurve(GF(13), [8, 8])
-sage: (E(5, 2) - E(9, 4)).xy()
-(11, 7)
+E = EllipticCurve(GF(13), [8, 8])
+(E(5, 2) - E(9, 4)).xy()
+# (11, 7)
 ```
 
 ## Exercise 64 ⚠️
@@ -211,8 +211,8 @@ proj_points = [(p[0], p[1], 1) for p in affine_points if eqn(p[0], p[1], F5(1))]
 We find the points (point at infinity ignored):
 
 ```py
-sage: print(proj_points)
-[(0, 1, 1), (0, 4, 1), (2, 1, 1), (2, 4, 1), (3, 1, 1), (3, 4, 1), (4, 2, 1), (4, 3, 1)]
+print(proj_points)
+# [(0, 1, 1), (0, 4, 1), (2, 1, 1), (2, 4, 1), (3, 1, 1), (3, 4, 1), (4, 2, 1), (4, 3, 1)]
 ```
 
 Alternatively, we can use `ProjectiveSpace` within Sage (thanks to [@skaunov](https://github.com/skaunov) for letting me know about `ProjectiveSpace` in issue [#1](https://github.com/erhant/moonmath/issues/1)):

@@ -12,5 +12,7 @@ sage
 Within Sage, you can run files via:
 
 ```py
-sage: load("./path-to-file.sage")
+load("./path-to-file.sage")
 ```
+
+Nevertheless, I try to keep all codes contained within the README in a self-sufficient way.

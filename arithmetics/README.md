@@ -19,8 +19,8 @@ Topics in this chapter:
 We find $2 \times 3 \times 5 \times 11 \times 13 \times 7$, which Sage confirms as:
 
 ```py
-sage: factor(30030)
-2 * 3 * 5 * 7 * 11 * 13
+factor(30030)
+# 2 * 3 * 5 * 7 * 11 * 13
 ```
 
 ## Exercise 3
@@ -232,7 +232,7 @@ $$
 
 ## Exercise 12
 
-> Consider exercise 8 again, which pairs $(a, b)$ form that exercise are coprime?
+> Consider exercise 8 again, which pairs $(a, b)$ from that exercise are coprime?
 
 Pairs $(13, 11)$ and $(13, 12)$ are coprime.
 
@@ -245,7 +245,7 @@ Pairs $(13, 11)$ and $(13, 12)$ are coprime.
 
 ## Exercise 14
 
-> Which of the following pairs of numbers are congruent with respect to the modulus $13$?
+> Which of the following pairs of numbers are congruent with respect to the modulus 13?
 >
 > - $(5, 19)$
 > - $(13, 0)$
@@ -367,11 +367,11 @@ First let's get rid of the trivial cases:
 We can check GCD for the remaining numbers:
 
 ```py
-sage: gcd(7, 24), gcd(805, 24), gcd(-4255, 24)
-(1, 1, 1)
+gcd(7, 24), gcd(805, 24), gcd(-4255, 24)
+# (1, 1, 1)
 ```
 
-Apparently, all of these are coprime to 24. We can perhaps use Extended Euclidean Algorithm, which I implemented in Sage already. Using `xgcd(a, b)` where `a >= b` we can find:
+Apparently, all of these are coprime to 24. We can perhaps use Extended Euclidean Algorithm, which is implemented in Sage already. Using `xgcd(a, b)` where `a >= b` we can find:
 
 $$
 \gcd(a, b) = s \times a + t \times b
@@ -380,13 +380,14 @@ $$
 First, let's treat all numbers in mod 24, so $805 \equiv 13 \pmod{24}$ and $-4255 \equiv 17 \pmod{24}$. Then, let's use `xgcd` as follows:
 
 ```py
-sage: load("./arithmetics/xgcd-crt.sage")
-sage: print(xgcd(24, 7))
-....: print(xgcd(24, 13))
-....: print(xgcd(24, 17))
-(1, -2, 7)
-(1, 6, -11)
-(1, 5, -7)
+print(xgcd(24, 7))
+# (1, -2, 7)
+
+print(xgcd(24, 13))
+# (1, 6, -11)
+
+print(xgcd(24, 17))
+# (1, 5, -7)
 ```
 
 To interpret these results:
@@ -470,17 +471,17 @@ We can find the answers in $\mathbb{Z}[x]$, and then project the coefficients fr
 We can calculate the result with coefficients in $\mathbb{Z}$ and then project it to the others. I used Sage instead of doing by hand:
 
 ```py
-sage: ZZx = ZZ['x']
-sage: A = ZZx(-3*x^4 + 4*x^3 + 2*x^2 + 4)
-sage: B = ZZx(x^2 - 4*x + 2)
+ZZx = ZZ['x']
+A = ZZx(-3*x^4 + 4*x^3 + 2*x^2 + 4)
+B = ZZx(x^2 - 4*x + 2)
 
 # quotient
-sage: A // B
--3*x^2 - 8*x - 24
+A // B
+# -3*x^2 - 8*x - 24
 
 # remainder
-sage: A % B
--80*x + 52
+A % B
+# -80*x + 52
 ```
 
 The result of division is the quotient $Q$ and remainder $R$ polynomials:
@@ -540,18 +541,51 @@ From this, we can see that $P(x) = (x^k + \ldots)Q(x)$, meaning that $Q(x)$ must
 Let's use Sage to find the roots.
 
 ```py
-sage: Z6 = Integers(6)
-sage: Z6x = Z6['x']
-sage: P = Z6x(x^7 + 3*x^6 + 3*x^5 + x^4 - x^3 - 3*x^2 - 3*x - 1)
+Z6 = Integers(6)
+Z6x = Z6['x']
+P = Z6x(x^7 + 3*x^6 + 3*x^5 + x^4 - x^3 - 3*x^2 - 3*x - 1)
 
 # find roots
-sage: P.roots(multiplicities=False)
-[1, 5]
+roots = P.roots(multiplicities=False)
+print("Roots:", roots)
+# [1, 5]
 ```
 
 To find factors, we can divide $x - r$ for each root $r$ until the quotient does not have $r$ as a root anymore. Once we are done with all roots, if the remaining result is not $1$ we can also include that as a factor.
 
-I have implemented this [here](./polynomials.sage).
+```py
+factors = []
+Q = P
+for r in roots:
+  R = Z6x([-r, 1])
+  count = 1
+  while True:
+    Q = Q // R
+    if r not in Q.roots(multiplicities=False):
+      break
+    count += 1
+  factors.append((R, count))
+
+if Q != Z6x(1):
+  factors.append((Q, 1))
+
+print("Factors:", factors)
+# [(x + 5, 1), (x + 1, 4), (x^2 + 1, 1)]
+```
+
+Note that the same factor can appear a few times, so the `factors` here is a list of tuples where the first item of a tuple is the factor, and the second item is the number of time it appears.
+
+After finding the factors, we can test to see if we get back the original polynomial when we multiply all these factors.
+
+```py
+PP = Z6x(1)
+for f in factors:
+  assert(f[1] > 0)
+  for _ in range(f[1]):
+    PP = PP * f[0]
+
+assert(P == PP)
+```
 
 ## Exercise 31
 
@@ -560,11 +594,11 @@ I have implemented this [here](./polynomials.sage).
 We need to do lagrange interpolation for this. We could do by hand, but let's just use Sage for this one!
 
 ```py
-sage: Integers(5)[x].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
-4*x^3 + 3*x^2 + 4*x
+Integers(5)[x].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
+# 4*x^3 + 3*x^2 + 4*x
 ```
 
-Apparently, $4x^3 + 3x^2 + 4x$ does the job!
+Apparently, $4x^3 + 3x^2 + 4x$ does the job.
 
 ## Exercise 32
 

@@ -81,14 +81,3 @@ def xgcd_arrayless(a: int, b: int):
         t_cur = t_next
 
     return r_prev, s_prev, t_prev
-
-
-def exercise_22():
-    print(xgcd(24, 7))
-    print(xgcd(24, 13))
-    print(xgcd(24, 17))
-
-
-if __name__ == "__main__":
-    # print(xgcd_arrayless(12, 5))
-    exercise_22()

@@ -70,7 +70,4 @@ def exercise_30():
       PP = PP * f[0]
   
   assert(P == PP)
-  
 
-if __name__ == '__main__':
-  exercise_30()
