@@ -621,7 +621,7 @@ print(TJJ_1_tor)
 
 > ![NOTE]
 >
-> We would expect $r^2$ elements (i.e. 4) in the full-torsion group, which is NOT the case here! After lengthy discussions with [@bufferhe4d](https://github.com/bufferhe4d) and his further discussions with more people, we have come to conclusion that the $r^2$ requirement is not strict when $k=1$. In these cases, we can have $r$ elements.
+> We would expect $r^2$ elements (i.e. 4) in the full-torsion group, which is NOT the case here! After lengthy discussions with @bufferhe4d and his further discussions with more people, we have come to conclusion that the $r^2$ requirement is not strict when $k=1$. In some cases, we can have $r$ elements.
 
 Let's compute the pairing groups now:
 
@@ -651,6 +651,8 @@ print("G2:", G1)
 > Regardless of this fact, the pairing groups for the torsion group at $k=4$ is equal to the pairing groups computed for $k=1$ in this exercise!
 >
 > See this [code](./pairings.sage) here for a better presentation of this exercise.
+>
+> I have opened an issue about this exercise and the things discussed in particular: [see here](https://github.com/LeastAuthority/moonmath-manual/issues/84).
 
 ## Exercise 83 🔴
 
@@ -703,7 +705,7 @@ TODO
 > Implement a cryptographic hash function $H_{\text{secp256k1}} : \{0, 1\}^* \to \text{secp256k1}$ that maps binary strings of arbitrary length onto the elliptic curve `secp256k1`.
 
 ```py
-# parameters for secpk2561
+# parameters for secp256k1
 p = 115792089237316195423570985008687907853269984665640564039457584007908834671663
 a, b = 0, 7
 

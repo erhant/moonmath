@@ -72,7 +72,81 @@ All solutions are unique.
 
 > Using the programming language of your choice, write an algorithm that computes integer long divison and handles all edge cases properly.
 
-TODO
+Here is an implementation in TypeScript. It uses simple statements so you can easily port it to other languages.
+
+```ts
+/**
+ * Long Division
+ *
+ * Given `dividend` and `divisor`, returns `quot` and `rem` such that
+ * `dividend = quot * divisor + rem` where `rem < divisor`.
+ *
+ * Throws an error if `divisor = 0`.
+ */
+function longDivision(
+  dividend: number,
+  divisor: number
+): { quot: number; rem: number } {
+  if (divisor === 0) {
+    // edge case: divisor is 0
+    throw new Error("division by zero");
+  } else if (divisor === 1) {
+    // edge case: divisor is 1
+    return { quot: dividend, rem: 0 };
+  }
+
+  // digits of the dividend
+  let digits = dividend
+    .toString()
+    .split("")
+    .map((d) => parseInt(d));
+
+  // the quotient
+  let result = 0;
+
+  // the value to be divided at each iteration
+  let carry = 0;
+
+  for (const digit of digits) {
+    // append the new digit to the carry
+    carry *= 10;
+    carry += digit;
+
+    // repeatedly subtract the divisor from carry until carry is less than divisor
+    // keep track of the number of subtractions
+    let count = 0;
+    while (carry >= divisor) {
+      carry -= divisor;
+      count++;
+    }
+
+    // append the number of subtractions to the result (quotient)
+    result *= 10;
+    result += count;
+  }
+
+  return { quot: result, rem: dividend - result * divisor };
+}
+```
+
+You can test out the implementation by comparing the results for random numbers, shown below:
+
+```ts
+for (let i = 0; i < 100_000; i++) {
+  const dividend = Math.floor(Math.random() * 999_999_999);
+  const divisor = Math.floor(Math.random() * 999_999);
+
+  const result = longDivision(dividend, divisor);
+  const expected = {
+    quot: Math.floor(dividend / divisor),
+    rem: dividend % divisor,
+  };
+
+  if (result.quot !== expected.quot || result.rem !== expected.rem) {
+    throw new Error("results do not match");
+  }
+}
+```
 
 ## Exercise 7
 

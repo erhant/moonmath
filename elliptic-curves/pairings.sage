@@ -1,9 +1,10 @@
 from sage.all import GF, EllipticCurve, factor
 
-def exercise82():
+def exercise82(max_k: int = 7):
     # curve parameters for TJJ_13
     p = 13
     a, b = 8, 8
+    q = 20
 
     F13 = GF(p)      # field
     F13t.<t> = F13[]  # polynomial ring # type: ignore 
@@ -11,8 +12,6 @@ def exercise82():
 
 
     def pairings(E, E_tor):
-        print(E)
-
         # frobenius
         def fro_pi(P):
             if P != E(0):
@@ -25,26 +24,26 @@ def exercise82():
         print("G1:", G1)
         # {(4 : 0 : 1), (0 : 1 : 0)}
 
-        G2 = [P for P in E_tor if fro_pi(P) == p*P]
+        G2 = [P for P in E_tor if fro_pi(P) == q*P]
         print("G2:", G2)
 
-    # curve over the base field
-    TJJ = EllipticCurve(F13, [a, b])
-    assert TJJ.order() % r == 0
+    # try for some values of k
+    for k in range(1, max_k):
+        # curve
+        if k == 1:
+            # over base field
+            TJJ = EllipticCurve(F13, [a, b])
+        else:
+            # over extension field
+            F13_K = GF(p^k, name='t', modulus=F13t.irreducible_element(k)) # type: ignore 
+            TJJ = EllipticCurve(F13_K, [a, b])
+    
 
-    # r-torsion group over base curve
-    TJJ_1_tor = TJJ(0).division_points(r)
-    print("2-torsion over p^1 (full)\n\t", TJJ_1_tor)
-    pairings(TJJ, TJJ_1_tor)
-
-    # curve over extension field of 4
-    F13_4 = GF(p^4, name='t', modulus=F13t.irreducible_element(4)) # type: ignore 
-    TJJ_4 = EllipticCurve(F13_4, [a, b])
-
-    # r-torsion group over extended curve
-    TJJ_4_tor = TJJ_4(0).division_points(r)
-    print("2-torsion over p^4\n\t", TJJ_4_tor)
-    pairings(TJJ_4, TJJ_4_tor)
+        # r-torsion group over base curve
+        TJJ_tor = TJJ(0).division_points(r)
+        print("{}-torsion over p^{} ({} elements)\n{}".format(r, k, len(TJJ_tor), TJJ_tor))
+        pairings(TJJ, TJJ_tor) 
+        print("")
 
 if __name__ == "__main__":
     pass
