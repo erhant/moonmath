@@ -150,7 +150,31 @@ To provide an instance with knowledge proof, we can just pick two points in the 
 
 > Consider the language $L_{add}$ from exercise 99. Define an R1CS such that words in $L_{add}$ are in 1:1 correspondance with solutions to this R1CS.
 
-TODO
+Let’s do this upon R1CS defined in the example #121 to avoid under-constraining (see the note in the end of the section, which is relevant to the previous exercise). This means all three pairs of input coordinates would first be run through those four constraints, and only if all passed, then these additional constraints are evaluated.
+
+Let label variable as $(first_x, first_y, second_x, second_y, result_x, result_y) = (I_1, …, I_6)$. Then an naive system would look as following.
+
+$W_1 = first_x * first_y$
+
+$W_2 = second_x * second_y$
+
+$W_3 = first_x * second_y$
+
+$W_4 = second_x * first_y$
+
+$W_5 = W_1 * W_2$
+
+$0 = result_x + 8 \cdot result_x * W_5 - W_3 - W_4$
+
+### note on underconstraining risk in exercise 99
+
+> What catches attention here, is that if we take the start of the solution, then such an instance would be any three points not belonging to a straight or a tanget line. (E.g. $(1,2), (1,2), (1,2)$.)
+> 
+> But if we're taking more technical statement which contains implementation details, than we're not even bounded to points and can give just 6 field elements, which are easy to choose even not on the curve: $(0,0,0,0,0,0)$.
+> 
+> *And here’s when mistake was hidden.* After taking a closer look to that trivial example I noticed that it actually satisfies decision function, so we have an early example of an underconstraining.
+> 
+> It’s a good place here to apply next subsection notions here. So we should initially apply $L_{tiny.jj}$ to each tuple of coordinates, and if it proves membership, then we can apply this language. This way it would be correct.
 
 ## Exercise 101
 
