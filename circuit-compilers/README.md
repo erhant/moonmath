@@ -23,7 +23,7 @@ TODO
 
 ## Exercise 104
 
-> Consider the tiny-jubjub curve from example 71 and its associated circuit. Write a statement in `PAPER` that brain-compiles the statement into a circuit equivalent ot the one derived in 124, assuming that curve point is the instance (public) and every other assignment is a witness (private).
+> Consider the tiny-jubjub curve from example 71 and its associated circuit. Write a statement in `PAPER` that brain-compiles the statement into a circuit equivalent to the one derived in 124, assuming that curve point is the instance (public) and every other assignment is a witness (private).
 
 TODO
 
