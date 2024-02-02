@@ -13,9 +13,9 @@
 
 1. [**Introduction**](./introduction/)
 2. [**Software Used in This Book**](./software-used/)
-3. [**Arithmetics**](./arithmetics/)
-4. [**Algebra**](./algebra/)
-5. [**Elliptic Curves**](./elliptic-curves/)
-6. [**Statements**](./statements/)
+3. [**Arithmetics**](./arithmetics/README.ipynb)
+4. [**Algebra**](./algebra/README.ipynb)
+5. [**Elliptic Curves**](./elliptic-curves/README.ipynb)
+6. [**Statements**](./statements/README.ipynb)
 7. [**Circuit Compilers**](./circuit-compilers/)
 8. [**Zero-Knowledge Protocols**](./zero-knowledge/)

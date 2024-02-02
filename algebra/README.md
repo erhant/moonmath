@@ -178,16 +178,12 @@ Looking at the table, we see that all rules of a commutative group hold.
 
 > Consider the finite cyclic group $(\mathbb{Z}_6, +)$. Describe all subgroups of this group. Then, identify its large prime order subgroup, define its cofactor clearing map and apply that map to all elements of $\mathbb{Z}_6$.
 
-Let's use Sage to do this. First, let us construct $\mathbb{Z}_6$ via:
+The fundamental theorem of finite cyclic groups say that the factorization of the order of our group should give the order of its subgroups. Let us do that:
 
 ```py
 Z6 = Integers(6)
 order = Z6.order()
-```
 
-The fundamental theorem of finite cyclic groups say that the factorization of the order of our group should give the order of its subgroups. Let us do that:
-
-```py
 factorization = list(map(lambda x : x[0], factor(order)))
 subgroupOrders = [1, order] # add the trivial group and itself too
 subgroupOrders.extend(factorization)
