@@ -52,8 +52,6 @@ Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \lan
 
 ## Exercise 98
 
-// TODO: review
-
 > Consider modular 6 arithmetic $(\mathbb{Z}_6)$, the alphabets $\Sigma_I$ and $\Sigma_W$ and the following decision function:
 >
 > $$
@@ -75,9 +73,9 @@ Looking at words with $n=1$, we have $\langle 0 \rangle, \langle 1 \rangle, \lan
 > - $(2, 1, 0)$
 > - $(4, 4, 2)$
 
-- It's $1$ for $(3, 3, 0)$,
-- $1$ for $(4, 4, 2)$,
-- and for $(2, 1, 0)$ there's no witness to balance the parity of the equality.
+- Witness is $1$ for $(3, 3, 0)$,
+- Witness is $1$ for $(4, 4, 2)$,
+- There is no witness for $(2, 1, 0)$, as we cant find a $w$ that makes the equation hold.
 
 ## Exercise 99 ✨
 
