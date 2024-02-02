@@ -570,7 +570,7 @@ q = E.order()
 qq = q^2
 ```
 
-TODO
+TODO: couldnt solve this yet
 
 ## Exercise 82
 
@@ -619,7 +619,7 @@ print(TJJ_1_tor)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 ```
 
-> ![NOTE]
+> [!IMPORTANT]
 >
 > We would expect $r^2$ elements (i.e. 4) in the full-torsion group, which is NOT the case here! After lengthy discussions with @bufferhe4d and his further discussions with more people, we have come to conclusion that the $r^2$ requirement is not strict when $k=1$. In some cases, we can have $r$ elements.
 
@@ -642,7 +642,7 @@ print("G2:", G1)
 # {(4 : 0 : 1), (0 : 1 : 0)}
 ```
 
-> ![NOTE]
+> [!NOTE]
 >
 > Regarding the note above about finding $r$ elements instead of $r^2$, there is also another thing to mention. If you find the 2-torsion group of TJJ over $\mathbb{F}_{p^4}$ you do actually get $r^2$ elements. 4 is the first time this happens, where the torsion group has 2 elements up until this point and has 4 elements beyond this point.
 >

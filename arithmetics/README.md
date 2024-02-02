@@ -68,7 +68,7 @@ We can also find an $x$ such that $|x| \ne 1$ by dividing both sides by $x^2 - 1
 
 All solutions are unique.
 
-## Exercise 6 🔴
+## Exercise 6
 
 > Using the programming language of your choice, write an algorithm that computes integer long divison and handles all edge cases properly.
 
