@@ -34,6 +34,10 @@ You can even open a notebook using the Docker image:
 docker run -v $PWD:/home/sage/moonmath:ro -p8888:8888 sagemath/sagemath sage-jupyter
 ```
 
+> [!TIP]
+>
+> We have short-hand scripts for these in Makefile.
+
 ## Circom
 
 To install Circom, you need to have Rust installed first:
