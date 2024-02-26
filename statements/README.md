@@ -211,6 +211,7 @@ flowchart TD
   a3 --S6--> f_tiny-jj
 ```
 
+
 The proof will be to find the correct values for wire labels given the inputs $\langle 11, 6 \rangle$. That is:
 
 ```mermaid
@@ -268,61 +269,107 @@ $$
 
 We can define the `qap` function as:
 
-```py
+
+
+```python
+from sage.all import GF
+
+
 def qap(r1cs, p: int):
-  '''
-  Given a R1CS and a prime, returns the QAP (Quadratic Arithmetic Program).
-  '''
-  # k := number of constraints
-  k = len(r1cs[0])
-  assert(k < p)
+    """
+    Given a R1CS and a prime, returns the QAP (Quadratic Arithmetic Program).
+    """
+    # k := number of constraints
+    k = len(r1cs[0])
+    assert k < p
 
-  # make sure lengths are alright
-  cnt = len(r1cs[0][0])
-  for term in range(3):
-    # each term must have k constraints
-    # and each constraint must have same amount of terms
-    for cons in range(k):
-      assert(cnt == len(r1cs[term][cons]))
+    # make sure lengths are alright
+    cnt = len(r1cs[0][0])
+    for term in range(3):
+        # each term must have k constraints
+        # and each constraint must have same amount of terms
+        for cons in range(k):
+            assert cnt == len(r1cs[term][cons])
 
-  # polynomial over GF(p)
-  Fp = GF(p)
-  Fpx = Fp["x"]
+    # polynomial over GF(p)
+    Fp = GF(p)
+    Fpx = Fp["x"]
 
-  # pick k random elements, unique & invertible
-  elems = []
-  for _ in range(k):
-    rand_elem = Fp.random_element()
-    if rand_elem not in elems:
-      elems.append(rand_elem)
+    # pick k random elements, unique & invertible
+    elems = []
+    for _ in range(k):
+        rand_elem = Fp.random_element()
+        if rand_elem not in elems:
+            elems.append(rand_elem)
 
-  # compute the target polynomial
-  target = Fpx(1)
-  for e in elems:
-    target *= Fpx([-e, 1]) # x - e
+    # compute the target polynomial
+    target = Fpx(1)
+    for e in elems:
+        target *= Fpx([-e, 1])  # x - e
 
-  # compute the lagrange polynomials
-  polys = ([], [], [])
-  for term in range(3):
-    for c in range(cnt):
-      points = [(elems[cons], r1cs[term][cons][c]) for cons in range(k)]
-      polys[term].append(Fpx.lagrange_polynomial(points))
+    # compute the lagrange polynomials
+    polys = ([], [], [])
+    for term in range(3):
+        for c in range(cnt):
+            points = [(elems[cons], r1cs[term][cons][c]) for cons in range(k)]
+            polys[term].append(Fpx.lagrange_polynomial(points))
 
-  return (target, polys)
+    return (target, polys)
 ```
 
-When we run this over the R1CS from example 121, we get:
+We give the R1CS along with the prime associated with TinyJubJub to `QAP`, and we find the following results:
 
-```sh
-# Target Polynomial
-x^4 + 11*x^3 + 12*x^2 + 3*x + 12
 
-# Polynomials (A)
-[12*x^3 + x^2 + 2*x + 12, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 7*x^3 + 8*x + 8, x^3 + 12*x^2 + 11*x + 1, 12*x^3 + x^2 + 2*x + 12]
+```python
+# prime for finite field of tinyjubjub
+p = 13
 
-# Polynomials (B)
-[12*x^3 + x^2 + 2*x + 12, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 0, 7*x^3 + 2*x^2 + 5*x + 12, 12*x^3 + x^2 + 2*x + 12]
+# R1CS of tiny_jj language (from the book)
+r1cs_tiny_jj = (
+    # [c, I1, I2, W1, W2, W3]
+    [  # A
+        [0, 1, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 8, 0, 0],
+        [1, 0, 0, 10, 12, 1],
+    ],
+    [  # B
+        [0, 1, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 0, 0, 0, 0, 1],
+    ],
+    [  # C
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0],
+    ],
+)
 
-# Polynomials (C)
-[0, 0, 0, 8*x^3 + 11*x^2 + 8*x + 12, 12*x^3 + 12*x^2 + 11*x + 4, 7*x^3 + 2*x^2 + 5*x + 12]
+QAP = qap(r1cs_tiny_jj, p)
+print("Target Polynomial")
+print(QAP[0])
+
+print("\nPolynomials (A)")
+print(QAP[1][0])
+
+print("\nPolynomials (B)")
+print(QAP[1][1])
+
+print("\nPolynomials (C)")
+print(QAP[1][2])
 ```
+
+    Target Polynomial
+    x^4 + 6*x^3 + 7*x^2 + 2*x
+    
+    Polynomials (A)
+    [5*x^3 + 3*x^2 + 11*x, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 2*x^3 + 2*x^2 + 8*x + 8, 8*x^3 + 10*x^2 + 2*x, 5*x^3 + 3*x^2 + 11*x]
+    
+    Polynomials (B)
+    [5*x^3 + 3*x^2 + 11*x, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 0, 7*x^3 + 3*x^2 + 10*x + 1, 5*x^3 + 3*x^2 + 11*x]
+    
+    Polynomials (C)
+    [0, 0, 0, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 7*x^3 + 3*x^2 + 10*x + 1]
+

@@ -12,16 +12,27 @@ Topics in this chapter:
 
 123, 27 and 0.
 
+
 ## Exercise 2
 
 > Compute the factorization of 30030 and double check your results with Sage.
 
 We find $2 \times 3 \times 5 \times 11 \times 13 \times 7$, which Sage confirms as:
 
-```py
+
+```python
+from sage.all import factor
+
 factor(30030)
-# 2 * 3 * 5 * 7 * 11 * 13
 ```
+
+
+
+
+    2 * 3 * 5 * 7 * 11 * 13
+
+
+
 
 ## Exercise 3
 
@@ -148,6 +159,7 @@ for (let i = 0; i < 100_000; i++) {
 }
 ```
 
+
 ## Exercise 7
 
 > Write an algorithm that computes the binary representation of any non-negative integer.
@@ -193,11 +205,20 @@ template Num2Bits(n) {
 
 Well, it's 1. In particular, a prime number is defined to be only divisible by itself, or 1. Since the `gcd` must be one of these, it is definitely not $p$ since $n < p$, so it must be $1$.
 
-```py
+
+```python
+from sage.all import random_prime, ZZ, gcd
 p = random_prime(2 ^ 256)
 n = ZZ.random_element(p)
-print(gcd(p, n))
+gcd(p, n) == 1
 ```
+
+
+
+
+    True
+
+
 
 ## Exercise 10
 
@@ -220,6 +241,7 @@ Our solutions for $k$ is therefore these numbers multiplied by 5:
 $$
 k \in \{95, 85, 65, 55, 35, 15\}
 $$
+
 
 ## Exercise 11
 
@@ -366,10 +388,19 @@ First let's get rid of the trivial cases:
 
 We can check GCD for the remaining numbers:
 
-```py
+
+```python
+from sage.all import gcd
 gcd(7, 24), gcd(805, 24), gcd(-4255, 24)
-# (1, 1, 1)
 ```
+
+
+
+
+    (1, 1, 1)
+
+
+
 
 Apparently, all of these are coprime to 24. We can perhaps use Extended Euclidean Algorithm, which is implemented in Sage already. Using `xgcd(a, b)` where `a >= b` we can find:
 
@@ -379,16 +410,19 @@ $$
 
 First, let's treat all numbers in mod 24, so $805 \equiv 13 \pmod{24}$ and $-4255 \equiv 17 \pmod{24}$. Then, let's use `xgcd` as follows:
 
-```py
-print(xgcd(24, 7))
-# (1, -2, 7)
 
-print(xgcd(24, 13))
-# (1, 6, -11)
-
-print(xgcd(24, 17))
-# (1, 5, -7)
+```python
+from sage.all import xgcd
+print(xgcd(24, 7))  # (1, -2, 7)
+print(xgcd(24, 13)) # (1, 6, -11)
+print(xgcd(24, 17)) # (1, 5, -7)
 ```
+
+    (1, -2, 7)
+    (1, 6, -11)
+    (1, 5, -7)
+
+
 
 To interpret these results:
 
@@ -470,19 +504,24 @@ We can find the answers in $\mathbb{Z}[x]$, and then project the coefficients fr
 
 We can calculate the result with coefficients in $\mathbb{Z}$ and then project it to the others. I used Sage instead of doing by hand:
 
-```py
+
+```python
+from sage.all import ZZ
 ZZx = ZZ['x']
-A = ZZx(-3*x^4 + 4*x^3 + 2*x^2 + 4)
-B = ZZx(x^2 - 4*x + 2)
+A = ZZx([4, 0, 2, 4, -3]) # -3*x^4 + 4*x^3 + 2*x^2 + 4
+B = ZZx([2, -4, 1]) # x^2 - 4*x + 2
 
 # quotient
-A // B
-# -3*x^2 - 8*x - 24
+print(A // B) # -3*x^2 - 8*x - 24
 
 # remainder
-A % B
-# -80*x + 52
+print(A % B) # -80*x + 52
 ```
+
+    -3*x^2 - 8*x - 24
+    -80*x + 52
+
+
 
 The result of division is the quotient $Q$ and remainder $R$ polynomials:
 
@@ -499,6 +538,7 @@ Projecting these to $\mathbb{Z}_5[x]$ we get:
 - $Q(x) = 2x^2 + 2x + 1$
 - $R(x) = 2$
 
+
 ## Exercise 28
 
 > Show that the polynomial $B(x) = 2x^4 -3x +4 \in \mathbb{Z}_5[x]$ is a factor of the polynomial $A(x) = x^7 + 4x^6 + 4x^5 + x^3 + 2x^2 + 2x + 3 \in \mathbb{Z}_5[x]$.
@@ -509,18 +549,26 @@ The important thing here is to realize that you need to invert the leading coeff
 
 Let's verify from Sage:
 
-```py
+
+```python
+from sage.all import Integers
+
 # Univariate Polynomial Ring in x
 # over Ring of integers modulo 5
-Z5x = Integers(5)[x]
+Z5x = Integers(5)['x']
 
-A = Z5x(x^7 + 4*x^6 + 4*x^5 + x^3 + 2*x^2 + 2*x + 3)
-B = Z5x(2*x^4 - 3*x + 4)
+# x^7 + 4*x^6 + 4*x^5 + x^3 + 2*x^2 + 2*x + 3
+A = Z5x([3, 2, 2, 1, 0, 4, 4, 1])
+# 2*x^4 - 3*x + 4
+B = Z5x([4, -3, 0, 0, 2])
 
 # expected result
-Q = Z5x(3*x^3 + 2*x^2 + 2*x + 2)
-Q == A / B # true
+# 3*x^3 + 2*x^2 + 2*x + 2
+Q = Z5x([2, 2, 2, 3])
+
+assert Q == A / B
 ```
+
 
 ## Exercise 29 ✨
 
@@ -538,12 +586,14 @@ From this, we can see that $P(x) = (x^k + \ldots)Q(x)$, meaning that $Q(x)$ must
 
 > Consider $P = x^7 + 3x^6 + 3x^5 + x^4 - x^3 - 3x^2 - 3x - 1$ in $\mathbb{Z}_6[X]$. Find the set of all roots $R_0(P)$ and then compute the prime factorization of $P$.
 
-Let's use Sage to find the roots.
+Let's use Sage to find the roots:
 
-```py
+
+```python
 Z6 = Integers(6)
 Z6x = Z6['x']
-P = Z6x(x^7 + 3*x^6 + 3*x^5 + x^4 - x^3 - 3*x^2 - 3*x - 1)
+# x^7 + 3*x^6 + 3*x^5 + x^4 - x^3 - 3*x^2 - 3*x - 1
+P = Z6x([-1, -3, -3, -1, 1, 3, 3, 1])
 
 # find roots
 roots = P.roots(multiplicities=False)
@@ -551,9 +601,13 @@ print("Roots:", roots)
 # [1, 5]
 ```
 
+    Roots: [1, 5]
+
+
 To find factors, we can divide $x - r$ for each root $r$ until the quotient does not have $r$ as a root anymore. Once we are done with all roots, if the remaining result is not $1$ we can also include that as a factor.
 
-```py
+
+```python
 factors = []
 Q = P
 for r in roots:
@@ -573,18 +627,22 @@ print("Factors:", factors)
 # [(x + 5, 1), (x + 1, 4), (x^2 + 1, 1)]
 ```
 
+    Factors: [(x + 5, 1), (x + 1, 4), (x^2 + 1, 1)]
+
+
 Note that the same factor can appear a few times, so the `factors` here is a list of tuples where the first item of a tuple is the factor, and the second item is the number of time it appears.
 
 After finding the factors, we can test to see if we get back the original polynomial when we multiply all these factors.
 
-```py
+
+```python
 PP = Z6x(1)
 for f in factors:
   assert(f[1] > 0)
   for _ in range(f[1]):
     PP = PP * f[0]
 
-assert(P == PP)
+assert P == PP
 ```
 
 ## Exercise 31
@@ -593,10 +651,18 @@ assert(P == PP)
 
 We need to do lagrange interpolation for this. We could do by hand, but let's just use Sage for this one!
 
-```py
-Integers(5)[x].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
+
+```python
+Integers(5)["x"].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
 # 4*x^3 + 3*x^2 + 4*x
 ```
+
+
+
+
+    4*x^3 + 3*x^2 + 4*x
+
+
 
 Apparently, $4x^3 + 3x^2 + 4x$ does the job.
 

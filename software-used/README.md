@@ -5,6 +5,8 @@ You need the following software for this book:
 - [SageMath](https://www.sagemath.org/) for almost all chapters.
 - [Circom](https://docs.circom.io/) for the last part.
 
+We also make use of [Jupyter Notebooks](https://github.com/jupyter/notebook) in this repository, and use [nbconvert](https://github.com/jupyter/nbconvert/) to convert notebooks to README files in Markdown.
+
 ## SageMath
 
 I've used the [Conda installation](https://doc.sagemath.org/html/en/installation/conda.html) method for this one, which results in an environment that can be activated as follows:
