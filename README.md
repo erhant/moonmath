@@ -32,7 +32,7 @@ make sage     # open Sage CLI
 make notebook # open Jupyter Notebook with Sage
 ```
 
-We also have a script that converts all the notebooks into Markdown format so that it is easier to read on the web:
+We also have a script that converts all the notebooks into Markdown format via `jupyter nbconvert` so that they are easier to read on the web from the READMEs alone:
 
 ```sh
 make markdown

@@ -98,14 +98,14 @@ $$
 \right)
 $$
 
-for $x_1, y_1, x_2, y_2 \in \mathbb{F}_{13}$. Our instance is composed of two points, each a pair of field elements; our witness is composed of a single point, a pair of field elements.
+for $x_1, y_1, x_2, y_2 \in \mathbb{F}_{13}$. Our instance is composed of two points, each a pair of field elements; our witness is just a single point, a pair of field elements.
 
 Both alphabets are thus field elements:
 
 - $\Sigma_I = \mathbb{F}_{13}$
 - $\Sigma_W = \mathbb{F}_{13}$
 
-Perhaps we could set our alphabet to equal a pair of field elements, that is $(\mathbb{F}_{13})^2$, but I prefer the above approach.
+Perhaps we could set our alphabet to equal a pair of field elements, that is $(\mathbb{F}_{13})^2$, but I've preferred the above approach.
 
 To make things easier, we will also re-use $L_{tiny-jj}$ from a previous example, which is a language such that if $a \in L_{tiny-jj}$ then $a$ is a word that is a pair of field elements corresponding to a point on the curve.
 
@@ -118,10 +118,9 @@ $$
 $$
 (i ; w) \mapsto
 \begin{cases}
-true  & |i| = 4 \text{ and } |w| = 2  \\
-      & \text{ and } (\langle i_1, i_2 \rangle) \in L_{tiny-jj} \\
-      & \text{ and } (\langle i_3, i_4 \rangle) \in L_{tiny-jj} \\
-      & \text{ and } (w_1, w_2) =
+true  & &(\langle i_1, i_2 \rangle) \in L_{tiny-jj} \\
+      & \text{ and } &(\langle i_3, i_4 \rangle) \in L_{tiny-jj} \\
+      & \text{ and } &(w_1, w_2) =
 \left(
 \frac
 {i_1i_4 + i_2i_3}
@@ -148,7 +147,94 @@ To provide an instance with knowledge proof, we can just pick two points in the 
 
 > Consider the language $L_{add}$ from exercise 99. Define an R1CS such that words in $L_{add}$ are in 1:1 correspondance with solutions to this R1CS.
 
-TODO
+What we need is an R1CS for the following computation:
+
+$$
+(x_1, y_1) \oplus (x_2, y_2) =
+\left(
+ \frac{x_1y_2 + y_1x_2}{1 + 8x_1x_2y_1y_2}
+,\frac{y_1y_2 - 3x_1x_2}{1 - 8x_1x_2y_1y_2}
+\right)
+$$
+
+where the result is denoted as $(x_3, y_3)$. Notice that we have a multiplicative inverse here, which is a problem for the R1CS description that we need. Instead, we will show that
+
+$$
+\begin{align*}
+    (1 + 8x_1x_2y_1y_2) \times x_3 &= x_1y_2 + y_1x_2  \\
+    (1 - 8x_1x_2y_1y_2) \times y_3 &= y_1y_2 - 3x_1x_2
+\end{align*}
+$$
+
+We define the intermediate variables (which are also witnesses) and the constraints for the two equations above as follows:
+
+$$
+\begin{align}
+    x_1 \cdot y_2 &= W_1 \\
+    x_2 \cdot y_1 &= W_2 \\
+    x_1 \cdot x_2 &= W_3 \\
+    y_1 \cdot y_2 &= W_4 \\
+    (8 \cdot W_1) \cdot W_2 &= W_5 \\
+    (1 + W_5) \cdot x_3 &= W_1 + W_2 \\
+    (1 - W_5) \cdot y_3 &= W_4 - 3\cdot W_3
+\end{align}
+$$
+
+With this, we have an R1CS with $n=4$ instances (the two input points), $m=7$ witnesses (one point and the intermediate variables via _flattening_), and $k=7$ for the 7 constraints shown above. For the instance and witnesses, we will have $I_1 = x_1, I_2 = y_1, I_3 = x_2, I_4 = y_2$ and $W_6 = x_3, W_7 = y_3$. With this definition, the columns of our matrix will show the coefficients of the variables as:
+
+$$
+\text{constant} \mid x_1 \mid y_1 \mid x_2 \mid y_2 \mid W_1 \mid W_2 \mid W_3 \mid W_4 \mid W_5 \mid x_3 \mid y_3
+$$
+
+Let's work with the matrices now.
+
+Our first matrix $A$ is:
+
+$$
+A = \begin{pmatrix}
+% 0  x1  y1  x2  y2  W1  W2  W3  W4  W5  x3  y3
+  0 &1  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &1  &0  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &1  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &1  &0  &0  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &8  &0  &0  &0  &0  &0  &0 \\
+  1 &0  &0  &0  &0  &0  &0  &0  &0  &1  &0  &0 \\
+  1 &0  &0  &0  &0  &0  &0  &0  &0  &-1  &0  &0 \\
+\end{pmatrix}
+$$
+
+Our second matrix $B$ is:
+
+$$
+% 0 &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &0 \\
+B = \begin{pmatrix}
+% 0  x1  y1  x2  y2  W1  W2  W3  W4  W5  x3  y3
+  0 &0  &0  &0  &1  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &1  &0  &0  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &1  &0  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &1  &0  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &1  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &0  &0  &0  &0  &1  &0 \\
+  0 &0  &0  &0  &0  &0  &0  &0  &0  &0  &0  &1
+\end{pmatrix}
+$$
+
+Our third matrix $C$ is:
+
+$$
+C = \begin{pmatrix}
+% 0  x1  y1  x2  y2  W1  W2  W3  W4  W5  x3  y3
+  0 &0  &0  &0  &0  &1  &0  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &1  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &0  &1  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &0  &0  &1  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &0  &0  &0  &1  &0  &0 \\
+  0 &0  &0  &0  &0  &1  &1  &0  &0  &0  &0  &0 \\
+  0 &0  &0  &0  &0  &0  &0  &-3  &1  &0  &0  &0
+\end{pmatrix}
+$$
+
+Define an R1CS $S_{add}$ as $Ax \odot Bx = Cx$ where $A, B, C$ is given above, and $x = (1, I, W) \in \mathbb{F}_{13}^{12}$. The final R1CS for $L_{add}$ is given by the union of $S_{add}$ and the R1CS from example 121 applied to both input points to ensure that they are on the curve.
 
 ## Exercise 101
 
@@ -211,7 +297,6 @@ flowchart TD
   a3 --S6--> f_tiny-jj
 ```
 
-
 The proof will be to find the correct values for wire labels given the inputs $\langle 11, 6 \rangle$. That is:
 
 ```mermaid
@@ -269,11 +354,8 @@ $$
 
 We can define the `qap` function as:
 
-
-
 ```python
 from sage.all import GF
-
 
 def qap(r1cs, p: int):
     """
@@ -319,7 +401,6 @@ def qap(r1cs, p: int):
 
 We give the R1CS along with the prime associated with TinyJubJub to `QAP`, and we find the following results:
 
-
 ```python
 # prime for finite field of tinyjubjub
 p = 13
@@ -363,13 +444,12 @@ print(QAP[1][2])
 
     Target Polynomial
     x^4 + 6*x^3 + 7*x^2 + 2*x
-    
+
     Polynomials (A)
     [5*x^3 + 3*x^2 + 11*x, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 2*x^3 + 2*x^2 + 8*x + 8, 8*x^3 + 10*x^2 + 2*x, 5*x^3 + 3*x^2 + 11*x]
-    
+
     Polynomials (B)
     [5*x^3 + 3*x^2 + 11*x, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 0, 7*x^3 + 3*x^2 + 10*x + 1, 5*x^3 + 3*x^2 + 11*x]
-    
+
     Polynomials (C)
     [0, 0, 0, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 7*x^3 + 3*x^2 + 10*x + 1]
-

@@ -149,7 +149,7 @@ assert sorted(I_TJJ_E75pts) == sorted(E75_pts)
 The inverse of $(x, y)$ is given by $(x, -y)$ unless the point is the point at infinity. So:
 
 - $-(10, 10) = (10, 3)$
-- $-\mathcal{O} = \mathcal{)}$
+- $-\mathcal{O} = \mathcal{O}$
 - $-(4, 0) = (4, 0)$
 - $-(1, 2) = (1, 11)$
 
