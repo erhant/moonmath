@@ -32,9 +32,7 @@ class TwistedEdwardsCurve:
         return "{0} * x^2 + y^2 = 1 + {1} * x^2 * y^2".format(self.a, self.d)
 
     def add(self, P, Q):
-        """
-        Add points P and Q in the Twisted Edwards curve.
-        """
+        """Add points P and Q in the Twisted Edwards curve."""
         x1, x2, y1, y2 = P[0], Q[0], P[1], Q[1]
 
         x3 = (x1 * y2 + y1 * x2) / (1 + self.d * x1 * x2 * y1 * y2)
@@ -42,23 +40,17 @@ class TwistedEdwardsCurve:
         return (x3, y3)
 
     def in_curve(self, P) -> bool:
-        """
-        Returns true if the given point is in curve.
-        """
+        """Returns true if the given point is in curve."""
         return self.a * (P[0] ** 2) + (P[1] ** 2) == self.F(1) + self.d * (
             P[0] ** 2
         ) * (P[1] ** 2)
 
     def inverse(self, P):
-        """
-        Inverts a point.
-        """
+        """Inverts a point."""
         return (self.F.order() - P[0], P[1])
 
     def point(self, x, y):
-        """
-        Return the a point in curve.
-        """
+        """Return the a point in curve."""
         return (self.F(x), self.F(y))
 
 

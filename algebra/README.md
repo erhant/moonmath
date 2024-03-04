@@ -51,17 +51,33 @@ Since there are $n$ different remainders possible for some integer division by $
 
 If 5 is a generator, then multiplications (i.e. multiple additions) of it should give the group members. Let us say that $(6 - 1)k$ results in group members for $k = 1, 2, ..., 6$. Indeed we have $-1, -2, ..., -6$ for the results, which are $5, 4, ..., 0$ in mod 6, giving out all elements in the group.
 
-```py
-list(map(lambda k : (6-1)*k % 6, range(1, 7)))
-# [5, 4, 3, 2, 1, 0]
+
+
+```python
+list(map(lambda k: (6 - 1) * k % 6, range(1, 7)))
 ```
+
+
+
+
+    [5, 4, 3, 2, 1, 0]
+
+
 
 When we consider the same logic for 2, we think of $(6 - 4)k$, but notice that for $k = 3$ we get $18 - 12 \equiv 0 \pmod{6}$. This means that $k=4$ will result in same with $k=1$, so we can't generate all group members.
 
-```py
-list(map(lambda k : (6-4)*k % 6, range(1, 7)))
-# [2, 4, 0, 2, 4, 0]
+
+
+```python
+list(map(lambda k: (6 - 4) * k % 6, range(1, 7)))
 ```
+
+
+
+
+    [2, 4, 0, 2, 4, 0]
+
+
 
 ## Exercise 37 ✨
 
@@ -132,32 +148,35 @@ In fact, here we actually showed that there are $\phi(p-1)$ many generators that
 
 Cyclic group exponentiation made use of "square-and-multiply".
 
-```py
+
+
+```python
 # g^x (mod n)
 def cge(g: int, x: int, n: int) -> int:
-  h = g
-  x >>= 1
-  while x > 0:
-    h = (h * h) % n   # square
-    if x & 1 == 1:
-      h = (h * g) % n # multiply
+    h = g
     x >>= 1
-  return h
+    while x > 0:
+        h = (h * h) % n  # square
+        if x & 1 == 1:
+            h = (h * g) % n  # multiply
+        x >>= 1
+    return h
 ```
 
 In efficient scalar multiplication, we will essentially use it's equivalent operations in additive groups, that is, "double-and-add". We call this "efficient scalar multiplication".
 
-```py
-# g*x (mod n)
+
+
+```python
 def esm(g: int, x: int, n: int) -> int:
-  h = g
-  x >>= 1
-  while x > 0:
-    h = (h + h) % n   # double
-    if x & 1 == 1:
-      h = (h + g) % n # add
+    h = g
     x >>= 1
-  return h
+    while x > 0:
+        h = (h + h) % n  # double
+        if x & 1 == 1:
+            h = (h + g) % n  # add
+        x >>= 1
+    return h
 ```
 
 ## Exercise 39
@@ -180,36 +199,39 @@ Looking at the table, we see that all rules of a commutative group hold.
 
 The fundamental theorem of finite cyclic groups say that the factorization of the order of our group should give the order of its subgroups. Let us do that:
 
-```py
+
+
+```python
+from sage.all import Integers, factor
+
 Z6 = Integers(6)
 order = Z6.order()
 
-factorization = list(map(lambda x : x[0], factor(order)))
-subgroupOrders = [1, order] # add the trivial group and itself too
+factorization = list(map(lambda x: x[0], factor(order)))
+subgroupOrders = [1, order]  # add the trivial group and itself too
 subgroupOrders.extend(factorization)
 subgroupOrders = sorted(subgroupOrders)
 ```
 
 We can do cofactor clearing for each subgroup to find the elements in it:
 
-```py
+
+
+```python
 for subgroupOrder in subgroupOrders:
-  cf = order // subgroupOrder # find cofactor
-  Z6_f_elems = []
-  for e in range(0, order):
-    Z6_f_elems.append(Z6(e) * cf)
-  Z6_f_elems = set(Z6_f_elems)
-  print("Z6[{}]  :{}".format(subgroupOrder, Z6_f_elems))
+    cf = order // subgroupOrder  # find cofactor
+    Z6_f_elems = []
+    for e in range(0, order):
+        Z6_f_elems.append(Z6(e) * cf)
+    Z6_f_elems = set(Z6_f_elems)
+    print("Z6[{}]  :{}".format(subgroupOrder, Z6_f_elems))
 ```
 
-Doing this gives us:
+    Z6[1]  :{0}
+    Z6[2]  :{0, 3}
+    Z6[3]  :{0, 2, 4}
+    Z6[6]  :{0, 1, 2, 3, 4, 5}
 
-```sh
-Z6[1]  :{0}
-Z6[2]  :{0, 3}
-Z6[3]  :{0, 2, 4}
-Z6[6]  :{0, 1, 2, 3, 4, 5}
-```
 
 The largest prime order here is that of `Z6[3]` with elements `{0, 2, 4}`. Also notice that for the cofactor clearing we did multiplication, not exponentiation; the latter is done when the group is multiplicative, but the former is done when the group is additive!
 
@@ -297,18 +319,24 @@ $$
 
 Writing the generic code for it:
 
-```py
-# xs: inputs, gs: generators, N: order
+
+
+```python
 def pedersen(xs, gs, N):
-  assert(len(xs) == len(gs))
+    assert len(xs) == len(gs)
 
-  Z = Integers(N)
-  ans = 1
-  for i in range(len(gs)):
-    ans *= Z(gs[i]) ^ xs[i]
+    Z = Integers(N)
+    ans = 1
+    for i in range(len(gs)):
+        ans *= Z(gs[i]) ** xs[i]
 
-  return ans
+    return ans
+
+print(pedersen([3, 7, 11], [2, 6, 11], 13))
 ```
+
+    11
+
 
 We then find `pedersen([3, 7, 11], [2, 6, 11], 13)` to be `11`.
 
@@ -318,22 +346,42 @@ We then find `pedersen([3, 7, 11], [2, 6, 11], 13)` to be `11`.
 
 Here is the code for this:
 
-```py
+
+
+```python
+from sage.all import ZZ
+from hashlib import sha256
+
+
+# Simple SHA256 to integer mapping
+def sha256_int(s):
+    # create hasher
+    hasher = sha256(s.encode())
+
+    # hash as hex string
+    hexdigest = hasher.hexdigest()
+
+    # map to an integer
+    d = ZZ(hexdigest, 16)
+
+    return d
+
+
 # s: input, gs: generators, N: modulus
 def sha256_pedersen(s, gs, N):
-  # sha256 hash-to-integer
-  z = sha256(s)
+    # sha256 hash-to-integer
+    z = sha256_int(s)
 
-  # get binary digits
-  z_bin = z.digits(base = 2, padto = 256)
+    # get binary digits
+    z_bin = z.digits(base=2, padto=256)
 
-  # multiply with powers of the generators
-  Z = Integers(N)
-  ans = 1
-  for i in range(len(gs)):
-    ans *= Z(gs[i]) ^ z_bin[i]
+    # multiply with powers of the generators
+    Z = Integers(N)
+    ans = 1
+    for i in range(len(gs)):
+        ans *= Z(gs[i]) ** z_bin[i]
 
-  return ans
+    return ans
 ```
 
 ## Exercise 46
@@ -435,24 +483,25 @@ Again we can use the built-in methods.
 
 We can use Sage for this.
 
-```py
+
+
+```python
+from sage.all import GF
+
 F13 = GF(13)
 pairs = []
-elems = list(map(lambda n : F13(n), range(0, 13)))
+elems = list(map(lambda n: F13(n), range(0, 13)))
 for x in elems:
-  for y in elems:
-    lhs = x * x + y * y
-    rhs = 1 + 7 * x * x * y * y
-    if lhs == rhs:
-      pairs.append((x, y))
+    for y in elems:
+        lhs = x * x + y * y
+        rhs = 1 + 7 * x * x * y * y
+        if lhs == rhs:
+            pairs.append((x, y))
 print(pairs)
 ```
 
-This gives us the pair of elements:
+    [(0, 1), (0, 12), (1, 0), (2, 4), (2, 9), (4, 2), (4, 11), (5, 6), (5, 7), (6, 5), (6, 8), (7, 5), (7, 8), (8, 6), (8, 7), (9, 2), (9, 11), (11, 4), (11, 9), (12, 0)]
 
-```
-[(0, 1), (0, 12), (1, 0), (2, 4), (2, 9), (4, 2), (4, 11), (5, 6), (5, 7), (6, 5), (6, 8), (7, 5), (7, 8), (8, 6), (8, 7), (9, 2), (9, 11), (11, 4), (11, 9), (12, 0)]
-```
 
 Notice that if $(a, b)$ is a valid pair, so is $(b, a)$ due to commutativity in the equation.
 
@@ -462,41 +511,45 @@ Notice that if $(a, b)$ is a valid pair, so is $(b, a)$ due to commutativity in 
 
 Let's write the code for Legendre symbol:
 
-```py
+
+
+```python
 def legendre_symbol(y, p):
-  assert(p % 2 == 1)
-  l = y ^ ((p - 1) // 2) % p
-  return -1 if l == p - 1 else l
+    assert p % 2 == 1
+    l = y ** ((p - 1) // 2) % p
+    return -1 if l == p - 1 else l
 ```
 
 Now, let's find the Legendre symbol & square root for each element:
 
-```py
+
+
+```python
 F13, legendres, sqrts = GF(13), {}, {}
 for e in F13:
-  sqrts[e] = []
+    sqrts[e] = []
 for e in F13:
-  legendres[e] = legendre_symbol(e, 13)
-  sqrts[e * e].append(e)
+    legendres[e] = legendre_symbol(e, 13)
+    sqrts[e * e].append(e)
+
+for e in F13:
+    print("N = {}\tSymbol: {}\tSqrts: {}".format(e, legendres[e], sqrts[e]))
 ```
 
-When we print this nicely, we see the following:
+    N = 0	Symbol: 0	Sqrts: [0]
+    N = 1	Symbol: 1	Sqrts: [1, 12]
+    N = 2	Symbol: -1	Sqrts: []
+    N = 3	Symbol: 1	Sqrts: [4, 9]
+    N = 4	Symbol: 1	Sqrts: [2, 11]
+    N = 5	Symbol: -1	Sqrts: []
+    N = 6	Symbol: -1	Sqrts: []
+    N = 7	Symbol: -1	Sqrts: []
+    N = 8	Symbol: -1	Sqrts: []
+    N = 9	Symbol: 1	Sqrts: [3, 10]
+    N = 10	Symbol: 1	Sqrts: [6, 7]
+    N = 11	Symbol: -1	Sqrts: []
+    N = 12	Symbol: 1	Sqrts: [5, 8]
 
-```py
-N = 0   Symbol: 0       Sqrts: [0]
-N = 1   Symbol: 1       Sqrts: [1, 12]
-N = 2   Symbol: -1      Sqrts: []
-N = 3   Symbol: 1       Sqrts: [4, 9]
-N = 4   Symbol: 1       Sqrts: [2, 11]
-N = 5   Symbol: -1      Sqrts: []
-N = 6   Symbol: -1      Sqrts: []
-N = 7   Symbol: -1      Sqrts: []
-N = 8   Symbol: -1      Sqrts: []
-N = 9   Symbol: 1       Sqrts: [3, 10]
-N = 10  Symbol: 1       Sqrts: [6, 7]
-N = 11  Symbol: -1      Sqrts: []
-N = 12  Symbol: 1       Sqrts: [5, 8]
-```
 
 As observed, we have two square roots (positive and negative) for each element that has Legendre symbol equal to 1.
 
@@ -508,25 +561,24 @@ As observed, we have two square roots (positive and negative) for each element t
 > y^2 = x^3 + 4
 > $$
 
-Using Sage:
+I'm not sure how to solve this one pen-and-paper, but here it is using Sage:
 
-```py
-F3_2 = GF(3^2, name="x", modulus=GF(3)['x']([1, 0, 1]))
+
+
+```python
+from sage.all import GF
+
+F3_2 = GF(3**2, name="x", modulus=GF(3)["x"]([1, 0, 1]))
 solutions = []
 for x in F3_2:
-  for y in F3_2:
-    if y^2 == x^3 + 4:
-      solutions.append((x, y))
+    for y in F3_2:
+        if y**2 == x**3 + 4:
+            solutions.append((x, y))
 print(solutions)
 ```
 
-We get the results:
+    [(0, 2), (0, 1), (x + 2, 2*x + 2), (x + 2, x + 1), (2*x + 2, x + 2), (2*x + 2, 2*x + 1), (2, 0), (1, x), (1, 2*x)]
 
-```sh
-[(0, 2), (0, 1), (x + 2, 2*x + 2), (x + 2, x + 1), (2*x + 2, x + 2), (2*x + 2, 2*x + 1), (2, 0), (1, x), (1, 2*x)]
-```
-
-I'm not sure how to solve this one pen-and-paper.
 
 ## Exercise 54
 
@@ -534,44 +586,49 @@ I'm not sure how to solve this one pen-and-paper.
 
 Using Sage:
 
-```py
+
+
+```python
 F3 = GF(3)
-F3x = F3['x']
-Q = F3x([2, 1, 1]) # x^2 + x + 2
+F3x = F3["x"]
+Q = F3x([2, 1, 1])  # x^2 + x + 2
 ```
 
 To check if it is irreducible, we will evaluate it over all elements in the field and see if the result is zero or not. If there is a zero, it means there is a factor for that element, i.e. if $Q(a) = 0$ then there is a factor $(x - a)$, meaning that it is reducible.
 
-```py
+
+
+```python
 is_irreducible = True
 for elem in F3:
-  if Q(elem) == 0:
-    is_irreducible = False
+    if Q(elem) == 0:
+        is_irreducible = False
 
 # compare with Sage's function for this
-assert(is_irreducible == Q.is_irreducible())
+assert is_irreducible == Q.is_irreducible()
 ```
 
 Finally, we print the multiplication table:
 
-```py
-F3_2 = GF(3^2, name="x", modulus=Q)
+
+```python
+F3_2 = GF(3 ** 2, name="x", modulus=Q)
 print(F3_2.multiplication_table('elements'))
 ```
 
-```sh
-      *        0       1       2       x   x + 1   x + 2     2*x 2*x + 1 2*x + 2
-       +------------------------------------------------------------------------
-      0|       0       0       0       0       0       0       0       0       0
-      1|       0       1       2       x   x + 1   x + 2     2*x 2*x + 1 2*x + 2
-      2|       0       2       1     2*x 2*x + 2 2*x + 1       x   x + 2   x + 1
-      x|       0       x     2*x 2*x + 1       1   x + 1   x + 2 2*x + 2       2
-  x + 1|       0   x + 1 2*x + 2       1   x + 2     2*x       2       x 2*x + 1
-  x + 2|       0   x + 2 2*x + 1   x + 1     2*x       2 2*x + 2       1       x
-    2*x|       0     2*x       x   x + 2       2 2*x + 2 2*x + 1   x + 1       1
-2*x + 1|       0 2*x + 1   x + 2 2*x + 2       x       1   x + 1       2     2*x
-2*x + 2|       0 2*x + 2   x + 1       2 2*x + 1       x       1     2*x   x + 2
-```
+          *        0       1       2       x   x + 1   x + 2     2*x 2*x + 1 2*x + 2
+           +------------------------------------------------------------------------
+          0|       0       0       0       0       0       0       0       0       0
+          1|       0       1       2       x   x + 1   x + 2     2*x 2*x + 1 2*x + 2
+          2|       0       2       1     2*x 2*x + 2 2*x + 1       x   x + 2   x + 1
+          x|       0       x     2*x 2*x + 1       1   x + 1   x + 2 2*x + 2       2
+      x + 1|       0   x + 1 2*x + 2       1   x + 2     2*x       2       x 2*x + 1
+      x + 2|       0   x + 2 2*x + 1   x + 1     2*x       2 2*x + 2       1       x
+        2*x|       0     2*x       x   x + 2       2 2*x + 2 2*x + 1   x + 1       1
+    2*x + 1|       0 2*x + 1   x + 2 2*x + 2       x       1   x + 1       2     2*x
+    2*x + 2|       0 2*x + 2   x + 1       2 2*x + 1       x       1     2*x   x + 2
+    
+
 
 ## Exercise 55
 
@@ -585,16 +642,21 @@ To show irreducibility, I cant see any other way than showing it evaluates to no
 
 I've used Sage to find the inverse:
 
-```py
+
+```python
+from sage.all import GF, xgcd
+
 F5 = GF(5)
 F5x = F5['t']
 P = F5x([1, 1, 0, 1])
 
-F5_3 = GF(5^3, name="t", modulus=P)
+F5_3 = GF(5 ** 3, name="t", modulus=P)
 
 print(xgcd(F5_3([4, 0, 2]), P))
-# (1, 4*t^2 + 4*t + 1, 0)
 ```
+
+    (1, 4*t^2 + 4*t + 1, 0)
+
 
 Here we see that $4*t^2 + 4*t + 1$ is the inverse of $2t^2 + 4$. Let's solve the equation now. We can begin by multiplying both sides with $(2t^2 + 4)^{-1}$ which we have just found:
 
@@ -612,10 +674,14 @@ $$
 
 Note that this is larger than our modulus with equal degree, so we have to find the remainder:
 
-```py
-F5x([0, 3, 1, 3]) % F5x([1, 1, 0, 1])
-# t^2 + 2
+
+```python
+print(F5x([0, 3, 1, 3]) % F5x([1, 1, 0, 1]))
 ```
+
+    t^2 + 2
+
+
 
 We find $x = t^2 + 2$ as the solution.
 
@@ -625,25 +691,55 @@ We find $x = t^2 + 2$ as the solution.
 
 Similar to exercise 54, we use Sage:
 
-```py
+
+
+```python
 F5 = GF(5)
-F5x.<x> = F5[] # type: ignore
+F5x = F5["x"]
 
 # is irreducible?
-P = F5x(x^2 + 2) # type: ignore
+P = F5x([2, 0, 1])
 is_irreducible = True
 for elem in F5:
-  if P(elem) == 0:
-    is_irreducible = False
+    if P(elem) == 0:
+        is_irreducible = False
 # also check Sage
-assert(is_irreducible == P.is_irreducible())
+assert is_irreducible == P.is_irreducible()
 
 # print elements
-F5_2 = GF(5^2, name="x", modulus=P)
+F5_2 = GF(5**2, name="x", modulus=P)
 print(F5_2, ":")
 for elem in F5_2:
-  print(" ", elem)
+    print(" ", elem)
 ```
+
+    Finite Field in x of size 5^2 :
+      0
+      x + 4
+      3*x + 4
+      x
+      4*x + 3
+      4*x + 4
+      3
+      3*x + 2
+      4*x + 2
+      3*x
+      2*x + 4
+      2*x + 2
+      4
+      4*x + 1
+      2*x + 1
+      4*x
+      x + 2
+      x + 1
+      2
+      2*x + 3
+      x + 3
+      2*x
+      3*x + 1
+      3*x + 3
+      1
+
 
 Another way to show that $P$ is irreducible would be to check that all evaluations of this polynomial are non-zero. In other words, we must show that $\forall x \in \mathbb{F}_5 : x^2 + 2 \ne 0$.
 
@@ -678,17 +774,19 @@ Notice that since $\mathbb{F}_2^* = \{1\}$, we cant obtain another point from a 
 
 Double checking our results with Sage:
 
-```py
+
+```python
+from sage.all import ProjectiveSpace
+
 for e in ProjectiveSpace(GF(2), 2):
   print(e)
 ```
 
-```sh
-(0 : 0 : 1)
-(0 : 1 : 1)
-(1 : 0 : 1)
-(1 : 1 : 1)
-(0 : 1 : 0)
-(1 : 1 : 0)
-(1 : 0 : 0)
-```
+    (0 : 0 : 1)
+    (0 : 1 : 1)
+    (1 : 0 : 1)
+    (1 : 1 : 1)
+    (0 : 1 : 0)
+    (1 : 1 : 0)
+    (1 : 0 : 0)
+

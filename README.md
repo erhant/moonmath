@@ -19,3 +19,21 @@
 6. [**Statements**](./statements/README.ipynb)
 7. [**Circuit Compilers**](./circuit-compilers/)
 8. [**Zero-Knowledge Protocols**](./zero-knowledge/)
+
+<h3 align="center">
+    Usage
+</h3>
+
+See [Chapter 2](./software-used/) for the required software. If you don't have Sage installed, you can use [Docker](https://www.docker.com/) mounted over the repository. We have scripts for that:
+
+```sh
+make pull     # pull the SageMath image
+make sage     # open Sage CLI
+make notebook # open Jupyter Notebook with Sage
+```
+
+We also have a script that converts all the notebooks into Markdown format via `jupyter nbconvert` so that they are easier to read on the web from the READMEs alone:
+
+```sh
+make markdown
+```
