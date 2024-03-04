@@ -1,5 +1,46 @@
 # Chapter 7: Circuit Compilers
 
+As a preliminary for this chapter, let's consider trivial circuit from example 134:
+
+```rs
+statement trivial_circuit {F:F_13} {
+  fn main{F}(in1 : F, pub in2 : F) -> (F,F) {
+    let const outc1 : F = 0 ;
+    let const inc1 : F = 7 ;
+    let out1 : F ;
+    let out2 : F ;
+    out1 <== inc1;
+    out2 <== in1;
+    outc1 <== in2;
+    return (out1, out2) ;
+  }
+}
+```
+
+This gets brain-compiled into the following circuit:
+
+```mermaid
+graph TD
+
+
+  subgraph inputs
+    i1["in_1"]
+    i2["in_2 = 0"]
+  end
+
+  i1 --"W_1"--> o2
+  i2 --"0"--> 0
+
+  subgraph outputs
+    o1["out_1"]
+    o2["out_2"]
+  end
+
+
+  7 --> o1
+
+```
+
 ## Exercise 103
 
 > Let `F` be the field $\mathbb{F}_5$. Brain-compile the following `PAPER` statement into an algebraic circuit:

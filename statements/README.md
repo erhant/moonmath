@@ -186,7 +186,7 @@ $$
 \text{constant} \mid x_1 \mid y_1 \mid x_2 \mid y_2 \mid W_1 \mid W_2 \mid W_3 \mid W_4 \mid W_5 \mid x_3 \mid y_3
 $$
 
-Let's work with the matrices now.
+Let's work with the matrices now. 
 
 Our first matrix $A$ is:
 
@@ -221,7 +221,7 @@ $$
 
 Our third matrix $C$ is:
 
-$$
+$$ 
 C = \begin{pmatrix}
 % 0  x1  y1  x2  y2  W1  W2  W3  W4  W5  x3  y3
   0 &0  &0  &0  &0  &1  &0  &0  &0  &0  &0  &0 \\
@@ -234,7 +234,7 @@ C = \begin{pmatrix}
 \end{pmatrix}
 $$
 
-Define an R1CS $S_{add}$ as $Ax \odot Bx = Cx$ where $A, B, C$ is given above, and $x = (1, I, W) \in \mathbb{F}_{13}^{12}$. The final R1CS for $L_{add}$ is given by the union of $S_{add}$ and the R1CS from example 121 applied to both input points to ensure that they are on the curve.
+Define an R1CS $S_{add}$ as $Ax \odot Bx = Cx$ where $A, B, C$ is given above, and $x = (1, I, W) \in \mathbb{F}_{13}^{12}$. The final R1CS for $L_{add}$ is given by the intersection of $S_{add}$ with the R1CS from example 121 applied to both input points to ensure that they are on the curve.
 
 ## Exercise 101
 
@@ -297,6 +297,7 @@ flowchart TD
   a3 --S6--> f_tiny-jj
 ```
 
+
 The proof will be to find the correct values for wire labels given the inputs $\langle 11, 6 \rangle$. That is:
 
 ```mermaid
@@ -354,8 +355,11 @@ $$
 
 We can define the `qap` function as:
 
+
+
 ```python
 from sage.all import GF
+
 
 def qap(r1cs, p: int):
     """
@@ -401,6 +405,7 @@ def qap(r1cs, p: int):
 
 We give the R1CS along with the prime associated with TinyJubJub to `QAP`, and we find the following results:
 
+
 ```python
 # prime for finite field of tinyjubjub
 p = 13
@@ -444,12 +449,13 @@ print(QAP[1][2])
 
     Target Polynomial
     x^4 + 6*x^3 + 7*x^2 + 2*x
-
+    
     Polynomials (A)
     [5*x^3 + 3*x^2 + 11*x, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 2*x^3 + 2*x^2 + 8*x + 8, 8*x^3 + 10*x^2 + 2*x, 5*x^3 + 3*x^2 + 11*x]
-
+    
     Polynomials (B)
     [5*x^3 + 3*x^2 + 11*x, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 0, 7*x^3 + 3*x^2 + 10*x + 1, 5*x^3 + 3*x^2 + 11*x]
-
+    
     Polynomials (C)
     [0, 0, 0, 7*x^3 + 11*x^2 + 4*x, 7*x^3 + 9*x^2 + x, 7*x^3 + 3*x^2 + 10*x + 1]
+
