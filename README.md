@@ -13,10 +13,10 @@
 
 1. [**Introduction**](./introduction/)
 2. [**Software Used in This Book**](./software-used/)
-3. [**Arithmetics**](./arithmetics/README.ipynb)
-4. [**Algebra**](./algebra/README.ipynb)
-5. [**Elliptic Curves**](./elliptic-curves/README.ipynb)
-6. [**Statements**](./statements/README.ipynb)
+3. [**Arithmetics**](./arithmetics/)
+4. [**Algebra**](./algebra/)
+5. [**Elliptic Curves**](./elliptic-curves/)
+6. [**Statements**](./statements/)
 7. [**Circuit Compilers**](./circuit-compilers/)
 8. [**Zero-Knowledge Protocols**](./zero-knowledge/)
 
@@ -37,3 +37,9 @@ We also have a script that converts all the notebooks into Markdown format via `
 ```sh
 make markdown
 ```
+
+<h3 align="center">
+    Contributions
+</h3>
+
+Please feel free to open an issue or create a pull-request if something is not clear, could have been better, or is missing references.
