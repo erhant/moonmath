@@ -1,0 +1,21 @@
+[book]
+authors = ["erhant"]
+language = "en"
+multilingual = false
+src = "book"
+title = "MoonMath Solutions"
+description = "Solutions to MoonMath Manual to zkSNARKs"
+
+# uses KaTeX instead of MathJax, much better interop
+[preprocessor.katex]
+after = ["links"]
+
+# converts mermaid drawings to SVG
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+additional-css = ["./book/custom.css"]
+additional-js = ["./book/mermaid.min.js", "./book/mermaid-init.js"]
+git-repository-url = "https://github.com/erhant/moonmath"
+default-theme = "rust"

@@ -24,7 +24,7 @@
     Usage
 </h3>
 
-See [Chapter 2](./software-used/) for the required software. If you don't have Sage installed, you can use [Docker](https://www.docker.com/) mounted over the repository. We have scripts for that:
+See [Software Used](./software-used/) for the required software. If you don't have [Sage](https://www.sagemath.org/) installed, you can use [Docker](https://www.docker.com/) mounted over the repository. We have scripts for that:
 
 ```sh
 make pull     # pull the SageMath image
@@ -37,6 +37,18 @@ We also have a script that converts all the notebooks into Markdown format via `
 ```sh
 make markdown
 ```
+
+<h3 align="center">
+    Book
+</h3>
+
+A [mdBook](https://github.com/rust-lang/mdBook) build can be created & opened with:
+
+```sh
+make book
+```
+
+The README file are copied under the [book](./book/) directory and a build is created from them. Note that it is not hot-reloaded (i.e. `mdbook serve`). You will also need [KaTeX](https://github.com/lzanini/mdbook-katex) and [Mermaid](https://github.com/badboy/mdbook-mermaid) plugins.
 
 <h3 align="center">
     Contributions

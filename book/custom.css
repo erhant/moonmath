@@ -1,0 +1,6 @@
+/* mermaidJS markdown is converted to svg, this rule affects them */
+svg {
+  /* https://stackoverflow.com/questions/8639383/how-do-i-center-an-svg-in-a-div */
+  display: block;
+  margin: auto;
+}

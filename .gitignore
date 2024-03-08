@@ -1,2 +1,5 @@
 __pycache__
 .vscode
+*.md
+book-build
+!SUMMARY.md

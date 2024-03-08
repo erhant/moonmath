@@ -243,8 +243,8 @@ Note that we did not explicitly constraint the inputs to be bits here, we assume
 
 $$
 \begin{align*}
-  (1 + (-1) \cdot b_1) \cdot (1 + (-1) \cdot b_2) &= W_1 \\
-  (1 + (-1) \cdot W_1) \cdot (1) &= W_2 \\
+  (1 - b_1) \cdot (1 - b_2) &= W_1 \\
+  (1 - W_1) \cdot 1 &= W_2 \\
 \end{align*}
 $$
 
@@ -272,20 +272,248 @@ Finally, our PAPER code is:
 // b1 and b2 assumed to be booleans
 fn OR(b1: F, b2: F) -> (F) {
   let out;
-  out <== ADD(1, MUL(-1,
-    MUL(
-      ADD(1, MUL(-1, b1)),
-      ADD(1, MUL(-1, b2))
+  out <== ADD(1, // 1 - (1 - b1)(1 - b2)
+    MUL(-1, // - (1 - b1)(1 - b2)
+      MUL(  // (1 - b1)(1 - b2)
+        ADD(1, MUL(-1, b1)), // 1 - b1
+        ADD(1, MUL(-1, b2))  // 1 - b2
+      )
     )
-  ));
+  );
 
   return (x);
 }
 ```
 
-## Exercise 107 🔴
+## Exercise 107
 
 > Derive algebraic circuits and associated R1CS for the following operators: NOR, XOR, NAND, and EQU.
+
+The book provides OR, AND and NOT gates for us already, and we can re-use them for this exercise. In our circuit definitions, we will use these existing circuits as a black box. In our R1CS definitions, we will use the notation $R_{\texttt{CIRCUIT}}(\cdot, \cdot)$ to represent the output of a constrainted circuit, for the sake of brevity.
+
+With that said, the NOR operation can be realized with an OR followed by NOT:
+
+```mermaid
+graph LR
+  subgraph inputs; b1; b2; end
+  subgraph outputs; NOR; end
+  b1 & b2 --> OR
+  OR --"W_1"--> NOT --"W_2"--> NOR
+```
+
+$$
+\begin{align*}
+  R_{\texttt{OR}}(b_1, b_2) = W_1 \\
+  R_{\texttt{NOT}}(W_1) = W_2
+\end{align*}
+$$
+
+The NAND operation is AND followed by NOT:
+
+```mermaid
+graph LR
+  subgraph inputs; b1; b2; end
+  subgraph outputs; NAND; end
+  b1 & b2 --> AND
+  AND --"W_1"--> NOT --"W_2"--> NAND
+```
+
+$$
+\begin{align*}
+  R_{\texttt{AND}}(b_1, b_2) = W_1 \\
+  R_{\texttt{NOT}}(W_1) = W_2
+\end{align*}
+$$
+
+The XOR operation can be defined by OR minus AND.
+
+```mermaid
+graph LR
+  subgraph inputs; b1; b2; end
+  subgraph outputs; XOR; end
+
+  b1 & b2 --> AND & OR
+  neg1["-1"] --> m1(("⋅"))
+  AND  --"W_1"--> m1(("⋅"))
+  m1 --"W_3"--> a1(("+"))
+  OR --"W_2"--> a1(("+")) --"W_4"--> XOR
+```
+
+$$
+\begin{align*}
+  R_{\texttt{AND}}(b_1, b_2) = W_1 \\
+  R_{\texttt{OR}}(b_1, b_2) = W_2 \\
+  (-1) \cdot (W_1) = W_3
+\end{align*}
+$$
+
+EQU is an equality constraint, the the equation $a = b$ for a pair of inputs $a, b \in \mathbb{F}$ is actually valid in an R1CS. We can realize it with and addition gate like $\texttt{ADD}(a, 0) = b$ or a multiplication gate like $\texttt{MUL}(a, 1) = b$. Both are shown below:
+
+```mermaid
+graph TD
+  subgraph Addition
+    direction LR
+    a & 0 --> a1(("+")) --"b"--> EQU
+  end
+
+  subgraph Multiplication
+  direction LR
+    aa["a"] & 00["1"] --> m1(("⋅")) --"b"--> EQU2["EQU"]
+  end
+```
+
+Both are represented by the same constraint:
+
+$$
+a = b
+$$
+
+## Exercise 108
+
+> Let $F = \mathbb{F}_{13}$ and $N = 4$ be fixed and let $x$ be of $uN$ type. Define circuits and associated R1CS for the left and right bit-shift operators $x \ll 2$ as well as $x \gg 2$. Execute the associated circuit for `x: u4 = 11` and generate a constructive proof for R1CS satisfyability.
+
+The right shift is given by the following circuit:
+
+```mermaid
+graph TD
+  subgraph inputs
+    direction LR
+    subgraph "x[]"
+      x1["x[1]"]; x2["x[2]"]; x3["x[3]"]; x4["x[4]"]
+    end
+  end
+  subgraph outputs
+    y1["y[1]"]; y2["y[2]"]; y3["y[3]"]; y4["y[4]"]
+  end
+
+  x1 --> y3; x2 --> y4;
+  0 --> y1 & y2;
+```
+
+which corresponds to the following R1CS:
+
+$$
+\begin{align*}
+  0 &= y_1 \\
+  0 &= y_2 \\
+  x_1 &= y_3 \\
+  x_2 &= y_4
+\end{align*}
+$$
+
+The left shift is given by the following circuit:
+
+```mermaid
+graph TD
+  subgraph inputs
+    direction LR
+    subgraph "x[]"
+      x1["x[1]"]; x2["x[2]"]; x3["x[3]"]; x4["x[4]"]
+    end
+  end
+  subgraph outputs
+    y1["y[1]"]; y2["y[2]"]; y3["y[3]"]; y4["y[4]"]
+  end
+
+  x3 --> y1; x4 --> y2;
+  0 --> y3 & y4;
+```
+
+which corresponds to the following R1CS:
+
+$$
+\begin{align*}
+  x_3 &= y_1 \\
+  x_4 &= y_2 \\
+  0 &= y_3 \\
+  0 &= y_4
+\end{align*}
+$$
+
+We are asked to give a proof for $x = 11$. First, we find its 4-bit representation $(11)_10 = (1011)_2$. Then, we map these bits to the input array: $x = \langle 1, 0, 1, 1 \rangle$.
+
+- A right shift of 2-bits result in $y = \langle 0, 0, 1, 0 \rangle$
+- A left shift of 2-bits result in $y = \langle 1, 1, 0, 0 \rangle$
+
+## Exercise 109
+
+> Let $F = \mathbb{F}_{13}$ and $N = 2$ be fixed. Define a circuit and associated R1CS for the addition operator $\texttt{ADD} : uN \times uN \to uN$. Execute the associated circuit to compute $\texttt{ADD}(2, 7)$ for $2, 7 \in uN$.
+
+Here we are asked to implement 2-bit addition, without the carry bit output though. This circuit is known as a "[Two-Bit Adder](https://web2.qatar.cmu.edu/cs/15348/labs/02/lab02.pdf)" in circuit engineering, and there are plenty examples online for it. We can use one with XOR and AND gates:
+
+<!-- https://web2.qatar.cmu.edu/cs/15348/labs/02/lab02.pdf -->
+
+```mermaid
+graph TD
+  subgraph inputs
+    direction LR
+    subgraph "a[]"
+      a0["a[1]"]; a1["a[2]"];
+    end
+    subgraph "b[]"
+      b0["b[1]"]; b1["b[2]"];
+    end
+  end
+
+  a0 & b0 --> XOR1["XOR"]
+  a0 & b0 --> AND1["AND"]
+  a1 & b1 --> XOR2["XOR"]
+
+  XOR1 --> s0
+  AND1 --"W_1"--> XOR3["XOR"]
+  XOR2 --"W_2"--> XOR3
+  XOR3 --> s1
+
+  subgraph outputs
+    s0["c[1]"]; s1["c[2]"];
+  end
+```
+
+$$
+\begin{align*}
+  R_{\texttt{XOR}}(a_1, b_1) &= c_1 \\
+  R_{\texttt{AND}}(a_1, b_1) &= W_1 \\
+  R_{\texttt{XOR}}(a_2, b_2) &= W_2 \\
+  R_{\texttt{XOR}}(W_1, W_2) &= c_2
+\end{align*}
+$$
+
+2 and 7 in binary are $(10)_2$ and $(111)_2$, and in 2-bits we get $(10)_2$ and $(11)_2$ respectively. Our inputs are $a_1 = 0, a_2 = 1$ and $b_1 = 1, b_2 = 1$. We find the result as:
+
+$$
+\begin{align*}
+  \texttt{XOR}(a_1, b_1) &= c_1 \\
+  \texttt{XOR}(\texttt{AND}(a_1, b_1), \texttt{XOR}(a_2, b_2)) &= c_2
+\end{align*}
+$$
+
+$$
+\begin{align*}
+  \texttt{XOR}(0, 1) = 1 &= c_1 \\
+  \texttt{XOR}(\texttt{AND}(0, 1), \texttt{XOR}(1, 1)) = \texttt{XOR}(0, 0) = 0 &= c_2
+\end{align*}
+$$
+
+We find $c_1 = 1$ and $c_2 = 0$, so the output of this circuit is the 2-bit number represented with $(01)_2$.
+
+## Exercise 110 🔴
+
+> Execute the setup phase for the following PAPER code, i.e., brain compile the code into a circuit and derive the associated R1CS.
+>
+> ```rs
+> statement MASK_MERGE {F: F_5, N = 4} {
+>   fn main(pub a: uN, pub b: uN) -> uN {
+>     let const mask: uN = 10;
+>     let r: uN;
+>     r <== XOR(a,AND(XOR(a,b),mask));
+>     return r;
+>   }
+> }
+> ```
+>
+> Let $L_{mask-merge}$ be the language defined by the circuit. Provide a constructive knowledge proof in $L_{mask-merge}$ for the instance $I = (I_a, I_b) = (14, 7)$.
+
+TODO: Why bother with $N=4$ if we are in field $\mathbb{F}_5$ though?
 
 ## Exercise 111 🔴
 
