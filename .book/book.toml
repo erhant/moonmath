@@ -2,7 +2,7 @@
 authors = ["erhant"]
 language = "en"
 multilingual = false
-src = "book"
+src = "."
 title = "MoonMath Solutions"
 description = "Solutions to MoonMath Manual to zkSNARKs"
 
@@ -15,7 +15,7 @@ after = ["links"]
 command = "mdbook-mermaid"
 
 [output.html]
-additional-css = ["./book/custom.css"]
-additional-js = ["./book/mermaid.min.js", "./book/mermaid-init.js"]
+additional-css = ["custom.css"]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
 git-repository-url = "https://github.com/erhant/moonmath"
 default-theme = "rust"

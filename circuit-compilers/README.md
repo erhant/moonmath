@@ -289,7 +289,32 @@ fn OR(b1: F, b2: F) -> (F) {
 
 > Derive algebraic circuits and associated R1CS for the following operators: NOR, XOR, NAND, and EQU.
 
-The book provides OR, AND and NOT gates for us already, and we can re-use them for this exercise. In our circuit definitions, we will use these existing circuits as a black box. In our R1CS definitions, we will use the notation $R_{\texttt{CIRCUIT}}(\cdot, \cdot)$ to represent the output of a constrainted circuit, for the sake of brevity.
+The book provides OR, AND and NOT gates for us already, and we can re-use them for this exercise. In our circuit definitions, we will use these existing circuits as a black box. In our R1CS definitions, we will use the notation $R_{\texttt{CIRCUIT}}(\cdot, \cdot)$ to represent the output of a constrainted circuit, for the sake of brevity. To briefly explain:
+
+- $R_{\texttt{AND}}(a, b) = c$ denotes an intersection with the following R1CS:
+
+$$
+\begin{align*}
+  a \cdot b &= c
+\end{align*}
+$$
+
+- $R_{\texttt{OR}}(a, b) = c$ denotes an intersection with the following R1CS:
+
+$$
+\begin{align*}
+  a \cdot b &= W_1 \\
+  (a + b - W_1) \cdot 1 &= c
+\end{align*}
+$$
+
+- $R_{\texttt{NOT}}(a) = b$ denotes an intersection with the following R1CS:
+
+$$
+\begin{align*}
+  (1 - a) \cdot 1 &= b
+\end{align*}
+$$
 
 With that said, the NOR operation can be realized with an OR followed by NOT:
 
@@ -347,7 +372,7 @@ $$
 \end{align*}
 $$
 
-EQU is an equality constraint, the the equation $a = b$ for a pair of inputs $a, b \in \mathbb{F}$ is actually valid in an R1CS. We can realize it with and addition gate like $\texttt{ADD}(a, 0) = b$ or a multiplication gate like $\texttt{MUL}(a, 1) = b$. Both are shown below:
+EQU is an equality constraint, and the equation $a = b$ for a pair of inputs $a, b \in \mathbb{F}$ is actually valid in an R1CS. We can realize it with and addition gate like $\texttt{ADD}(a, 0) = b$ or a multiplication gate like $\texttt{MUL}(a, 1) = b$. Both are shown below:
 
 ```mermaid
 graph TD
@@ -496,7 +521,7 @@ $$
 
 We find $c_1 = 1$ and $c_2 = 0$, so the output of this circuit is the 2-bit number represented with $(01)_2$.
 
-## Exercise 110 🔴
+## Exercise 110
 
 > Execute the setup phase for the following PAPER code, i.e., brain compile the code into a circuit and derive the associated R1CS.
 >
@@ -513,16 +538,163 @@ We find $c_1 = 1$ and $c_2 = 0$, so the output of this circuit is the 2-bit numb
 >
 > Let $L_{mask-merge}$ be the language defined by the circuit. Provide a constructive knowledge proof in $L_{mask-merge}$ for the instance $I = (I_a, I_b) = (14, 7)$.
 
-TODO: Why bother with $N=4$ if we are in field $\mathbb{F}_5$ though?
+Instead of drawing the circuit for each bit, we will draw a more concise version below:
 
-## Exercise 111 🔴
+```mermaid
+graph TD
+  subgraph inputs
+    direction LR
+    subgraph a["a[]"]
+      a1["a[1]"]; a2["a[2]"]; a3["a[3]"]; a4["a[4]"]
+    end
+    subgraph b["b[]"]
+      b1["b[1]"]; b2["b[2]"]; b3["b[3]"]; b4["b[4]"]
+    end
+  end
+
+  subgraph mask["mask[] = 10"]
+    m1["1"]; m2["0"]; m3["1"]; m4["0"]
+  end
+
+  a & b --> XOR1["XOR"]
+  XOR1 --"W_{1, 2, 3, 4}"--> AND
+  mask --"M_{1, 2, 3, 4}"--> AND
+  b --> XOR2["XOR"]
+  AND --"W_{5, 6, 7, 8}"--> XOR2["XOR"]
+  XOR2 --> outputs
+
+  subgraph outputs
+    r1["r[1]"]; r2["r[2]"]; r3["r[3]"]; r4["r[4]"]
+  end
+```
+
+We had provided the description for XOR gate in a previous exercise, and we will treat $R_{\texttt{XOR}}(\texttt{in}_1, \texttt{in}_2) = \texttt{out}$ as an R1CS such that the inputs and outputs must intersect with the R1CS of XOR.
+
+$$
+\begin{align*}
+  1 \cdot M_1 &= 1 & \\
+  1 \cdot M_2 &= 0 & \\
+  1 \cdot M_3 &= 1 & \\
+  1 \cdot M_4 &= 0 & \\
+  R_{\texttt{XOR}}(a_i, b_i) &= W_i & \forall i \in \{1, 2, 3, 4\} \\
+  R_{\texttt{AND}}(W_i, M_i) &= W_{i+4} & \forall i \in \{1, 2, 3, 4\} \\
+  R_{\texttt{XOR}}(W_{i+4}, b_i) &= r_i & \forall i \in \{1, 2, 3, 4\}
+\end{align*}
+$$
+
+We are asked to apply the inputs $a = 14 = (1110)_2$ and $b = 7 = (0111)_2$. The field defined for this circuit is $\mathbb{F}_5$ but our inputs in decimal form are larger than 5, so how is this possible? The trick is that we are working over their bitwise representations, this is similar to how big-integers are implemented in normal programming languages. There is even a big-int implementation in Circom, see [alex-ozdemir/circom-bigint](https://github.com/alex-ozdemir/circom-bigint).
+
+The entire circuit operates over bits, so lets write the operations for each bit:
+
+$$
+\begin{align*}
+  ((a_1 \oplus b_1) \land 1) \oplus b_1 &= r_1 \\
+  ((a_2 \oplus b_2) \land 0) \oplus b_2 &= r_2 \\
+  ((a_3 \oplus b_3) \land 1) \oplus b_3 &= r_3 \\
+  ((a_4 \oplus b_4) \land 0) \oplus b_4 &= r_4
+\end{align*}
+$$
+
+We can reduce all these equations to the following:
+
+$$
+\begin{align*}
+  a_1 \oplus b_1 \oplus b_1 &= a_1 = r_1 \\
+  0 \oplus b_2 &= b_2 = r_2 \\
+  a_3 \oplus b_3 \oplus b_3 &= a_3 = r_3 \\
+  0 \oplus b_4 &= b_4 = r_4 \\
+\end{align*}
+$$
+
+As the name suggests, this is a masking operation! Given two bits $a_i, b_i$, if the mask-bit $m_i$ is set (1), we take $a_i$, otherwise we take $b_i$. Our inputs were $a = \langle 1,1,1,0 \rangle$ and $b = \langle 0,1,1,1 \rangle$, so with a constant mask $\langle 1, 0, 1, 0 \rangle$ our output becomes $r = \langle 1, 1, 1, 1 \rangle$. A proof would be to assign the signal values for all the circuit signals, but I am omitting that for brevity here.
+
+## Exercise 111
 
 > Write the circuit and associated Rank-1 Constraint System for a Weierstrass curve of a given field $\mathbb{F}$.
 
-## Exercise 112 🔴
+Fix some constant $a, b \in \mathbb{F}$ and define the inputs as $x, y \in \mathbb{F}$. Our curve equation to satisfy is:
 
-> Define a circuit that enforces field inversion for a point of a twisted Edwards curve over a field $\mathbb{F}$.
+$$
+y^2 = x^3 + ax + b
+$$
 
-## Exercise 113 🔴
+With a slight rearrangement we can write this as:
+
+$$
+x^2(x + a) + b - y^2 = 0
+$$
+
+Based on this equation, we can write the R1CS as:
+
+$$
+\begin{align*}
+  x \cdot x &= W_1 \\
+  y \cdot y &= W_2 \\
+  W_1 \cdot (a + x) &= W_3 \\
+  (W_3 + b - W_2) \cdot 1 &= W_4 = 0
+\end{align*}
+$$
+
+This corresponds to the following circuit:
+
+```mermaid
+graph TD
+  subgraph inputs
+    x; y;
+  end
+
+  a; b;
+  a1(("+")); a2(("+")); a3(("+"));
+  m1(("⋅")); m2(("⋅")); m3(("⋅")); m4(("⋅"));
+  neg1["-1"]
+  x & a --> a1
+  x & x --> m1
+  m1 --"W_1"--> m4
+
+  a1 --"a+x"--> m4
+
+  b --> a3
+  m4 --"W_3"--> a3
+  a3 --"W_3+b"--> a2
+
+  y & y --> m2
+  m2 --"W_2"--> m3
+
+  neg1 --> m3
+  m3 --"-W_2"--> a2
+
+  a2 --"W_4=0"--> out
+```
+
+With this circuit definition, a valid witness is one such that `out` results in 0.
+
+## Exercise 112
+
+> Define a circuit that enforces field inversion for a point of a Twisted Edwards curve over a field $\mathbb{F}$.
+
+The inverse of a point $(x, y)$ on a Twisted Edwards curve is $(-x, y)$. We can just re-use the Twisted Edwards curve contraint on section 7.3.4.1.1 and add a field element negation over it:
+
+```mermaid
+graph TD
+  subgraph inputs
+    x; y;
+  end
+  subgraph outputs
+    ox["x'"]; oy["y'"];
+  end
+
+  x & y --> TwistedEdwardsPoint --> 0
+  neg1["-1"]; m1(("⋅"));
+  x & neg1 --> m1 --> ox;
+  y --> oy;
+```
+
+## Exercise 113
 
 > Write the circuit and associated Rank-1 Constraint System for a Weierstrass addition law of a given field $\mathbb{F}$.
+
+The Weierstrass addition law is not really friendly to be written as an arithmetic circuit. First of all, we face division-by-zero problems if we are to compute all addition rules at once. Furthermore, there is the issue of "point-at-infinity" which is not really representable as an affine coordinate.
+
+One approach here could be to work over projective coordinates, to avoid running into point-at-infinity or division-by-zero issues. Alternatively, one can write a circuit for both Chord and Tangent rules separately, and provide additional "hints" to these circuits on whether we have a point-at-infinity or not for some point.
+
+I will not write the entire circuit here as it is cumbersome, but we can see a solution online at [yi-sun/circom-pairing](https://github.com/yi-sun/circom-pairing/blob/master/circuits/curve.circom) library.

@@ -47,3 +47,4 @@ Some possible errors in version 1.1.1.
 - Page 177, exercise 103, extra `,` at the end of line with `fn foo`.
 - Page 177, exercise 103, in `fn main` should be `in_2 : F`.
 - Page 188, "unigned" integer operators
+- Page 193, "We get" at the end of page.

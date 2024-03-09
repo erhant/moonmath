@@ -48,7 +48,7 @@ A [mdBook](https://github.com/rust-lang/mdBook) build can be created & opened wi
 make book
 ```
 
-The README file are copied under the [book](./book/) directory and a build is created from them. Note that it is not hot-reloaded (i.e. `mdbook serve`). You will also need [KaTeX](https://github.com/lzanini/mdbook-katex) and [Mermaid](https://github.com/badboy/mdbook-mermaid) plugins.
+The README file are copied under the [`.book`](./.book/) directory and a build is created from them. Note that it is not hot-reloaded (i.e. `mdbook serve`). You will also need [KaTeX](https://github.com/lzanini/mdbook-katex) and [Mermaid](https://github.com/badboy/mdbook-mermaid) plugins.
 
 <h3 align="center">
     Contributions

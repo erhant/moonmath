@@ -56,3 +56,11 @@ cd circom
 cargo build --release
 cargo install --path circom
 ```
+
+## SnarkJS
+
+We also use SnarkJS together with Circom. SnarkJS is an NPM package, and you can install it as a global binary via:
+
+```sh
+npm i -g snarkjs
+```
