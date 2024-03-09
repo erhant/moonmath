@@ -187,11 +187,43 @@ E = EllipticCurve(GF(13), [8, 8])
 
 
 
-## Exercise 64 ⚠️
+## Exercise 64
 
 > Consider example 79 and compute the set $\{[1](0, 1), [2](0, 1), \ldots, [8](0, 1), [9](0, 1)\}$ using the tangent rule only.
 
-**Isn't this done in example 79 already?**
+The curve in example 79 is $E_{1,1}(\mathbb{F}_5)$ which has scalar order 9. Using tangent rule only means to use **doubling** only:
+
+$$
+\begin{align*}
+    [1](0, 1) + [1](0, 1) = [2](0, 1) \\
+    [2](0, 1) + [2](0, 1) = [4](0, 1) \\
+    [4](0, 1) + [4](0, 1) = [8](0, 1) \\
+    [8](0, 1) + [8](0, 1) = [7](0, 1) \\
+    [7](0, 1) + [7](0, 1) = [5](0, 1) \\
+    [5](0, 1) + [5](0, 1) = [1](0, 1)
+\end{align*}
+$$
+
+We got points at order 1, 2, 4, 5, 7, 8 but we are missing the ones at 3, 6. We can't find $[3](0, 1)$ or $[6](0, 1)$ without the Chord rule here, and this is not a surprise. As explained in example 79, our group has order 9 which factorizes as $9 = 3 \times 3$. So, we expect to have 3 subgroups:
+
+- A subgroup of order 9 (the group itself).
+- A subgroup of order 3.
+- A subgroup of order 1 (trivial group).
+
+As you may notice, the points $[3](0, 1)$ and $[6](0, 1)$ are actually the elements within the subgroup of order 3. In other words, they belong to the logarithmic order:
+
+$$
+[3](0, 1) \to [6](0, 1) \to \mathcal{O}
+$$
+
+When we do the doubling, these points give eachother:
+
+$$
+\begin{align*}
+    [3](0, 1) + [3](0, 1) = [6](0, 1) \\
+    [6](0, 1) + [6](0, 1) = [3](0, 1)
+\end{align*}
+$$
 
 ## Exercise 65 🔴
 

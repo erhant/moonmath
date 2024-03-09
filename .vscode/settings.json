@@ -1,8 +1,8 @@
 {
   // https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/images/folderIcons.png
   "material-icon-theme.folders.associations": {
-    "elliptic-curves": "Functions",
-    "algebra": "Animation",
+    "elliptic-curves": "Animation",
+    "algebra": "Functions",
     "arithmetics": "Import",
     "circuit-compilers": "Core",
     "statements": "Json",
