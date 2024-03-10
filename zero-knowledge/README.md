@@ -1,6 +1,6 @@
 # Chapter 8: Zero-Knowledge Protocols
 
-For this section, you need Circom and SnarkJS, see [chapter 2](../software-used/) for installations. I'm using SnarkJS v0.7.3 and Circom v2.1.8. Also use this directory as your active directory when working with the solution code below.
+For this section, you need Circom and SnarkJS, see [chapter 2](../software-used/) for installations. I'm using SnarkJS v0.7.3 and Circom v2.1.8. Also use this directory as your active directory when working with the solution code below. You can run all the scripts here at once with `./run.sh`.
 
 ## Exercise 114
 

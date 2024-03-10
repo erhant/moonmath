@@ -6,6 +6,12 @@ Also see this <https://curves.xargs.org/> for great animations, especially about
 - [Montgomery](https://www.wolframalpha.com/input?i2d=true&i=7Power%5By%2C2%5D%3DPower%5Bx%2C3%5D%2B6Power%5Bx%2C2%5D%2Bx+for+x%5C%2844%29+y+in+GF%5C%2840%2913%5C%2841%29)
 - [Twisted Edwards](https://www.wolframalpha.com/input?i2d=true&i=3Power%5Bx%2C2+%5D%2B+Power%5By%2C2%5D+%3D+1+%2B+8+Power%5Bx%2C2%5D+Power%5By%2C2%5D+for+x%5C%2844%29+y+in+GF%5C%2840%2913%5C%2841%29)
 
+Some commonly used curves in this section:
+
+- [alt\_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage)
+- [secp256k1](https://neuromancer.sk/std/secg/secp256k1)
+- [bls12-381](https://neuromancer.sk/std/bls/BLS12-381)
+
 ## Exercise 58
 
 > Compute the set of all points $(x, y) \in E_{1, 1}(\mathbb{F}_5)$ from example 70.
@@ -225,11 +231,63 @@ $$
 \end{align*}
 $$
 
-## Exercise 65 🔴
+## Exercise 65
 
 > Consider example 80 and compute the scalar multiplications $[10](5, 11)$ as well as $[10](9, 4)$ and $[4](9, 4)$ with pen and paper using the algorithm from exercise 38 (Efficient Scalar Multiplication).
 
-TODO
+We can compute these as:
+
+- $[10](5, 11) = [2 \times (2 \times 1 + 1)](5, 11)$
+- $[10](9, 4) = [2 \times (2 \times 1 + 1)](9, 4)$
+- $[4](9, 4) = [2 \times (2 \times 1)](9, 4)$
+
+The question wants us to do this in pen-and-paper, but I will instead write the intermediate results in Sage below for us to verify results if we are to write them on paper:
+
+
+
+```python
+from sage.all import GF, EllipticCurve
+
+F13 = GF(13)
+TJJ = EllipticCurve(F13, [8, 8])
+
+
+def esm(P, k) -> int:
+    """
+    Efficient Scalar Multiplication using "double-and-add"
+    for some curve point P and scalar k
+    """
+    print(P)
+    ans = P - P  # 0
+    base = P
+    while k > 0:
+        if k & 1 == 1:
+            ans += base
+            print(ans)
+        base += base
+        k >>= 1
+    print("")
+    return ans
+
+
+assert esm(TJJ(5, 11), 10) == TJJ(0)  # result from example 80
+assert esm(TJJ(9, 4), 10) == TJJ(4, 0)  # result from example 80
+assert esm(TJJ(9, 4), 4) == TJJ(7, 11)
+```
+
+    (5 : 11 : 1)
+    (7 : 11 : 1)
+    (0 : 1 : 0)
+    
+    (9 : 4 : 1)
+    (5 : 11 : 1)
+    (4 : 0 : 1)
+    
+    (9 : 4 : 1)
+    (7 : 11 : 1)
+    
+
+
 
 ## Exercise 66
 
@@ -334,26 +392,57 @@ print(len(log_order), "elements")
 
 As expected from the large prime-order subgroup of $TJJ_{13}$ which has order 5, we see 5 elements.
 
-## Exercise 68 🔴
+## Exercise 68
 
-> Consider example 81 again. Compute the following expressions for projective points $E_1(\mathbb{F}_5\mathbb{P}^2)$ using algorithm 7.
+> Consider example 81 again. Compute the following expressions for projective points $E_{1, 1}(\mathbb{F}_5\mathbb{P}^2)$ using algorithm 7.
 >
 > - $[0 : 1 : 0] \oplus [4 : 3 : 1]$
 > - $[0 : 3 : 0] \oplus [3 : 1 : 2]$
 > - $-[0 : 4 : 1] \oplus [3 : 4 : 1]$
 > - $[4 : 3 : 1] \oplus [4 : 2 : 1]$
 >
-> and then solve the equation $[X : Y : Z] \oplus [0 : 1 : 1] = [2 : 4 : 1]$ for some point from the projective Short Weierstrass curve $E_1(\mathbb{F}_5\mathbb{P}^2)$
+> and then solve the equation $[X : Y : Z] \oplus [0 : 1 : 1] = [2 : 4 : 1]$ for some point from the projective Short Weierstrass curve $E_{1, 1}(\mathbb{F}_5\mathbb{P}^2)$
 
-TODO
+Let's explain each expression one by one:
+
+- The first expression here is actually addition with a point-at-infinity, so $[0 : 1 : 0] \oplus [4 : 3 : 1] = [4 : 3 : 1]$ is straightforward.
+
+- At $[0 : 3 : 0] \oplus [3 : 1 : 2]$ we can look at the point on the left hand-side a bit more carefully. Notice that $\{3k \mid k \in \mathbb{F}_5^\ast\} = \{3, 1, 4, 2\}$, so this projective point is the same as $[0 : 1 : 0]$ that is the point at infinity. We can simply say that $[0 : 3 : 0] \oplus [3 : 1 : 2] = [3 : 1 : 2]$ in that case.
+
+- $-[0 : 4 : 1] \oplus [3 : 4 : 1]$ can be written as $[0 : 1 : 1] \oplus [3 : 4 : 1]$ due to how additive inverse works in projective points. Then, let's look at first few variables in the Algorithm 7: 
+
+$$
+\begin{align*}
+U_1 &\gets Y_2 \cdot Z_1 &= 4 \cdot 1 = 4 \\
+U_2 &\gets Y_1 \cdot Z_2 &= 1 \cdot 1 = 1 \\
+V_1 &\gets X_2 \cdot Z_1 &= 3 \cdot 1 = 3 \\
+V_2 &\gets X_1 \cdot Z_2 &= 0 \cdot 1 = 0
+\end{align*}
+$$
+
+We have $V_1 \ne V_2$ so we apply the `else` branch at the bottom:
+
+$$
+\begin{align*}
+U  &= U_1 − U_2 &= 4 - 1 = 3 \\
+V  &= V_1 − V_2 &= 3 - 0 = 3 \\
+W  &= Z_1 \cdot Z_2 &= 1 \cdot 1 = 1 \\
+A  &= U^2 \cdot W − V^3 − 2 \cdot V^2 \cdot V_2 &= 3^2 \cdot 1 - 3^3 - 2 \cdot 3^2 \cdot 0 = 4 - 3 = 1 \\
+X' &= V \cdot A &= 3 \cdot 1 = 3 \\
+Y' &= U \cdot (V^2 \cdot V_2 − A) − V^3 \cdot U_2 &= 3 \cdot (3^2 \cdot 0 - 1) - 3^3 \cdot 1 = 3^2 - 3^3 = 4 - 3 = 1 \\
+Z' &= V^3 \cdot W &= 3^3 \cdot 1 = 3
+\end{align*}
+$$
+
+We find the answer as $[X3 : Y3 : Z3] \gets [X' : Y' : Z'] = [3 : 1 : 3]$. We can have $Z=1$ by multiplying the values by 2, $[3 \times 2 : 1 \times 2 : 3 \times 2] = [1 : 2 : 1]$.
+
+- $[4 : 3 : 1] \oplus [4 : 2 : 1]$ is actually an operation of a point with its inverse, notice that $-[4 : 3 : 1] = [4 : -3 : 1] = [4 : 2 : 1]$, so the result of this operation is $[0 : 1 : 0]$ i.e. point-at-infinity.
 
 ## Exercise 69
 
 > Compare the affine addition law for Short Weierstrass curves with the projective addition rule. Which branch in the projective branch corresponds to which case in the affine law?
 
-The first two if-else's handle the addition with neutral element (point at infinity) case.
-
-Then, we have a major branching after $V_1 = V_2$ check, which is true if $X_1 = X_2$. If $X$ coordinates match for two points, they are either the same point or on the opposite sides of the curve:
+The first two if-else's handle the addition with neutral element (point at infinity) case. Then, we have a major branching after $V_1 = V_2$ check, which is true if $X_1 = X_2$. If $X$ coordinates match for two points, they are either the same point or on the opposite sides of the curve:
 
 - $U_1 \ne U_2$ is true if these points are on the opposite sides, and we know this means $Y_1 = -Y_2$ and their addition results in $\mathcal{O}$
 - $U_1 = U_2$ means this is the same point, and we apply the Tangent rule. However, there is one case where the tangent rule results in point at infinity, and that is when $Y = 0$ which is checked by $Y_1 = 0$ in the algorithm.

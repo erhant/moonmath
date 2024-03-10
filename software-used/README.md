@@ -3,9 +3,9 @@
 You need the following software for this book:
 
 - [SageMath](https://www.sagemath.org/) for almost all chapters.
-- [Circom](https://docs.circom.io/) for the last part.
+- [Circom](https://docs.circom.io/) and [SnarkJS](https://npmjs.com/package/snarkjs) for the last part.
 
-We also make use of [Jupyter Notebooks](https://github.com/jupyter/notebook) in this repository, and use [nbconvert](https://github.com/jupyter/nbconvert/) to convert notebooks to README files in Markdown.
+We also make use of [Jupyter Notebooks](https://github.com/jupyter/notebook) in this repository, and use [nbconvert](https://github.com/jupyter/nbconvert/) to convert notebooks into Markdown.
 
 ## SageMath
 
@@ -36,9 +36,7 @@ You can even open a notebook using the Docker image:
 docker run -v $PWD:/home/sage/moonmath:ro -p8888:8888 sagemath/sagemath sage-jupyter
 ```
 
-> [!TIP]
->
-> We have short-hand scripts for these in Makefile.
+We have short-hand scripts for these in Makefile as well!
 
 ## Circom
 
