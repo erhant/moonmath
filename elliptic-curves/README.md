@@ -8,7 +8,7 @@ Also see this <https://curves.xargs.org/> for great animations, especially about
 
 Some commonly used curves in this section:
 
-- [alt\_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage)
+- [alt_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage)
 - [secp256k1](https://neuromancer.sk/std/secg/secp256k1)
 - [bls12-381](https://neuromancer.sk/std/bls/BLS12-381)
 
@@ -47,7 +47,7 @@ print(len(points), "points")
 from sage.all import EllipticCurve
 
 # https://neuromancer.sk/std/bls/BLS12-381
-p = 0x1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaaab
+p = 0x1A0111EA397FE69A4B1BA7B6434BACD764774B84F38512BF6730D2A0F6B0F6241EABFFFEB153FFFFB9FEFFFFFFFFAAAB
 E = EllipticCurve(GF(p), [0, 4])
 
 base_order, scalar_order = E.base_field().order(), E.order()
@@ -288,7 +288,6 @@ assert esm(TJJ(9, 4), 4) == TJJ(7, 11)
     
 
 
-
 ## Exercise 66
 
 > Consider example 81 and compute the set shown in equation (5.23) by inserting all points from the projective plane $\mathbb{F}_5\mathbb{P}^2$ into the defining projective Short Weierstrass equation.
@@ -407,9 +406,9 @@ Let's explain each expression one by one:
 
 - The first expression here is actually addition with a point-at-infinity, so $[0 : 1 : 0] \oplus [4 : 3 : 1] = [4 : 3 : 1]$ is straightforward.
 
-- At $[0 : 3 : 0] \oplus [3 : 1 : 2]$ we can look at the point on the left hand-side a bit more carefully. Notice that $\{3k \mid k \in \mathbb{F}_5^\ast\} = \{3, 1, 4, 2\}$, so this projective point is the same as $[0 : 1 : 0]$ that is the point at infinity. We can simply say that $[0 : 3 : 0] \oplus [3 : 1 : 2] = [3 : 1 : 2]$ in that case.
+- At $[0 : 3 : 0] \oplus [3 : 1 : 2]$ we can look at the point on the left hand-side a bit more carefully. Notice that $\{3k \mid k \in \mathbb{F}_5^\ast\} = \{3, 1, 4, 2\}$, so this projective point is the same as $[0 : 1 : 0]$ that is the point at infinity. We can simply say that $[0 : 3 : 0] \oplus [3 : 1 : 2] = [3 : 1 : 2]$ in that case. We can find the answer for $Z=1$ as well, simply multiply the coordinates with 3 to get $[9 : 3 : 6] = [4 : 3 : 1]$.
 
-- $-[0 : 4 : 1] \oplus [3 : 4 : 1]$ can be written as $[0 : 1 : 1] \oplus [3 : 4 : 1]$ due to how additive inverse works in projective points. Then, let's look at first few variables in the Algorithm 7: 
+- $-[0 : 4 : 1] \oplus [3 : 4 : 1]$ can be written as $[0 : 1 : 1] \oplus [3 : 4 : 1]$ due to how additive inverse works in projective points. Then, let's look at first few variables in the Algorithm 7:
 
 $$
 \begin{align*}
@@ -427,16 +426,31 @@ $$
 U  &= U_1 − U_2 &= 4 - 1 = 3 \\
 V  &= V_1 − V_2 &= 3 - 0 = 3 \\
 W  &= Z_1 \cdot Z_2 &= 1 \cdot 1 = 1 \\
-A  &= U^2 \cdot W − V^3 − 2 \cdot V^2 \cdot V_2 &= 3^2 \cdot 1 - 3^3 - 2 \cdot 3^2 \cdot 0 = 4 - 3 = 1 \\
-X' &= V \cdot A &= 3 \cdot 1 = 3 \\
-Y' &= U \cdot (V^2 \cdot V_2 − A) − V^3 \cdot U_2 &= 3 \cdot (3^2 \cdot 0 - 1) - 3^3 \cdot 1 = 3^2 - 3^3 = 4 - 3 = 1 \\
-Z' &= V^3 \cdot W &= 3^3 \cdot 1 = 3
+A  &= U^2 \cdot W − V^3 − 2 \cdot V^2 \cdot V_2 &= 3^2 \cdot 1 - 3^3 - 2 \cdot 3^2 \cdot 0 = 4 - 2 = 2 \\
+X' &= V \cdot A &= 3 \cdot 2 = 1 \\
+Y' &= U \cdot (V^2 \cdot V_2 − A) − V^3 \cdot U_2 &= 3 \cdot (3^2 \cdot 0 - 2) - 3^3 \cdot 1 = - (3 \cdot 2) - 3^3 = 4 - 2 = 2 \\
+Z' &= V^3 \cdot W &= 3^3 \cdot 1 = 2
 \end{align*}
 $$
 
-We find the answer as $[X3 : Y3 : Z3] \gets [X' : Y' : Z'] = [3 : 1 : 3]$. We can have $Z=1$ by multiplying the values by 2, $[3 \times 2 : 1 \times 2 : 3 \times 2] = [1 : 2 : 1]$.
+We find the answer as $[X' : Y' : Z'] \gets [1 : 2 : 2]$. We can have $Z=1$ by multiplying the values by 3, $[1 \times 3 : 2 \times 3 : 2 \times 3] = [3 : 1 : 1]$.
 
 - $[4 : 3 : 1] \oplus [4 : 2 : 1]$ is actually an operation of a point with its inverse, notice that $-[4 : 3 : 1] = [4 : -3 : 1] = [4 : 2 : 1]$, so the result of this operation is $[0 : 1 : 0]$ i.e. point-at-infinity.
+
+Let's verify our results with Sage:
+
+
+
+```python
+from sage.all import GF, EllipticCurve
+
+E = EllipticCurve(GF(5), [1, 1])
+
+assert E(0, 1, 0) + E(4, 3, 1) == E(4, 3, 1)
+assert E(0, 3, 0) + E(3, 1, 2) == E(4, 3, 1)
+assert -E(0, 4, 1) + E(3, 4, 1) == E(3, 1, 1)
+assert E(4, 3, 1) + E(4, 2, 1) == E(0, 1, 0)
+```
 
 ## Exercise 69
 
@@ -456,16 +470,18 @@ Naturally, the remaining branch (where $V_1 \ne V_2$) handles the Chord rule whe
 We use Sage to compute the set:
 
 
+
 ```python
 from sage.all import GF, Set
+
 F13 = GF(13)
 B = F13(7)
 A = F13(6)
 points = []
 for x in F13:
-  for y in F13:
-    if B * (y ** 2) == (x ** 3) + A * (x ** 2) + x:
-      points.append((x, y))
+    for y in F13:
+        if B * (y**2) == (x**3) + A * (x**2) + x:
+            points.append((x, y))
 print(points)
 ```
 
@@ -479,13 +495,15 @@ print(points)
 The curve in example 70 is defined as the set of all pairs $(x, y)$ in $\mathbb{F}_5$ that satisfy $y^2 = x^3 + x + 1$. One of the conditions for a Short Weierstrass curve to be a Montgomery curve is for it to have a scalar order divisible by 4. If we check that:
 
 
+
 ```python
 from sage.all import GF, EllipticCurve
+
 F5 = GF(5)
 a, b = 0, 1
 E1_F5 = EllipticCurve(F5, [a, b])
 if E1_F5.order() % 4 != 0:
-  print("Not a Montgomery curve!")
+    print("Not a Montgomery curve!")
 ```
 
     Not a Montgomery curve!
@@ -509,7 +527,7 @@ p = 1157920892373161954235709850086879078532699846656405640394575840079088346716
 E = EllipticCurve(GF(p), [0, 7])
 
 if E.order() % 4 != 0:
-  print("Not a Montgomery curve!")
+    print("Not a Montgomery curve!")
 ```
 
     Not a Montgomery curve!
@@ -557,6 +575,7 @@ As we can see, the order is not divisible by 4, therefore `alt_bn128` is not a M
 > Finally, choose some point in the curve and test to see if it is a generator. If not, keep trying until you find one. Print out that generator point's logarithmic order.
 
 We first implement a class for Twisted Edwards:
+
 
 
 ```python
@@ -612,6 +631,7 @@ class TwistedEdwardsCurve:
 With that, we can solve our exercise:
 
 
+
 ```python
 # TinyJubJub parameters
 prime = 13
@@ -622,7 +642,9 @@ print("\nCurve:")
 print(TETJJ)
 
 print("\nPart 1: Inverting points:")
-pointsToInvert = list(map(lambda xy: TETJJ.point(xy[0], xy[1]), [(1, 11), (0, 1), (3, 0), (5, 8)]))
+pointsToInvert = list(
+    map(lambda xy: TETJJ.point(xy[0], xy[1]), [(1, 11), (0, 1), (3, 0), (5, 8)])
+)
 inverses = list(map(lambda p: TETJJ.inverse(p), pointsToInvert))
 for p, ip in zip(pointsToInvert, inverses):
     assert TETJJ.in_curve(ip)
@@ -632,7 +654,7 @@ print("\nPart 2: Solving x + (5, 8) = (1, 11)")
 A, B = TETJJ.point(5, 8), TETJJ.point(1, 11)
 assert TETJJ.in_curve(A)
 assert TETJJ.in_curve(B)
-X = TETJJ.add(B, TETJJ.inverse(A)) # X = B + (-A)
+X = TETJJ.add(B, TETJJ.inverse(A))  # X = B + (-A)
 assert TETJJ.in_curve(X)
 print("X:", X)
 
@@ -850,7 +872,7 @@ So, the question boils down to some optimization. Futher in the exercise 96 at t
 
 We are looking for a point other than the point at infinity, and with the knowledge we have so far that seems to be impossible.
 
-However, we could maybe find a value from the curve itself instead of an extension field, which would be in the full $r$-torsion group due to the subset rule. Also note that $r$ here is equal to the scalar order, because the order of `secp256k1` is a prime meaning that the order itself is the largest prime factor.
+However, we could maybe find a value from the curve itself instead of an extension field, which would be in the full $r$-torsion group due to the subset rule. Also note that $r$ here is equal to the scalar order, because the scalar order of `secp256k1` is a prime meaning that the order itself is the largest prime factor.
 
 
 
@@ -867,9 +889,13 @@ k = 1929868153955269923726183083478131797547292737984581739710086052358636024905
 q = E.order()
 assert is_prime(q)
 
+# largest prime factor is the order itself
+r = q.factor()[0][0]
+assert q == r
+
 # try for some random points
 for _ in range(200):
-    assert E.random_point() * q == INF
+    assert E.random_point() * r == INF
 ```
 
 Indeed any point within the original curve is a member of the torsion group $E(\mathbb{F}_p)[r]$ and we know that this is a subset of the full-torsion group!
@@ -878,9 +904,7 @@ Indeed any point within the original curve is a member of the torsion group $E(\
 
 > Consider `alt_bn128` curve and and it's full $r$-torsion group. Write a Sage program that computes a generator from the curve's full torsion group.
 
-First of all, we should notice that $r$ is equal to the order of the scalar field of `alt_bn128` since that order is a prime and it is the largest prime factor on its own.
-
-We also know from example 89 that this curve has an embedding degree of 12. So, we must compute the curve over the extension field with a degree 12 polynomial. Let's do that in Sage:
+First of all, we should notice that $r$ is equal to the order of the scalar field of `alt_bn128` since that order is a prime and it is the largest prime factor on its own. We also know from example 89 that this curve has an embedding degree of 12. So, we must compute the curve over the extension field with a degree 12 polynomial. Let's do that in Sage:
 
 
 
@@ -891,9 +915,12 @@ a, b = 0, 3
 
 FP = GF(p)  # field
 FPt = FP["t"]  # polynomial ring
-k = 12  # embedding degree
+
+# curve over the base field
+E = EllipticCurve(FP, [a, b])
 
 # an irreducible polynomial of degree k
+k = 12  # embedding degree
 P_MOD_K = FPt.irreducible_element(k)
 assert P_MOD_K.is_irreducible()
 
@@ -903,23 +930,15 @@ FP_K = GF(p**k, name="t", modulus=P_MOD_K)
 # curve over extension field
 E_K = EllipticCurve(FP_K, [a, b])
 
-# curve over the base field
-E = EllipticCurve(FP, [a, b])
+# largest prime factor is the order itself
+r = q.factor()[0][0]
+assert q == r
+
+# try for some random points
+INF = E_K(0)
+for _ in range(200):
+    assert E_K.random_point() * r == INF
 ```
-
-It is stated that the full $r$-torsion group has order of $r^2$, we can use this to test whether our point is generator or not.
-
-
-
-```python
-# order of the scalar field
-q = E.order()
-
-# expected order of the full r-torsion group
-qq = q**2
-```
-
-TODO: couldnt solve this yet
 
 ## Exercise 82
 
@@ -1006,8 +1025,18 @@ G2 = [P for P in TJJ_1_tor if fro_pi(P) == p * P]
 print("G2:", G1)
 ```
 
-    G1: [(4 : 0 : 1), (0 : 1 : 0)]
-    G2: [(4 : 0 : 1), (0 : 1 : 0)]
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Cell In[9], line 1
+    ----> 1 INF = TJJ(0)  # point at infinity
+          4 def fro_pi(P):
+          5     if P != INF:
+
+
+    NameError: name 'TJJ' is not defined
 
 
 Regarding the remark above about finding $r$ elements instead of $r^2$, there is also another thing to mention. If you find the 2-torsion group of TJJ over $\mathbb{F}_{p^4}$ you do actually get $r^2$ elements. 4 is the first time this happens, where the torsion group has 2 elements up until this point and has 4 elements beyond this point.
@@ -1022,39 +1051,8 @@ Regardless of this fact, the pairing groups for the torsion group at $k=4$ is eq
 
 > Consider `alt_bn128` curve and and it's curve extension. Write a Sage program that computes a generator for each of the torsion group $\mathbb{G}_1[p]$ and $\mathbb{G}_2[p]$.
 
-Note here that instead of $r$ we have used $p$ in the question. This refers to the characteristic $p$, which is the characteristic of this elliptic curve. Since the curve order is prime, we have $p=r$ so this exercise is actually very similar to previous exercise 81.
+TODO
 
-First let's do our setup:
-
-
-
-```python
-from sage.all import GF, EllipticCurve
-
-# curve parameters for alt_bn128
-p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
-a, b = 0, 3
-
-FP = GF(p)  # field
-FPt = FP["t"]  # polynomial ring
-k = 12  # embedding degree
-
-# an irreducible polynomial of degree k
-P_MOD_K = FPt.irreducible_element(k)
-
-# extension field
-FP_K = GF(p**k, name="t", modulus=P_MOD_K)
-
-# curve over extension field
-E_K = EllipticCurve(FP_K, [a, b])
-
-# curve over the base field
-E = EllipticCurve(FP, [a, b])
-```
-
-Generator of $\mathbb{G}_1$ is easy to find since a generator of the curve serves that purpose when $r$ is equal to the scalar field order, as also shown in exercise 81.
-
-TODO: calculate gen for G2?
 
 ## Exercise 84 🔴
 
@@ -1063,40 +1061,39 @@ TODO: calculate gen for G2?
 First, let's see how the pairing is computed, as shown in example 87:
 
 
+
 ```python
 from sage.all import GF, EllipticCurve
 
 # field of TJJ
 F13 = GF(13)
-F13t = F13['t']
+F13t = F13["t"]
 
 # extension field over t^4 + 2
-P_MOD_4 = F13t([2, 0, 0, 0, 1]) # t^4 + 2
-F13_4 = GF(13 ** 4, name='t', modulus=P_MOD_4)
+P_MOD_4 = F13t([2, 0, 0, 0, 1])  # t^4 + 2
+F13_4 = GF(13**4, name="t", modulus=P_MOD_4)
 
 # curve over extension field
 TJJF13_4 = EllipticCurve(F13_4, [8, 8])
 P = TJJF13_4([7, 2])
 print("      P:", P.xy())
 
-Q = TJJF13_4([
-    F13t([7, 0, 9]),    # 9t^2 + 7
-    F13t([0, 2, 0, 12]) # 12t^3 + 2t
-])
+Q = TJJF13_4([F13t([7, 0, 9]), F13t([0, 2, 0, 12])])  # 9t^2 + 7  # 12t^3 + 2t
 print("      Q:", Q.xy())
 
 ans = P.weil_pairing(Q, 5)
 print("e(P, Q):", ans)
 ```
 
-    P: (7, 2)
-    Q: (9*t^2 + 7, 12*t^3 + 2*t)
+          P: (7, 2)
+          Q: (9*t^2 + 7, 12*t^3 + 2*t)
     e(P, Q): 7*t^3 + 7*t^2 + 6*t + 3
 
 
 Now, lets do the same thing but for the group that is given in our exercise:
 
 TODO: do the exercise here
+
 
 ## Exercise 85
 
@@ -1105,14 +1102,16 @@ TODO: do the exercise here
 I didn't like the example implementation much, so I will implement the more generic function (the one defined in Algorithm 9) below, and use it for this exercise.
 
 
+
 ```python
 from sage.all import ZZ, GF
 from hashlib import sha256
 
+
 def try_and_increment(s, E):
-    '''Hash `s` into a curve point on `E`.'''
+    """Hash `s` into a curve point on `E`."""
     c = -1
-    
+
     # order of base field & curve params
     p = E.base_field().order()
     a, b = E.a4(), E.a6()
@@ -1126,19 +1125,19 @@ def try_and_increment(s, E):
         digest: str = sha256(sc.encode("utf-8")).hexdigest()
 
         # cast the digest into integer & get (k+1)-bit representation
-        bits = ZZ(digest, 16).digits(base=2, padto=k+1)
-        
+        bits = ZZ(digest, 16).digits(base=2, padto=k + 1)
+
         # map to a number (x-coord) using k bits
         x = 0
         for i, bit in enumerate(bits[:k]):
-            x += bit * (2 ** i)
+            x += bit * (2**i)
         if x >= p:
             # if x is too large, try again
             continue
-        
+
         # find y^2 via the curve equation
         x = E.base_field()(x)
-        yy = x ** 3 + a * x + b
+        yy = x**3 + a * x + b
         if not yy.is_square():
             # if yy is not a square root, try again
             continue
@@ -1151,10 +1150,10 @@ def try_and_increment(s, E):
             # if auxiliary bit is 1, use the negative root
             return E(x, -y)
 
+
 # example
 TJJ = EllipticCurve(GF(13), [8, 8])
 print(try_and_increment("lorem ipsum", E))
-  
 ```
 
     (8 : 8 : 1)
@@ -1163,17 +1162,19 @@ print(try_and_increment("lorem ipsum", E))
 The function above can map any string into a curve point. In the exercise, we not only need to hash to a curve point but then also map this point onto the 5-torsion group of TJJ. Remember that TJJ had 20 points, and $20 = 5 \times 4$ so we can do co-factor clearing by multiplying the point with 4.
 
 
+
 ```python
 def hash_to_tjj_13_5(s: str):
-  TJJ = EllipticCurve(GF(13), [8, 8])
-  P = try_and_increment(s, TJJ)
-  return 4 * P
+    TJJ = EllipticCurve(GF(13), [8, 8])
+    P = try_and_increment(s, TJJ)
+    return 4 * P
+
 
 P = hash_to_tjj_13_5("lorem ipsum")
 print(P.xy())
 
 # [5]P == INF if P is in 5-torsion group
-assert(P * 5 == 0)
+assert P * 5 == 0
 ```
 
     (8, 5)
@@ -1186,8 +1187,10 @@ assert(P * 5 == 0)
 We will make use of the `try_and_increment` function implemented in the previous exercise.
 
 
+
 ```python
 from sage.all import GF, EllipticCurve
+
 
 def hash_to_secp256k1(s: str):
     # parameters for secp256k1
@@ -1199,7 +1202,8 @@ def hash_to_secp256k1(s: str):
 
     P = try_and_increment(s, E)
     return P
-  
+
+
 P = hash_to_secp256k1("lorem ipsum")
 print(P.xy())
 ```
@@ -1212,6 +1216,7 @@ print(P.xy())
 > Consider `alt_bn128` curve. Write a Sage program that computes the trace of Frobenius for `alt_bn128`. Does the curve contain more or less elements than its base field $\mathbb{F}_p$?
 
 Using Sage:
+
 
 
 ```python
