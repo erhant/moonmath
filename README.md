@@ -54,4 +54,4 @@ The README file are copied under the [`.book`](./.book/) directory and a build i
     Contributions
 </h3>
 
-Please feel free to open an issue or create a pull-request if something is not clear, could have been better, or is missing references.
+Please feel free to open an issue or create a pull-request if something is not clear, could have been better, or is missing references. For the chapters with notebooks, please write the changes in the notebook and then generate the README files with `make markdown`.

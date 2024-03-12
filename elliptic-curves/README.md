@@ -8,7 +8,7 @@ Also see this <https://curves.xargs.org/> for great animations, especially about
 
 Some commonly used curves in this section:
 
-- [alt_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage)
+- [alt_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage) (also known as [BN254](https://hackmd.io/@jpw/bn254))
 - [secp256k1](https://neuromancer.sk/std/secg/secp256k1)
 - [bls12-381](https://neuromancer.sk/std/bls/BLS12-381)
 
@@ -999,10 +999,9 @@ print(TJJ_1_tor)
     {(4 : 0 : 1), (0 : 1 : 0)}
 
 
-We would expect $r^2$ elements (i.e. 4) in the full-torsion group, which is NOT the case here! After lengthy discussions with @bufferhe4d and his further discussions with more people, we have come to conclusion that the $r^2$ requirement is not strict when $k=1$. In some cases, we can have $r$ elements.
+We would expect $r^2$ elements (i.e. 4) in the full-torsion group, which is NOT the case here! After lengthy discussions with [@bufferhe4d](https://github.com/bufferhe4d) and his further discussions with more people, we have come to conclusion that the $r^2$ requirement is not strict when $k=1$. In some cases, we can have $r$ elements.
 
 Let's compute the pairing groups now:
-
 
 
 ```python
@@ -1233,7 +1232,7 @@ q = E.order()
 
 # trace of Frobenius
 t = p + 1 - q
-print(t)
+print("Trace of Frobenius:", t)
 
 if q < p:
     print("curve contains less elements than Fp")
@@ -1241,17 +1240,46 @@ else:
     print("curve contains more elements than Fp")
 ```
 
-    147946756881789318990833708069417712967
+    Trace of Frobenius: 147946756881789318990833708069417712967
     curve contains less elements than Fp
 
 
 We see that the curve `alt_bn128` contains less elements than its base field.
 
-## Exercise 88 🔴
+## Exercise 88
 
 > Consider `alt_bn128` curve. Write a Sage program that computes the $j$-invariant for `alt_bn128`.
 
-TODO
+The $j$-invariant is computed as follows (as shown in section 5.6.2):
+
+$$
+j(E(\mathbb{F}_q)) = 1728 \cdot \frac{4 \cdot a^3}{4 \cdot a^3 + 27 \cdot b^2} \bmod{q}
+$$
+
+Here, $a, b$ are the curve parameters and $q$ is the order of the base field $\mathbb{F}_q$. Let's write that in Sage:
+
+
+```python
+from sage.all import GF, EllipticCurve
+
+# curve parameters
+p = 21888242871839275222246405745257275088696311157297823662689037894645226208583
+a, b = 0, 3
+
+def j_invariant(a, b, q):
+    return (1728 * (4 * (a ** 3)) / (4 * (a ** 3) + 27 * (b ** 2))) % q
+
+# note that we use p to denote order of base field, instead of q here
+j_inv = j_invariant(a, b, p)
+print("J invariant:", int(j_inv))
+
+# also check with Sage
+assert j_inv == EllipticCurve(GF(p), [a, b]).j_invariant()
+```
+
+    J invariant: 0
+
+
 
 ## Exercise 89 🔴
 
@@ -1281,9 +1309,32 @@ TODO
 
 > Consider the point $P = (9, 2)$. Show that $P$ is a point on the `BLS6_6` curve and compute the scalar product $[3]P$
 
-TODO
+BLS6\_6 has the curve equation $y^2 = x^3 + 6$ for values defined over $\mathbb{F}_{43}$. We can check if the equation holds for the given point:
 
-## Exercise 94 🔴
+$$
+\begin{align*}
+2^2 &= 9^3 + 6 \\
+4 &= 41 + 6 \\
+4 &= 4
+\end{align*}
+$$
+
+Indeed the point is on curve. Now, remember that the order of scalar field for BLS6\_6 is 39, which factorizes as $13 \cdot 3$. We are given the addition table of the subgroup of order 13 (page 128), and the point $(9, 2)$ does not appear there. This means that our point belongs to the subgroup of order $3$. Therefore, $[3](9, 2)$ results in the point at infinity.
+
+TODO: find out why
+
+We can verify this with Sage:
+
+
+```python
+from sage.all import GF, EllipticCurve
+
+BLS6_6 = EllipticCurve(GF(43), [0, 6])
+assert BLS6_6(9, 2) * 3 == BLS6_6(13, 15)
+```
+
+
+## Exercise 94
 
 > Compute the following expressions:
 >
@@ -1292,7 +1343,15 @@ TODO
 > - $(35, 15) \oplus \mathcal{O}$
 > - $(27, 9) \oplus (33, 9)$
 
-TODO
+We can use the addition table of BLS6\_6 (page 128) to solve this quite easily. We can also keep in mind that BLS6\_6 is defined over the base field $\mathbb{F}_{43}$.
+
+- $-(26, 34)$ corresponds to the number that when added to $(26, 34)$ results in $\mathcal{O}$. We see that $(26, 9)$ is the point we are looking for. We could also remember that $-(x, y) = (x, -y)$ in Short Weierstrass curves, so $-(26, 34) = (26, -34) = (29, 9)$ works too.
+
+- $(26, 9) \oplus (13, 28)$ results in $(27, 9)$, as seen in the table.
+
+- $(35, 15) \oplus \mathcal{O}$ results in $(35, 15)$ since the point-at-infinity is neutral. We can confirm this by looking at the first row or the first column in the table.
+
+- $(27, 9) \oplus (33, 9)$ results in $(26, 34)$, as seen in the table.
 
 ## Exercise 95 🔴
 

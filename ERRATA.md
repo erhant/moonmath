@@ -32,6 +32,7 @@ Some possible errors in version 1.1.1.
 - Page 103, Example 92, "doing this for 815730721 _elements_ is a bit too slow..."
 - Page 108, top of the page says "add this to references"
 - Page 110, Algorithm 9, should be $y^2 \gets x^3 + a\cdot x + b$
+- Page 119, $y^2 = x^3 + 4^2 + 4 cdot 4^3$, that $4^2$ seems wrong?
 
 ## Chapter 6
 
