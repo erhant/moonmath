@@ -8,7 +8,7 @@ Also see this <https://curves.xargs.org/> for great animations, especially about
 
 Some commonly used curves in this section:
 
-- [alt_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage) (also known as [BN254](https://hackmd.io/@jpw/bn254))
+- [alt_bn128](https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128.sage) (also known as [BN254](https://neuromancer.sk/std/bn/bn254))
 - [secp256k1](https://neuromancer.sk/std/secg/secp256k1)
 - [bls12-381](https://neuromancer.sk/std/bls/BLS12-381)
 
@@ -1305,7 +1305,7 @@ TODO
 
 TODO
 
-## Exercise 93 🔴
+## Exercise 93
 
 > Consider the point $P = (9, 2)$. Show that $P$ is a point on the `BLS6_6` curve and compute the scalar product $[3]P$
 
@@ -1319,19 +1319,20 @@ $$
 \end{align*}
 $$
 
-Indeed the point is on curve. Now, remember that the order of scalar field for BLS6\_6 is 39, which factorizes as $13 \cdot 3$. We are given the addition table of the subgroup of order 13 (page 128), and the point $(9, 2)$ does not appear there. This means that our point belongs to the subgroup of order $3$. Therefore, $[3](9, 2)$ results in the point at infinity.
+Indeed the point is on curve. Now, remember that the order of scalar field for BLS6\_6 is 39, which factorizes as $13 \cdot 3$. We are given the addition table of the subgroup of order 13 (page 128), and the point $(9, 2)$ does not appear there. This just means that $(9, 2)$ does not belong to the subgroup of order 13, so it may have order 3 or 39.
 
-TODO: find out why
-
-We can verify this with Sage:
+We could compute the result using the Tangent and Chord rules (i.e. double it, and add itself) but I will use Sage instead. Note that the book also provides the result of this computation in section 5.6.4.2.
 
 
 ```python
 from sage.all import GF, EllipticCurve
 
 BLS6_6 = EllipticCurve(GF(43), [0, 6])
-assert BLS6_6(9, 2) * 3 == BLS6_6(13, 15)
+print(BLS6_6(9, 2).xy())
 ```
+
+    (9, 2)
+
 
 
 ## Exercise 94
@@ -1345,7 +1346,7 @@ assert BLS6_6(9, 2) * 3 == BLS6_6(13, 15)
 
 We can use the addition table of BLS6\_6 (page 128) to solve this quite easily. We can also keep in mind that BLS6\_6 is defined over the base field $\mathbb{F}_{43}$.
 
-- $-(26, 34)$ corresponds to the number that when added to $(26, 34)$ results in $\mathcal{O}$. We see that $(26, 9)$ is the point we are looking for. We could also remember that $-(x, y) = (x, -y)$ in Short Weierstrass curves, so $-(26, 34) = (26, -34) = (29, 9)$ works too.
+- $-(26, 34)$ corresponds to the number that when added to $(26, 34)$ results in $\mathcal{O}$. We see that $(26, 9)$ is the point we are looking for. We could also remember that $-(x, y) = (x, -y)$ in Short Weierstrass curves, so $-(26, 34) = (26, -34) = (26, 9)$ works too.
 
 - $(26, 9) \oplus (13, 28)$ results in $(27, 9)$, as seen in the table.
 
@@ -1355,7 +1356,7 @@ We can use the addition table of BLS6\_6 (page 128) to solve this quite easily. 
 
 ## Exercise 95 🔴
 
-> Consider the extended `BLS6_6` curve as defined in 5.67 and the two curve points $g1 = (13, 15)$ and $g2 = (7v^2, 16v^3)$. Compute the Weil pairing $e(g1, g2)$ using definition 5.49 and Miller's algorithm.
+> Consider the extended `BLS6_6` curve as defined in 5.67 and the two curve points $g_1 = (13, 15)$ and $g_2 = (7v^2, 16v^3)$. Compute the Weil pairing $e(g_1, g_2)$ using definition 5.49 and Miller's algorithm.
 
 TODO
 

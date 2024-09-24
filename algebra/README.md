@@ -311,7 +311,7 @@ The bilinearity property holds due to distribute law of integers mod $n$, simila
 
 > Consider $\mathbb{Z}_{13}^\ast$. Choose a set of 3 generators from this group, define it's associated Pedersen Hash Function and compute the Pedersen hash of $(3, 7, 11) \in \mathbb{Z}_{12}$.
 
-Generators of $\mathbb{Z}_{13}^\ast$ are $\{2, 6, 7, 11\}$. Let's choose $2, 6, 7$ and define our Pedersen Hash Function as:
+Generators of $\mathbb{Z}_{13}^\ast$ are $\{2, 6, 7, 11\}$. Let's choose $2, 6, 11$ from these, and define our Pedersen Hash Function as:
 
 $$
 H(x_1, x_2, x_3) = 2^{x_1}6^{x_2}11^{x_3} \pmod{13}
