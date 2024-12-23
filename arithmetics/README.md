@@ -17,7 +17,7 @@ Topics in this chapter:
 
 > Compute the factorization of 30030 and double check your results with Sage.
 
-We find $2 \times 3 \times 5 \times 11 \times 13 \times 7$, which Sage confirms as:
+We find $2 \times 3 \times 5 \times 7 \times 11 \times 13$, which Sage confirms as:
 
 
 ```python
@@ -140,6 +140,29 @@ function longDivision(
 }
 ```
 
+```rust
+fn int_long_division(dividend: i64, divisor: i64) -> (i64, u64) {
+    if divisor == 0 {
+        panic!("Division by zero");
+    }
+
+    let mut carry: i64 = 0;
+    let mut quotient: i64 = 0;
+
+    for digit in dividend.to_string().chars().map(|c| c.to_digit(10).unwrap() as i64) {
+        carry = carry * 10 + digit;
+        quotient *= 10;
+        
+        while carry >= divisor {
+            carry -= divisor;
+            quotient += 1;
+        }
+    }
+
+    (quotient, carry as u64)
+}
+```
+
 You can test out the implementation by comparing the results for random numbers, shown below:
 
 ```ts
@@ -159,6 +182,21 @@ for (let i = 0; i < 100_000; i++) {
 }
 ```
 
+```rust
+fn main () {
+    let mut rng = rand::thread_rng();
+    let numbers: Vec<u64> = (0..100).map(|_| rng.gen_range(1..10000000)).collect();
+
+    for dividend in numbers {
+        let divisor = rng.gen_range(1..10000000);
+        let (q,r) = int_long_division(dividend as i64, divisor as i64);
+        
+        println!("{} / {} = {} with reminder {}", dividend, divisor, q, r);
+        
+        assert_eq!(dividend as i64, q * divisor as i64 + r as i64);
+    }
+}
+```
 
 ## Exercise 7
 
@@ -186,6 +224,26 @@ template Num2Bits(n) {
   lc === in;
 }
 ```
+
+```rust
+fn binary_rep(n: i32) -> String {
+    let mut n = n;
+    let mut digits = Vec::new();
+
+    if n == 0 {
+        return "0".to_string();
+    }
+
+    while n > 0 {
+        digits.push((n & 1).to_string()); // n % 2
+        n >>= 1; // n / 2
+    }
+
+    digits.reverse()
+    digits.join("")
+}
+```
+
 
 ## Exercise 8
 
@@ -230,16 +288,16 @@ $$
 \gcd(5 \times 20, 5 \times k') = 5 \implies \gcd(20, k') = 1
 $$
 
-From this, we simply list out all the primes less than 20:
+From this, we simply list out all the coprimes with 20:
 
 $$
-k' \in \{19, 17, 13, 11, 7, 3\}
+k' \in \{19, 17, 13, 11, 9, 7, 3, 1\}
 $$
 
 Our solutions for $k$ is therefore these numbers multiplied by 5:
 
 $$
-k \in \{95, 85, 65, 55, 35, 15\}
+k \in \{95, 85, 65, 55, 45, 35, 15, 5\}
 $$
 
 
