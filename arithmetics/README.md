@@ -709,6 +709,27 @@ assert P == PP
 We need to do lagrange interpolation for this. We could do by hand, but let's just use Sage for this one!
 
 
+
+Apparently, $4x^3 + 3x^2 + 4x$ does the job.
+
+We need to find a polynomial $P$ that will go through the points defined by the set $S={(0,0),(1,1),(2,2),(3,2)}$.
+
+We recall that Lagrange interpolation is defined by:
+$$P(x) = \sum_{i=0}^n \left( y_i \prod_{\substack{j=0\\j\neq i}}^n \frac{x-x_j}{x_i-x_j} \right)$$
+For readability, we are going to calculate each product individually.
+Because $y_0$ is 0, then we don't need to calculate $l_0(x)$.
+$$l_1(x)=\frac{x-0}{1-0}\cdot\frac{x-2}{1-2}\cdot\frac{x-3}{1-3}=\frac{x\cdot(x-2)\cdot(x-3)}{1\cdot(-1)\cdot(-2)}=\frac{(x^2-2x)\cdot(x-3)}{2}=\frac{x^3-3x^2-2x^2+6x}{2}=\frac{x^3+x}{2}=3(x^3+x)$$
+$$=3x^3+3x$$
+$$l_2(x)=\frac{x-0}{2-0}\cdot\frac{x-1}{2-1}\cdot\frac{x-3}{2-3}=\frac{x(x-1)(x-3)}{2\cdot1\cdot(-1)}=\frac{(x^2-x)(x-3)}{-2}=\frac{x^3-3x^2-x^2+3x}{3}=\frac{x^3-4x^2+3x}{3}=2(x^3+x^2+3x)$$
+$$2x^3+2x^2+x$$
+$$l_3(x)=\frac{x-0}{3-0}\cdot\frac{x-1}{3-1}\cdot\frac{x-2}{3-2}=\frac{x(x-1)(x-2)}{3\cdot2\cdot1}=\frac{(x^2-x)(x-2)}{6}=\frac{x^3-2x^2-x^2+2x}{1}=x^3-3x^2+2x$$
+$$=x^3+2x^2+2x$$
+Finally, we calculate $P(x)$ as:
+$$P(x)=0\cdot l_0(x)+1\cdot l_1(x)+2\cdot l_2(x)+2\cdot l_3(x)=3x^3+3x+2(2x^3+2x^2+x)+2(x^3+2x^2+2x)=3x^3+3x+4x^3+4x^2+2x+2x^3+4x^2+4x$$
+$$=4x^3+3x^2+4x$$
+
+Let's verify our calculation with Sage:
+
 ```python
 Integers(5)["x"].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
 # 4*x^3 + 3*x^2 + 4*x
@@ -718,10 +739,6 @@ Integers(5)["x"].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
 
 
     4*x^3 + 3*x^2 + 4*x
-
-
-
-Apparently, $4x^3 + 3x^2 + 4x$ does the job.
 
 ## Exercise 32
 
