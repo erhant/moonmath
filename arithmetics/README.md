@@ -27,13 +27,6 @@ factor(30030)
 ```
 
 
-
-
-    2 * 3 * 5 * 7 * 11 * 13
-
-
-
-
 ## Exercise 3
 
 > For $4x + 21 = 5$, compute the set of all solutions for $x$ under the alternative assumptions:
@@ -270,13 +263,6 @@ n = ZZ.random_element(p)
 gcd(p, n) == 1
 ```
 
-
-
-
-    True
-
-
-
 ## Exercise 10
 
 > Find all numbers $k \in \mathbb{N}$ with $0 \leq k \leq 100$ such that $\gcd(100, k) = 5$.
@@ -452,13 +438,6 @@ gcd(7, 24), gcd(805, 24), gcd(-4255, 24)
 ```
 
 
-
-
-    (1, 1, 1)
-
-
-
-
 Apparently, all of these are coprime to 24. We can perhaps use Extended Euclidean Algorithm, which is implemented in Sage already. Using `xgcd(a, b)` where `a >= b` we can find:
 
 $$
@@ -474,11 +453,6 @@ print(xgcd(24, 7))  # (1, -2, 7)
 print(xgcd(24, 13)) # (1, 6, -11)
 print(xgcd(24, 17)) # (1, 5, -7)
 ```
-
-    (1, -2, 7)
-    (1, 6, -11)
-    (1, 5, -7)
-
 
 
 To interpret these results:
@@ -575,10 +549,6 @@ print(A // B) # -3*x^2 - 8*x - 24
 print(A % B) # -80*x + 52
 ```
 
-    -3*x^2 - 8*x - 24
-    -80*x + 52
-
-
 
 The result of division is the quotient $Q$ and remainder $R$ polynomials:
 
@@ -658,9 +628,6 @@ print("Roots:", roots)
 # [1, 5]
 ```
 
-    Roots: [1, 5]
-
-
 To find factors, we can divide $x - r$ for each root $r$ until the quotient does not have $r$ as a root anymore. Once we are done with all roots, if the remaining result is not $1$ we can also include that as a factor.
 
 
@@ -684,9 +651,6 @@ print("Factors:", factors)
 # [(x + 5, 1), (x + 1, 4), (x^2 + 1, 1)]
 ```
 
-    Factors: [(x + 5, 1), (x + 1, 4), (x^2 + 1, 1)]
-
-
 Note that the same factor can appear a few times, so the `factors` here is a list of tuples where the first item of a tuple is the factor, and the second item is the number of time it appears.
 
 After finding the factors, we can test to see if we get back the original polynomial when we multiply all these factors.
@@ -702,25 +666,34 @@ for f in factors:
 assert P == PP
 ```
 
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Cell In[2], line 1
+    ----> 1 PP = Z6x(1)
+          2 for f in factors:
+          3   assert(f[1] > 0)
+          4   for _ in range(f[1]):
+
+
+    NameError: name 'Z6x' is not defined
+
+
 ## Exercise 31
 
 > Consider modular 5 arithmetic, and set $S = \{(0, 0), (1, 1), (2, 2), (3, 2)\}$. Find a polynomial $P \in \mathbb{Z}_5[x]$ such that $P(x_i) = y_i$ for all $(x_i, y_i) \in S$.
 
-We need to do lagrange interpolation for this. We could do by hand, but let's just use Sage for this one!
-
-
-
-Apparently, $4x^3 + 3x^2 + 4x$ does the job.
 
 We need to find a polynomial $P$ that will go through the points defined by the set $S={(0,0),(1,1),(2,2),(3,2)}$.
-
 We recall that Lagrange interpolation is defined by:
 $$P(x) = \sum_{i=0}^n \left( y_i \prod_{\substack{j=0\\j\neq i}}^n \frac{x-x_j}{x_i-x_j} \right)$$
 For readability, we are going to calculate each product individually.
 Because $y_0$ is 0, then we don't need to calculate $l_0(x)$.
-$$l_1(x)=\frac{x-0}{1-0}\cdot\frac{x-2}{1-2}\cdot\frac{x-3}{1-3}=\frac{x\cdot(x-2)\cdot(x-3)}{1\cdot(-1)\cdot(-2)}=\frac{(x^2-2x)\cdot(x-3)}{2}=\frac{x^3-3x^2-2x^2+6x}{2}=\frac{x^3+x}{2}=3(x^3+x)$$
+$$l_1(x)=\frac{x-0}{1-0}\cdot\frac{x-2}{1-2}\cdot\frac{x-3}{1-3}=\frac{x(x-2)(x-3)}{1\cdot(-1)\cdot(-2)}=\frac{(x^2-2x)(x-3)}{2}=\frac{x^3-3x^2-2x^2+6x}{2}=\frac{x^3+x}{2}=3(x^3+x)$$
 $$=3x^3+3x$$
-$$l_2(x)=\frac{x-0}{2-0}\cdot\frac{x-1}{2-1}\cdot\frac{x-3}{2-3}=\frac{x(x-1)(x-3)}{2\cdot1\cdot(-1)}=\frac{(x^2-x)(x-3)}{-2}=\frac{x^3-3x^2-x^2+3x}{3}=\frac{x^3-4x^2+3x}{3}=2(x^3+x^2+3x)$$
+$$l_2(x)=\frac{x-0}{2-0}\cdot\frac{x-1}{2-1}\cdot\frac{x-3}{2-3}=\frac{x(x-1)(x-3)}{2\cdot 1\cdot(-1)}=\frac{(x^2-x)(x-3)}{-2}=\frac{x^3-3x^2-x^2+3x}{3}=\frac{x^3-4x^2+3x}{3}=2(x^3+x^2+3x)$$
 $$2x^3+2x^2+x$$
 $$l_3(x)=\frac{x-0}{3-0}\cdot\frac{x-1}{3-1}\cdot\frac{x-2}{3-2}=\frac{x(x-1)(x-2)}{3\cdot2\cdot1}=\frac{(x^2-x)(x-2)}{6}=\frac{x^3-2x^2-x^2+2x}{1}=x^3-3x^2+2x$$
 $$=x^3+2x^2+2x$$
@@ -730,15 +703,11 @@ $$=4x^3+3x^2+4x$$
 
 Let's verify our calculation with Sage:
 
+
 ```python
 Integers(5)["x"].lagrange_polynomial([(0, 0), (1, 1), (2, 2), (3, 2)])
 # 4*x^3 + 3*x^2 + 4*x
 ```
-
-
-
-
-    4*x^3 + 3*x^2 + 4*x
 
 ## Exercise 32
 
