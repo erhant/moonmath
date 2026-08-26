@@ -152,7 +152,7 @@ fn int_long_division(dividend: i64, divisor: i64) -> (i64, u64) {
     for digit in dividend.to_string().chars().map(|c| c.to_digit(10).unwrap() as i64) {
         carry = carry * 10 + digit;
         quotient *= 10;
-        
+
         while carry >= divisor {
             carry -= divisor;
             quotient += 1;
@@ -190,9 +190,9 @@ fn main () {
     for dividend in numbers {
         let divisor = rng.gen_range(1..10000000);
         let (q,r) = int_long_division(dividend as i64, divisor as i64);
-        
+
         println!("{} / {} = {} with reminder {}", dividend, divisor, q, r);
-        
+
         assert_eq!(dividend as i64, q * divisor as i64 + r as i64);
     }
 }
@@ -244,7 +244,6 @@ fn binary_rep(n: i32) -> String {
 }
 ```
 
-
 ## Exercise 8
 
 > Find integers $s, t \in \mathbb{Z}$ such that $\gcd(a, b) = sa + tb$ holds for the following pairs:
@@ -288,7 +287,7 @@ $$
 \gcd(5 \times 20, 5 \times k') = 5 \implies \gcd(20, k') = 1
 $$
 
-From this, we simply list out all the coprimes with 20:
+From this, we simply list out all the primes less than 20:
 
 $$
 k' \in \{19, 17, 13, 11, 9, 7, 3, 1\}
