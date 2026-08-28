@@ -12,10 +12,20 @@ notebook:
 
 .PHONY: markdown
 markdown:
-	@jupyter nbconvert --to markdown ./arithmetics/README.ipynb
-	@jupyter nbconvert --to markdown ./algebra/README.ipynb
-	@jupyter nbconvert --to markdown ./elliptic-curves/README.ipynb
-	@jupyter nbconvert --to markdown ./statements/README.ipynb
+	@if command -v jupyter >/dev/null 2>&1; then \
+		jupyter nbconvert --to markdown ./arithmetics/README.ipynb; \
+		jupyter nbconvert --to markdown ./algebra/README.ipynb; \
+		jupyter nbconvert --to markdown ./elliptic-curves/README.ipynb; \
+		jupyter nbconvert --to markdown ./statements/README.ipynb; \
+	else \
+		echo "jupyter not found, falling back to Docker..."; \
+		docker run --rm -v ${PWD}:/home/sage/moonmath sagemath/sagemath \
+			jupyter nbconvert --to markdown \
+			moonmath/arithmetics/README.ipynb \
+			moonmath/algebra/README.ipynb \
+			moonmath/elliptic-curves/README.ipynb \
+			moonmath/statements/README.ipynb; \
+	fi
 
 .PHONY: book
 book:
