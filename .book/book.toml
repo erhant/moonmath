@@ -1,7 +1,6 @@
 [book]
 authors = ["erhant"]
 language = "en"
-multilingual = false
 src = "."
 title = "MoonMath Solutions"
 description = "Solutions to MoonMath Manual to zkSNARKs"

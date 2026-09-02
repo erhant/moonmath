@@ -37,4 +37,4 @@ book:
 	@cp ./statements/README.md ./.book/statements.md
 	@cp ./circuit-compilers/README.md ./.book/circuit-compilers.md
 	@cp ./zero-knowledge/README.md ./.book/zero-knowledge.md
-	mdbook build ./.book -d ./build --open
+	mdbook build ./.book -d ./book-build --open
