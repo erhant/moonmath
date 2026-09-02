@@ -3,10 +3,10 @@ name: Markdown in sync with notebooks
 on:
   push:
     branches: [master]
-    paths: ["**/README.ipynb", "**/README.md", "Makefile"]
+    paths: ["**/README.ipynb", "**/README.md", "Makefile", ".github/workflows/markdown-check.yml"]
   pull_request:
     branches: [master]
-    paths: ["**/README.ipynb", "**/README.md", "Makefile"]
+    paths: ["**/README.ipynb", "**/README.md", "Makefile", ".github/workflows/markdown-check.yml"]
 
 jobs:
   check:
