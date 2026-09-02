@@ -1,0 +1,27 @@
+name: Markdown in sync with notebooks
+
+on:
+  push:
+    branches: [master]
+    paths: ["**/README.ipynb", "**/README.md", "Makefile", ".github/workflows/markdown-check.yml"]
+  pull_request:
+    branches: [master]
+    paths: ["**/README.ipynb", "**/README.md", "Makefile", ".github/workflows/markdown-check.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install nbconvert
+      - name: Regenerate Markdown from notebooks
+        run: make markdown
+      - name: Fail if generated Markdown differs from committed
+        run: |
+          git diff --exit-code -- '*/README.md' || {
+            echo '::error::README.md files are out of sync with README.ipynb — run `make markdown` and commit the result.'
+            exit 1
+          }
